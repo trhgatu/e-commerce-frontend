@@ -1,0 +1,392 @@
+// src/components/feature/user/product/ProductList.tsx
+import { useState, useEffect } from 'react';
+import ProductCard from './ProductCard';
+import { IProduct } from '@/types/product';
+import { Button } from '@/components/ui/button';
+
+// Mock data
+export const mockProducts: IProduct[] = [
+    {
+        _id: '1',
+        name: 'MacBook Pro 14"',
+        slug: 'macbook-pro-14',
+        price: 1999,
+        description: 'High-performance laptop for professionals',
+        images: ['https://via.placeholder.com/150/macbook'],
+        thumbnail: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        tags: ['laptop', 'apple', 'pro'],
+        stock: 50,
+        colorVariants: [
+            { colorId: { _id: 'color1', name: 'Space Gray', hexCode: '#3C3C3C' }, stock: 20 },
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 30 },
+        ],
+        categoryId: { _id: 'cat1', name: 'Gaming Laptop', parentId: 'cat0', description: 'High-end laptops', icon: 'laptop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Apple',
+        isFeatured: true,
+        discountPercent: 10,
+        rating: 4.8,
+        reviewCount: 120,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '2',
+        name: 'Dell XPS 13',
+        slug: 'dell-xps-13',
+        price: 1299,
+        description: 'Compact and powerful laptop',
+        images: ['https://via.placeholder.com/150/dell'],
+        thumbnail: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        tags: ['laptop', 'dell', 'ultrabook'],
+        stock: 30,
+        colorVariants: [
+            { colorId: { _id: 'color3', name: 'Black', hexCode: '#000000' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat2', name: 'Ultrabook', parentId: 'cat0', description: 'Lightweight laptops', icon: 'laptop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Dell',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.5,
+        reviewCount: 80,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '3',
+        name: 'HP Spectre x360',
+        slug: 'hp-spectre-x360',
+        price: 1499,
+        description: 'Versatile convertible laptop',
+        images: ['https://via.placeholder.com/150/hp'],
+        thumbnail: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        tags: ['laptop', 'hp', 'convertible'],
+        stock: 25,
+        colorVariants: [
+            { colorId: { _id: 'color4', name: 'Blue', hexCode: '#1E90FF' }, stock: 25 },
+        ],
+        categoryId: { _id: 'cat2', name: 'Ultrabook', parentId: 'cat0', description: 'Lightweight laptops', icon: 'laptop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'HP',
+        isFeatured: false,
+        discountPercent: 5,
+        rating: 4.6,
+        reviewCount: 95,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '4',
+        name: 'Gaming PC Ryzen 7',
+        slug: 'gaming-pc-ryzen-7',
+        price: 1499,
+        description: 'High-performance gaming PC',
+        images: ['https://via.placeholder.com/150/pc'],
+        thumbnail: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        tags: ['pc', 'gaming', 'ryzen'],
+        stock: 20,
+        colorVariants: [
+            { colorId: { _id: 'color3', name: 'Black', hexCode: '#000000' }, stock: 20 },
+        ],
+        categoryId: { _id: 'cat3', name: 'Gaming PC', parentId: 'cat4', description: 'Gaming desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Custom',
+        isFeatured: true,
+        discountPercent: 15,
+        rating: 4.7,
+        reviewCount: 90,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '5',
+        name: 'Workstation PC Intel',
+        slug: 'workstation-pc-intel',
+        price: 1799,
+        description: 'Powerful PC for professionals',
+        images: ['https://via.placeholder.com/150/workstation'],
+        thumbnail: 'https://via.placeholder.com/150/workstation',
+        tags: ['pc', 'workstation', 'intel'],
+        stock: 15,
+        colorVariants: [
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Intel',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.6,
+        reviewCount: 60,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '6',
+        name: 'Mini PC ASUS',
+        slug: 'mini-pc-asus',
+        price: 699,
+        description: 'Compact PC for home use',
+        images: ['https://via.placeholder.com/150/mini-pc'],
+        thumbnail: 'https://via.placeholder.com/150/mini-pc',
+        tags: ['pc', 'asus', 'mini'],
+        stock: 35,
+        colorVariants: [
+            { colorId: { _id: 'color3', name: 'Black', hexCode: '#000000' }, stock: 35 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'ASUS',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.3,
+        reviewCount: 45,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '7',
+        name: 'Samsung 27" Monitor',
+        slug: 'samsung-27-monitor',
+        price: 299,
+        description: 'High-resolution 4K monitor',
+        images: ['https://via.placeholder.com/150/monitor'],
+        thumbnail: 'https://via.placeholder.com/150/monitor',
+        tags: ['monitor', 'samsung', '4k'],
+        stock: 40,
+        colorVariants: [
+            { colorId: { _id: 'color3', name: 'Black', hexCode: '#000000' }, stock: 40 },
+        ],
+        categoryId: { _id: 'cat6', name: '4K Monitor', parentId: 'cat7', description: 'High-resolution monitors', icon: 'monitor', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Samsung',
+        isFeatured: true,
+        discountPercent: 20,
+        rating: 4.9,
+        reviewCount: 150,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '8',
+        name: 'LG 24" Monitor',
+        slug: 'lg-24-monitor',
+        price: 199,
+        description: 'Full HD monitor for everyday use',
+        images: ['https://via.placeholder.com/150/lg-monitor'],
+        thumbnail: 'https://via.placeholder.com/150/lg-monitor',
+        tags: ['monitor', 'lg', 'fhd'],
+        stock: 25,
+        colorVariants: [
+            { colorId: { _id: 'color3', name: 'Black', hexCode: '#000000' }, stock: 25 },
+        ],
+        categoryId: { _id: 'cat8', name: 'FHD Monitor', parentId: 'cat7', description: 'Standard monitors', icon: 'monitor', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'LG',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.4,
+        reviewCount: 50,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '9',
+        name: 'Dell 32" Curved Monitor',
+        slug: 'dell-32-curved-monitor',
+        price: 499,
+        description: 'Immersive curved 4K monitor',
+        images: ['https://via.placeholder.com/150/curved-monitor'],
+        thumbnail: 'https://via.placeholder.com/150/curved-monitor',
+        tags: ['monitor', 'dell', 'curved', '4k'],
+        stock: 20,
+        colorVariants: [
+            { colorId: { _id: 'color3', name: 'Black', hexCode: '#000000' }, stock: 20 },
+        ],
+        categoryId: { _id: 'cat6', name: '4K Monitor', parentId: 'cat7', description: 'High-resolution monitors', icon: 'monitor', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Dell',
+        isFeatured: true,
+        discountPercent: 10,
+        rating: 4.8,
+        reviewCount: 70,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '10',
+        name: 'Workstation PC Intel',
+        slug: 'workstation-pc-intel',
+        price: 1799,
+        description: 'Powerful PC for professionals',
+        images: ['https://via.placeholder.com/150/workstation'],
+        thumbnail: 'https://via.placeholder.com/150/workstation',
+        tags: ['pc', 'workstation', 'intel'],
+        stock: 15,
+        colorVariants: [
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Intel',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.6,
+        reviewCount: 60,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '11',
+        name: 'Workstation PC Intel',
+        slug: 'workstation-pc-intel',
+        price: 1799,
+        description: 'Powerful PC for professionals',
+        images: ['https://via.placeholder.com/150/workstation'],
+        thumbnail: 'https://via.placeholder.com/150/workstation',
+        tags: ['pc', 'workstation', 'intel'],
+        stock: 15,
+        colorVariants: [
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Intel',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.6,
+        reviewCount: 60,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '12',
+        name: 'Workstation PC Intel',
+        slug: 'workstation-pc-intel',
+        price: 1799,
+        description: 'Powerful PC for professionals',
+        images: ['https://via.placeholder.com/150/workstation'],
+        thumbnail: 'https://via.placeholder.com/150/workstation',
+        tags: ['pc', 'workstation', 'intel'],
+        stock: 15,
+        colorVariants: [
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Intel',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.6,
+        reviewCount: 60,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '13',
+        name: 'Workstation PC Intel',
+        slug: 'workstation-pc-intel',
+        price: 1799,
+        description: 'Powerful PC for professionals',
+        images: ['https://via.placeholder.com/150/workstation'],
+        thumbnail: 'https://via.placeholder.com/150/workstation',
+        tags: ['pc', 'workstation', 'intel'],
+        stock: 15,
+        colorVariants: [
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Intel',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.6,
+        reviewCount: 60,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '14',
+        name: 'Workstation PC Intel',
+        slug: 'workstation-pc-intel',
+        price: 1799,
+        description: 'Powerful PC for professionals',
+        images: ['https://via.placeholder.com/150/workstation'],
+        thumbnail: 'https://via.placeholder.com/150/workstation',
+        tags: ['pc', 'workstation', 'intel'],
+        stock: 15,
+        colorVariants: [
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Intel',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.6,
+        reviewCount: 60,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+    {
+        _id: '15',
+        name: 'Workstation PC Intel',
+        slug: 'workstation-pc-intel',
+        price: 1799,
+        description: 'Powerful PC for professionals',
+        images: ['https://via.placeholder.com/150/workstation'],
+        thumbnail: 'https://via.placeholder.com/150/workstation',
+        tags: ['pc', 'workstation', 'intel'],
+        stock: 15,
+        colorVariants: [
+            { colorId: { _id: 'color2', name: 'Silver', hexCode: '#C0C0C0' }, stock: 15 },
+        ],
+        categoryId: { _id: 'cat5', name: 'Workstation', parentId: 'cat4', description: 'Professional desktops', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+        brand: 'Intel',
+        isFeatured: false,
+        discountPercent: 0,
+        rating: 4.6,
+        reviewCount: 60,
+        createdAt: new Date('2025-04-27'),
+        updatedAt: new Date('2025-04-27'),
+    },
+];
+
+// Mock danh mục cha
+export const mockCategories = [
+    { _id: 'cat0', name: 'Laptop', description: 'All laptops', icon: 'laptop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+    { _id: 'cat4', name: 'PC', description: 'All PCs', icon: 'desktop', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+    { _id: 'cat7', name: 'Monitor', description: 'All monitors', icon: 'monitor', createdAt: '2025-04-27', updatedAt: '2025-04-27' },
+];
+
+interface ProductListProps {
+    page: number;
+    setPage: (page: number) => void;
+}
+
+const ProductList: React.FC<ProductListProps> = ({ page, setPage }) => {
+    const [products, setProducts] = useState<IProduct[]>([]);
+    const [totalPages] = useState(Math.ceil(mockProducts.length / 9));
+
+    useEffect(() => {
+        const start = (page - 1) * 9;
+        const end = start + 9;
+        setProducts(mockProducts.slice(start, end));
+    }, [page]);
+
+    const handlePrevPage = () => {
+        if (page > 1) setPage(page - 1);
+    };
+
+    const handleNextPage = () => {
+        if (page < totalPages) setPage(page + 1);
+    };
+
+    return (
+        <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                {products.map(product => (
+                    <ProductCard key={product._id} product={product} />
+                ))}
+            </div>
+            <div className="flex justify-center space-x-4">
+                <Button onClick={handlePrevPage} disabled={page === 1} variant="outline">
+                    Previous
+                </Button>
+                <span className="self-center">Page {page} of {totalPages}</span>
+                <Button onClick={handleNextPage} disabled={page === totalPages} variant="outline">
+                    Next
+                </Button>
+            </div>
+        </div>
+    );
+};
+
+export default ProductList;
