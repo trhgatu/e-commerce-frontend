@@ -9,6 +9,7 @@ export interface IProduct {
   categoryId: string;
   brand: string;
   stock: number;
+  colorVariants: { colorId: string; stock: number }[];
   createdAt: string;
   updatedAt: string;
 }
