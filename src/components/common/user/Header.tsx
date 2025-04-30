@@ -200,7 +200,7 @@ const Header: React.FC = () => {
       </div>
 
       {/* Category navigation */}
-      <div className="bg-gray-100 py-2 border-t border-gray-200 overflow-hidden relative">
+      <div className="bg-gray-100 border-t border-gray-200 overflow-hidden relative">
         <div className="container mx-auto px-4">
           <nav className="hidden md:flex space-x-6 overflow-x-auto scrollbar-hide py-1">
             {categories.map((category) => (

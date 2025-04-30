@@ -21,7 +21,7 @@ const categories: Category[] = [
   },
   {
     id: 'cat2',
-    name: 'Máy Tính Để Bàn',
+    name: 'PC',
     slug: 'desktop',
     icon: <Cpu className="h-10 w-10" />,
     count: 38

@@ -1,5 +1,5 @@
 import React from 'react';
-import { mockProducts } from './ProductList';
+import { mockProducts } from '@/mock/productData';
 import ProductCard from './ProductCard';
 
 interface RelatedProductsProps {
@@ -8,10 +8,9 @@ interface RelatedProductsProps {
 }
 
 const RelatedProducts: React.FC<RelatedProductsProps> = ({ categoryId, currentProductId }) => {
-  // Filter products with the same category but not the current product
   const relatedProducts = mockProducts
     .filter(product => product.categoryId._id === categoryId && product._id !== currentProductId)
-    .slice(0, 4); // Limit to 4 products
+    .slice(0, 4);
 
   if (relatedProducts.length === 0) {
     return null;

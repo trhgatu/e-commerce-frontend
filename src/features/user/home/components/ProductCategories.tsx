@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { mockProducts } from '@/features/user/product/components';
+import { mockProducts } from '@/mock/productData';
 import ProductCard from '@/features/user/product/components/ProductCard';
 import { IProduct } from '@/types/product';
 

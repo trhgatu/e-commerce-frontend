@@ -21,7 +21,7 @@ export interface IProduct {
   discountPercent?: number;
   slug: string;
   tags?: string[];
-  isNew: boolean;
-  isBestSeller: boolean;
-  isTrending: boolean;
+  isNew?: boolean;
+  isBestSeller?: boolean;
+  isTrending?: boolean;
 }

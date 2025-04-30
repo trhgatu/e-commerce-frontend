@@ -1,6 +1,7 @@
 // src/pages/user/ProductDetailPage.tsx
 import { useParams } from 'react-router-dom';
-import { mockProducts, RelatedProducts } from '@/features/user/product/components';
+import { RelatedProducts } from '@/features/user/product/components';
+import { mockProducts } from '@/mock/productData';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Heart, Share2, ShoppingCart, Star, ChevronRight, Truck, Shield, RotateCcw } from 'lucide-react';

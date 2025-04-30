@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { mockProducts } from '@/features/user/product/components';
+import { mockProducts } from '@/mock/productData';
 import ProductCard from '@/features/user/product/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
@@ -34,15 +34,11 @@ const cardVariants = {
 };
 
 const FeaturedProducts: React.FC = () => {
-  // Lọc và sắp xếp sản phẩm
   const featuredProducts = mockProducts
     .filter(product => product.isFeatured)
-    // Sắp xếp sản phẩm khuyến mãi lên đầu
     .sort((a, b) => {
-      // Ưu tiên sản phẩm có discount
       if ((a.discountPercent || 0) > 0 && (b.discountPercent || 0) === 0) return -1;
       if ((a.discountPercent || 0) === 0 && (b.discountPercent || 0) > 0) return 1;
-      // Nếu cả hai đều có hoặc đều không có discount, ưu tiên discount cao hơn
       return (b.discountPercent || 0) - (a.discountPercent || 0);
     });
 
@@ -69,16 +65,6 @@ const FeaturedProducts: React.FC = () => {
         <h3 className="text-xl font-semibold text-gray-800 md:hidden">
           Sản Phẩm Nổi Bật
         </h3>
-        <div className="hidden md:flex md:gap-2">
-          {Array.from({ length: Math.min(featuredProducts.length, 5) }).map((_, i) => (
-            <div
-              key={i}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                i === 0 ? 'bg-blue-500' : 'bg-gray-300'
-              }`}
-            />
-          ))}
-        </div>
       </div>
 
       {/* Mobile Carousel */}
