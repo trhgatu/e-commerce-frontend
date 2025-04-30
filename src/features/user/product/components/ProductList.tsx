@@ -13,11 +13,11 @@ interface ProductListProps {
 
 const ProductList: React.FC<ProductListProps> = ({ page, setPage }) => {
     const [products, setProducts] = useState<IProduct[]>([]);
-    const [totalPages] = useState(Math.ceil(mockProducts.length / 9));
+    const [totalPages] = useState(Math.ceil(mockProducts.length / 10));
 
     useEffect(() => {
-        const start = (page - 1) * 9;
-        const end = start + 9;
+        const start = (page - 1) * 10;
+        const end = start + 10;
         setProducts(mockProducts.slice(start, end));
     }, [page]);
 
@@ -31,7 +31,7 @@ const ProductList: React.FC<ProductListProps> = ({ page, setPage }) => {
 
     return (
         <div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                 {products.map(product => (
                     <ProductCard key={product._id} product={product} />
                 ))}

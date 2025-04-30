@@ -104,9 +104,9 @@ const Header: React.FC = () => {
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-4 text-sm">
-            <Link to="/about" className="hover:text-blue-200">Về Chúng Tôi</Link>
-            <Link to="/contact" className="hover:text-blue-200">Liên Hệ</Link>
-            <Link to="/help" className="hover:text-blue-200">Trợ Giúp</Link>
+            <Link to="/about" className="hover:text-blue-200">Về chúng tôi</Link>
+            <Link to="/contact" className="hover:text-blue-200">Liên hệ</Link>
+            <Link to="/help" className="hover:text-blue-200">Trợ giúp</Link>
           </div>
         </div>
       </div>

@@ -63,7 +63,7 @@ const FeaturedProducts: React.FC = () => {
     >
       <div className="mb-6 flex justify-between items-center">
         <h3 className="text-xl font-semibold text-gray-800 md:hidden">
-          Sản Phẩm Nổi Bật
+          Sản phẩm nổi bật
         </h3>
       </div>
 

@@ -97,7 +97,7 @@ const ProductCategories: React.FC = () => {
   return (
     <div className="space-y-24 py-12">
       {categories.map((category) => {
-        const categoryProducts = mockProducts.filter(category.filter).slice(0, 4);
+        const categoryProducts = mockProducts.filter(category.filter).slice(0, 5);
 
         return (
           <div key={category.id} className={`relative overflow-hidden rounded-2xl ${category.bgColor} ${category.accentColor} p-8 pt-12`}>
@@ -114,7 +114,7 @@ const ProductCategories: React.FC = () => {
                 </Link>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
                 {categoryProducts.length > 0 ? (
                   categoryProducts.map(product => (
                     <ProductCard key={product._id} product={product} />

@@ -42,16 +42,16 @@ const HomePage: React.FC = () => {
       </motion.div>
 
       {/* Danh mục sản phẩm */}
-      <motion.div variants={sectionVariants} className="bg-gray-50 py-8">
+      <motion.div variants={sectionVariants}>
         <div className="container mx-auto px-4">
           <CategorySection />
         </div>
       </motion.div>
 
       {/* Sản phẩm nổi bật */}
-      <motion.div variants={sectionVariants} className="container mx-auto px-4 py-8">
+      <motion.div variants={sectionVariants} className="container mx-auto px-4">
         <div className="mb-2">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Sản Phẩm Nổi Bật</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Sản phẩm nổi bật</h2>
           <FeaturedProducts />
         </div>
       </motion.div>
@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
       {/* Tất cả sản phẩm */}
       <motion.div variants={sectionVariants} className="container mx-auto px-4 py-8">
         <div className="mb-4">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Tất Cả Sản Phẩm</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Tất cả sản phẩm</h2>
           <ProductList page={page} setPage={setPage} />
         </div>
       </motion.div>
