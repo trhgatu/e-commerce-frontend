@@ -302,7 +302,7 @@ const Header: React.FC = () => {
 
               {/* Categories */}
               <div className="mb-8">
-                <motion.h3 variants={menuItemVariants} className="text-xl font-bold mb-4 text-gray-800">Danh Mục Sản Phẩm</motion.h3>
+                <motion.h3 variants={menuItemVariants} className="text-xl font-bold mb-4 text-gray-800">Danh mục sản phẩm</motion.h3>
                 <nav className="grid grid-cols-2 gap-4">
                   {categories.map((category) => (
                     <motion.div key={category.slug} variants={menuItemVariants}>

@@ -62,7 +62,7 @@ const HomePage: React.FC = () => {
       </motion.div>
 
       {/* Khuyến mãi */}
-      <motion.div variants={sectionVariants} className="bg-gray-50 py-8">
+      <motion.div variants={sectionVariants}>
         <PromotionSection />
       </motion.div>
 

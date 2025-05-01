@@ -44,7 +44,7 @@ const promotions: Promotion[] = [
 
 const PromotionSection: React.FC = () => {
   return (
-    <div className="bg-gray-50 py-12">
+    <div>
       <div className="container mx-auto px-4">
         <h2 className="text-2xl font-bold text-gray-800 mb-8">Khuyến Mãi Đặc Biệt</h2>
 

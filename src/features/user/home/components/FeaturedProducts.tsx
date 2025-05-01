@@ -61,11 +61,6 @@ const FeaturedProducts: React.FC = () => {
       viewport={{ once: true, amount: 0.2 }}
       className="relative"
     >
-      <div className="mb-6 flex justify-between items-center">
-        <h3 className="text-xl font-semibold text-gray-800 md:hidden">
-          Sản phẩm nổi bật
-        </h3>
-      </div>
 
       {/* Mobile Carousel */}
       {isMobile ? (
@@ -90,7 +85,7 @@ const FeaturedProducts: React.FC = () => {
         </Carousel>
       ) : (
         /* Desktop Grid */
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-6">
           {featuredProducts.slice(0, 8).map((product) => (
             <motion.div key={product._id} variants={cardVariants}>
               <ProductCard product={product} />

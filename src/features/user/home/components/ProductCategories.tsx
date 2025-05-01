@@ -16,21 +16,6 @@ interface CategorySection {
   svgPattern: React.ReactNode;
 }
 
-// SVG pattern components
-const CirclePattern = () => (
-  <svg className="absolute right-0 top-0 h-full w-1/2 opacity-20" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <circle cx="80" cy="20" r="15" />
-    <circle cx="90" cy="60" r="10" />
-    <circle cx="60" cy="80" r="20" />
-    <circle cx="30" cy="90" r="8" />
-  </svg>
-);
-
-const WavePattern = () => (
-  <svg className="absolute left-0 bottom-0 h-2/3 w-full opacity-10" viewBox="0 0 1200 300" preserveAspectRatio="none">
-    <path d="M 0 300 Q 300 100 600 200 Q 900 300 1200 100 L 1200 300 Z" />
-  </svg>
-);
 
 const GridPattern = () => (
   <svg className="absolute inset-0 opacity-10" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +47,7 @@ const categories: CategorySection[] = [
     filter: (product) => product.tags?.includes('laptop') || product.categoryId.name.toLowerCase().includes('laptop'),
     bgColor: 'bg-blue-50',
     accentColor: 'text-blue-600',
-    svgPattern: <CirclePattern />
+    svgPattern: <GridPattern />
   },
   {
     id: 'pc',
@@ -80,7 +65,7 @@ const categories: CategorySection[] = [
     filter: (product) => product.brand.toLowerCase() === 'apple',
     bgColor: 'bg-gray-50',
     accentColor: 'text-gray-600',
-    svgPattern: <WavePattern />
+    svgPattern: <GridPattern />
   },
   {
     id: 'gaming',
@@ -95,7 +80,7 @@ const categories: CategorySection[] = [
 
 const ProductCategories: React.FC = () => {
   return (
-    <div className="space-y-24 py-12">
+    <div className="space-y-24">
       {categories.map((category) => {
         const categoryProducts = mockProducts.filter(category.filter).slice(0, 5);
 
@@ -114,7 +99,7 @@ const ProductCategories: React.FC = () => {
                 </Link>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-6">
                 {categoryProducts.length > 0 ? (
                   categoryProducts.map(product => (
                     <ProductCard key={product._id} product={product} />

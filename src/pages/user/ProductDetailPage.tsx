@@ -14,7 +14,7 @@ const TabContent: React.FC<{
 }> = ({ isActive, children, className = "" }) => {
   if (!isActive) return null;
   return (
-    <div className={`bg-white p-6 rounded-md mt-4 ${className}`}>
+    <div className={`bg-white p-4 rounded-md mt-4 ${className}`}>
       {children}
     </div>
   );
