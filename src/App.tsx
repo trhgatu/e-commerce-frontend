@@ -6,6 +6,7 @@ import ProductDetailPage from '@/pages/user/ProductDetailPage';
 import ScrollToTop from '@/components/ScrollToTop';
 import { RegisterPage, LoginPage } from '@/features/user/auth/pages';
 import CartPage from '@/features/user/cart/pages/CartPage';
+import ProductListingPage from '@/features/user/product/pages/ProductListingPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
+          <Route path='products' element={<ProductListingPage />} />
           <Route path="product/:id" element={<ProductDetailPage />} />
           <Route path="cart" element={<CartPage />} />
         </Route>
