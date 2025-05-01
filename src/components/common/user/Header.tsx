@@ -1,11 +1,9 @@
-// src/components/common/user/Header.tsx
 import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
-import { Search, ShoppingCart, User, Menu, Heart, Phone, X, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Search, ShoppingCart, Menu, Heart, Phone, X, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-/* import { useAppSelector, useAppDispatch } from '@/hooks';
-import { logout } from '@/store/authSlice'; */
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,15 +14,15 @@ const Header: React.FC = () => {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     if (!isMobileMenuOpen) {
-      // Khi mở menu, vô hiệu hóa cuộn trang
+      // Disable scrolling when menu is open
       document.body.style.overflow = 'hidden';
     } else {
-      // Khi đóng menu, bật lại cuộn trang
+      // Enable scrolling when menu is closed
       document.body.style.overflow = 'auto';
     }
   };
 
-  // Theo dõi scroll để thay đổi màu header
+  // Track scroll to change header color
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -34,7 +32,7 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Đảm bảo overflow được reset khi unmount
+  // Reset overflow when unmounting
   useEffect(() => {
     return () => {
       document.body.style.overflow = 'auto';
@@ -72,7 +70,7 @@ const Header: React.FC = () => {
     open: { opacity: 1, x: 0 },
   };
 
-  // Danh mục sản phẩm
+  // Product categories
   const categories = [
     { name: 'Laptop', slug: 'laptop' },
     { name: 'PC - Máy Tính Bàn', slug: 'desktop' },
@@ -82,13 +80,6 @@ const Header: React.FC = () => {
     { name: 'Thiết Bị Thông Minh', slug: 'smart-devices' },
     { name: 'Thiết Bị Mạng', slug: 'networking' },
   ];
-
-  /*  const { isAuthenticated } = useAppSelector(state => state.auth);
-  const dispatch = useAppDispatch();
-
-  const handleLogout = () => {
-    dispatch(logout());
-  }; */
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -104,9 +95,13 @@ const Header: React.FC = () => {
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-4 text-sm">
+            {/* Login and Register in top bar for medium+ screens */}
+            <Link to="/auth/login" className="hover:text-blue-200">Đăng nhập</Link>
+            <span className="text-blue-300">|</span>
+            <Link to="/auth/register" className="hover:text-blue-200">Đăng ký</Link>
+            <span className="text-blue-300">|</span>
             <Link to="/about" className="hover:text-blue-200">Về chúng tôi</Link>
             <Link to="/contact" className="hover:text-blue-200">Liên hệ</Link>
-            <Link to="/help" className="hover:text-blue-200">Trợ giúp</Link>
           </div>
         </div>
       </div>
@@ -135,11 +130,18 @@ const Header: React.FC = () => {
 
           {/* Navigation - hidden on mobile */}
           <nav className="hidden md:flex items-center space-x-4">
+            {/* Login and Register buttons for medium+ screens */}
+            <div className="flex items-center space-x-3">
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/auth/login" className="font-medium">Đăng nhập</Link>
+              </Button>
+              <Button size="sm" className="bg-blue-600 hover:bg-blue-700" asChild>
+                <Link to="/auth/register" className="font-medium">Đăng ký</Link>
+              </Button>
+            </div>
+
             <Link to="/wishlist" className="flex items-center text-gray-700 hover:text-blue-600">
               <Heart size={20} className="mr-1" />
-            </Link>
-            <Link to="/account" className="flex items-center text-gray-700 hover:text-blue-600">
-              <User size={20} className="mr-1" />
             </Link>
             <Link to="/cart" className="flex items-center text-gray-700 hover:text-blue-600 relative">
               <ShoppingCart size={20} className="mr-1" />
@@ -260,18 +262,26 @@ const Header: React.FC = () => {
             className="fixed inset-0 bg-white z-40 pt-20 overflow-y-auto"
           >
             <div className="container mx-auto px-4 py-6">
+              {/* Login/Register buttons for mobile */}
+              <div className="flex flex-col space-y-3 mb-8 border-b border-gray-200 pb-6">
+                <motion.div variants={menuItemVariants} className="w-full">
+                  <Button variant="outline" size="lg" className="w-full" asChild>
+                    <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                      Đăng nhập
+                    </Link>
+                  </Button>
+                </motion.div>
+                <motion.div variants={menuItemVariants} className="w-full">
+                  <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700" asChild>
+                    <Link to="/register" onClick={() => setIsMobileMenuOpen(false)}>
+                      Đăng ký
+                    </Link>
+                  </Button>
+                </motion.div>
+              </div>
+
               {/* User Actions */}
               <div className="flex justify-around mb-8 border-b border-gray-200 pb-6">
-                <Link
-                  to="/account"
-                  className="flex flex-col items-center text-gray-700"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <motion.div variants={menuItemVariants} className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-2">
-                    <User size={24} />
-                  </motion.div>
-                  <motion.span variants={menuItemVariants}>Tài Khoản</motion.span>
-                </Link>
                 <Link
                   to="/wishlist"
                   className="flex flex-col items-center text-gray-700"
