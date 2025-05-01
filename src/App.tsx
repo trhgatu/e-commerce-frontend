@@ -4,12 +4,12 @@ import HomePage from '@/pages/user/HomePage';
 import { AdminPage } from '@/pages/admin/AdminPage';
 import ProductDetailPage from '@/pages/user/ProductDetailPage';
 import ScrollToTop from '@/components/ScrollToTop';
-import LoginPage from '@/features/user/auth/pages/LoginPage';
+import { RegisterPage, LoginPage } from '@/features/user/auth/pages';
 
 function App() {
   return (
     <Router>
-      <ScrollToTop/>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
@@ -17,7 +17,8 @@ function App() {
         </Route>
 
         <Route path="/auth" element={<MainLayout />}>
-          <Route path="login"  element={<LoginPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
         </Route>
 
 

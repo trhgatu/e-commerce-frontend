@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Eye, EyeOff, Mail, Lock, Facebook, Github } from 'lucide-react';
 import { FaGoogle } from 'react-icons/fa';
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -179,5 +179,3 @@ const LoginPage = () => {
     </div>
   );
 };
-
-export default LoginPage;
