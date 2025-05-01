@@ -5,6 +5,7 @@ import { AdminPage } from '@/pages/admin/AdminPage';
 import ProductDetailPage from '@/pages/user/ProductDetailPage';
 import ScrollToTop from '@/components/ScrollToTop';
 import { RegisterPage, LoginPage } from '@/features/user/auth/pages';
+import CartPage from '@/features/user/cart/pages/CartPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="product/:id" element={<ProductDetailPage />} />
+          <Route path="cart" element={<CartPage />} />
         </Route>
 
         <Route path="/auth" element={<MainLayout />}>
