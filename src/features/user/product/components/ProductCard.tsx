@@ -151,14 +151,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
           <div>
             {discountedPrice ? (
-              <>
+              <div className='flex flex-col'>
                 <span className="text-lg font-semibold text-red-600">
                   {discountedPrice.toLocaleString('vi-VN')}₫
                 </span>
-                <span className="text-sm text-gray-500 line-through ml-2">
+                <span className="text-sm text-gray-500 line-through">
                   {product.price.toLocaleString('vi-VN')}₫
                 </span>
-              </>
+              </div>
             ) : (
               <span className="text-lg font-semibold text-gray-800">
                 {product.price.toLocaleString('vi-VN')}₫
@@ -166,7 +166,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             )}
           </div>
           <Button
-            className="text-blue-600 group-hover:text-blue-800 flex items-center text-sm font-medium"
+            className="text-blue-600 group-hover:text-blue-800 bg-blue-200  flex items-center text-sm font-medium"
             variant="ghost"
             /* onClick={handleAddToCart} */
             disabled={!product.colorVariants.length || product.stock <= 0}

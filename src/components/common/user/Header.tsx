@@ -137,15 +137,12 @@ const Header: React.FC = () => {
           <nav className="hidden md:flex items-center space-x-4">
             <Link to="/wishlist" className="flex items-center text-gray-700 hover:text-blue-600">
               <Heart size={20} className="mr-1" />
-              <span>Yêu Thích</span>
             </Link>
             <Link to="/account" className="flex items-center text-gray-700 hover:text-blue-600">
               <User size={20} className="mr-1" />
-              <span>Tài Khoản</span>
             </Link>
             <Link to="/cart" className="flex items-center text-gray-700 hover:text-blue-600 relative">
               <ShoppingCart size={20} className="mr-1" />
-              <span>Giỏ Hàng</span>
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                 0
               </span>
