@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { ProductList } from "@/features/user/product/components";
+import React from "react";
 import { Banner, CategorySection, PromotionSection, FeaturedProducts, ProductCategories } from "@/features/user/home/components";
 import { motion } from "framer-motion";
 
@@ -27,8 +26,6 @@ const sectionVariants = {
 };
 
 const HomePage: React.FC = () => {
-  const [page, setPage] = useState(1);
-
   return (
     <motion.div
       className="space-y-8 pb-16"
@@ -64,14 +61,6 @@ const HomePage: React.FC = () => {
       {/* Khuyến mãi */}
       <motion.div variants={sectionVariants}>
         <PromotionSection />
-      </motion.div>
-
-      {/* Tất cả sản phẩm */}
-      <motion.div variants={sectionVariants} className="container mx-auto px-4 py-8">
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Tất cả sản phẩm</h2>
-          <ProductList page={page} setPage={setPage} />
-        </div>
       </motion.div>
     </motion.div>
   );
