@@ -1,15 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, ShoppingCart, Menu, Heart, Phone, X, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAppDispatch } from '@/hooks';
+import { mockProducts } from '@/mock/productData';
+import { setSearch } from '@/features/user/filter/reducers/filterSlice';
 
 const Header: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  const categories = Array.from(new Set(mockProducts.map(p => p.categoryId.name))).map(name => ({
+    name,
+    slug: name.toLowerCase().replace(/\s+/g, '-'),
+  }));
+
+  const handleCategoryClick = (name: string, slug: string) => {
+    setActiveCategory(name);
+    navigate(`/category/${slug}`);
+  };
   // Hamburger menu animation
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -70,16 +84,6 @@ const Header: React.FC = () => {
     open: { opacity: 1, x: 0 },
   };
 
-  // Product categories
-  const categories = [
-    { name: 'Laptop', slug: 'laptop' },
-    { name: 'PC - Máy Tính Bàn', slug: 'desktop' },
-    { name: 'Màn Hình', slug: 'monitor' },
-    { name: 'Linh Kiện', slug: 'components' },
-    { name: 'Phụ Kiện', slug: 'accessories' },
-    { name: 'Thiết Bị Thông Minh', slug: 'smart-devices' },
-    { name: 'Thiết Bị Mạng', slug: 'networking' },
-  ];
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -121,6 +125,10 @@ const Header: React.FC = () => {
                 type="text"
                 placeholder="Tìm kiếm sản phẩm..."
                 className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300"
+                onChange={(e) => {
+                  dispatch(setSearch(e.target.value));
+                  navigate(`/products`);
+                }}
               />
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                 <Search size={18} className="text-gray-500" />
@@ -209,15 +217,16 @@ const Header: React.FC = () => {
                 onMouseLeave={() => setActiveCategory(null)}
                 className="relative"
               >
-                <Link
-                  to={`/category/${category.slug}`}
+                <Button
+                variant="outline"
+                  onClick={() => handleCategoryClick(category.name, category.slug)}
                   className={`text-gray-700 hover:text-blue-600 whitespace-nowrap flex items-center ${
                     activeCategory === category.slug ? 'text-blue-600' : ''
                   }`}
                 >
                   {category.name}
                   <ChevronDown size={14} className="ml-1" />
-                </Link>
+                </Button>
 
                 {activeCategory === category.slug && (
                   <motion.div

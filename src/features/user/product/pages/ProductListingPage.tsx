@@ -1,5 +1,5 @@
 // src/pages/user/ProductListingPage.tsx
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { mockProducts } from '@/mock/productData';
 import ProductCard from '@/features/user/product/components/ProductCard';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setCategory, setBrand, setSearch } from '@/features/user/filter/reducers/filterSlice'
 import { motion } from 'framer-motion';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import { useParams } from 'react-router-dom';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -20,18 +21,30 @@ const cardVariants = {
 };
 
 const ProductListingPage: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>()
   const dispatch = useAppDispatch();
   const { category, brand, search } = useAppSelector(state => state.filter);
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
-  const filteredProducts = mockProducts.filter(product => {
-    let match = true;
-    if (category && product.categoryId.name !== category) match = false;
-    if (brand && product.brand !== brand) match = false;
-    if (search && !product.name.toLowerCase().includes(search.toLowerCase())) match = false;
-    return match;
-  });
+  useEffect(() => {
+    if (slug) {
+      const categoryName = mockProducts.find(p => p.categoryId.name.toLowerCase().replace(/\s+/g, '-') === slug)?.categoryId.name;
+      if (categoryName) {
+        dispatch(setCategory(categoryName));
+      }
+    }
+  }, [slug, dispatch]);
+
+  const filteredProducts = useMemo(() => {
+    return mockProducts.filter(product => {
+      let match = true;
+      if (category && product.categoryId.name !== category) match = false;
+      if (brand && product.brand !== brand) match = false;
+      if (search && !product.name.toLowerCase().includes(search.toLowerCase())) match = false;
+      return match;
+    });
+  }, [category, brand, search]);
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const paginatedProducts = filteredProducts.slice((page - 1) * itemsPerPage, page * itemsPerPage);
