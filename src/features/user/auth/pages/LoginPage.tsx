@@ -1,46 +1,44 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+// src/features/user/auth/pages/LoginPage.tsx
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Mail, Lock, Facebook, Github } from 'lucide-react';
 import { FaGoogle } from 'react-icons/fa';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { login } from '@/store/authSlice';
+import { Loader2 } from 'lucide-react';
 
-export const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export const LoginPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { loading, error, isAuthenticated, user } = useAppSelector(state => state.auth);
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      setLoginError('Vui lòng nhập email và mật khẩu');
+    if (!formData.email || !formData.password) {
       return;
     }
-
-    try {
-      setIsLoading(true);
-      setLoginError(null);
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // For demo purposes - replace with actual authentication logic
-      console.log('Login attempt with:', { email, password, rememberMe });
-
-      // Navigate to home page after successful login
-      // navigate('/');
-
-    } catch (error) {
-      setLoginError('Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập của bạn.');
-      console.error('Login error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    await dispatch(login(formData));
   };
 
   const togglePasswordVisibility = () => {
@@ -60,10 +58,10 @@ export const LoginPage = () => {
 
         {/* Login form */}
         <div className="bg-white p-8 rounded-lg shadow-md">
-          {loginError && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">
-              {loginError}
-            </div>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
           )}
 
           <form onSubmit={handleSubmit}>
@@ -76,11 +74,13 @@ export const LoginPage = () => {
                 <Input
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="your.email@example.com"
                   className="pl-10"
                   required
+                  aria-label="Email"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                   <Mail size={18} />
@@ -96,12 +96,14 @@ export const LoginPage = () => {
               <div className="relative">
                 <Input
                   id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   placeholder="••••••••"
                   className="pl-10 pr-10"
                   required
+                  aria-label="Password"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                   <Lock size={18} />
@@ -110,6 +112,7 @@ export const LoginPage = () => {
                   type="button"
                   onClick={togglePasswordVisibility}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -122,7 +125,7 @@ export const LoginPage = () => {
                 <Checkbox
                   id="remember-me"
                   checked={rememberMe}
-                  onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                  onCheckedChange={checked => setRememberMe(checked as boolean)}
                 />
                 <label htmlFor="remember-me" className="ml-2 text-sm text-gray-600">
                   Nhớ tài khoản
@@ -137,9 +140,16 @@ export const LoginPage = () => {
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
-              disabled={isLoading}
+              disabled={loading || !formData.email || !formData.password}
             >
-              {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+              {loading ? (
+                <span className="flex items-center">
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  Đang đăng nhập...
+                </span>
+              ) : (
+                'Đăng nhập'
+              )}
             </Button>
           </form>
 

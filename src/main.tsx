@@ -4,6 +4,9 @@ import './index.css'
 import App from './App.tsx'
 import { Provider } from 'react-redux'
 import { store } from '@/store/index.ts'
+import { restoreAuth } from '@/store/authSlice.ts'
+
+store.dispatch(restoreAuth());
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

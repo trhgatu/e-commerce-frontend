@@ -28,6 +28,28 @@ const initialState: AuthState = {
     error: null,
 };
 
+export const restoreAuth = createAsyncThunk<
+    AuthResponse,
+    void,
+    { rejectValue: string }
+>(
+    'auth/restoreAuth',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('No token found');
+            }
+            const response = await axiosInstance.get('/users/me', {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            return response.data;
+        } catch (error) {
+            const axiosError = error as AxiosError<ErrorResponse>;
+            return rejectWithValue(axiosError.response?.data?.message || 'Failed to restore auth');
+        }
+    }
+);
 export const login = createAsyncThunk<
     AuthResponse,
     { email: string; password: string },
@@ -75,6 +97,23 @@ const authSlice = createSlice({
     },
     extraReducers: builder => {
         builder
+            .addCase(restoreAuth.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(restoreAuth.fulfilled, (state, action) => {
+                state.loading = false;
+                state.isAuthenticated = true;
+                state.user = action.payload.user;
+                state.token = action.payload.token;
+            })
+            .addCase(restoreAuth.rejected, (state) => {
+                state.loading = false;
+                state.isAuthenticated = false;
+                state.user = null;
+                state.token = null;
+                localStorage.removeItem('token');
+            })
             .addCase(login.pending, state => {
                 state.loading = true;
                 state.error = null;
