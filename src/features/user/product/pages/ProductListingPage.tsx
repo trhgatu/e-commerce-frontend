@@ -5,7 +5,7 @@ import ProductCard from '@/features/user/product/components/ProductCard';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { setCategory, setBrand, setSearch } from '@/features/user/filter/reducers/filterSlice'
+import { setCategory, setBrand, setSearch } from '@/store/filterSlice'
 import { motion } from 'framer-motion';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { useParams } from 'react-router-dom';

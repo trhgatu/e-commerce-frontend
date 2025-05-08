@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { MainLayout } from '@/components/layouts';
-import HomePage from '@/pages/user/HomePage';
-import ProductDetailPage from '@/pages/user/ProductDetailPage';
+import HomePage from '@/features/user/home/pages/HomePage';
+import ProductDetailPage from '@/features/user/product/pages/ProductDetailPage';
 import ScrollToTop from '@/components/ScrollToTop';
 import { RegisterPage, LoginPage } from '@/features/user/auth/pages';
 import CartPage from '@/features/user/cart/pages/CartPage';

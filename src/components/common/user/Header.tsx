@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppDispatch } from '@/hooks';
 import { mockProducts } from '@/mock/productData';
-import { setSearch } from '@/features/user/filter/reducers/filterSlice';
+import { setSearch } from '@/store/filterSlice';
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
