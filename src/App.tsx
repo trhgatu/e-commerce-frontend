@@ -1,12 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { MainLayout } from '@/components/layouts';
 import HomePage from '@/pages/user/HomePage';
-import { AdminPage } from '@/pages/admin/AdminPage';
 import ProductDetailPage from '@/pages/user/ProductDetailPage';
 import ScrollToTop from '@/components/ScrollToTop';
 import { RegisterPage, LoginPage } from '@/features/user/auth/pages';
 import CartPage from '@/features/user/cart/pages/CartPage';
 import ProductListingPage from '@/features/user/product/pages/ProductListingPage';
+import { AdminLayout } from '@/components/layouts/AdminLayout';
+import DashboardPage from '@/pages/admin/Dashboard';
+import ROUTERS from '@/constants/routes';
 
 function App() {
   return (
@@ -27,7 +29,10 @@ function App() {
         </Route>
 
 
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to={ROUTERS.ADMIN.dashboard} replace />} />
+          <Route path={ROUTERS.ADMIN.dashboard} element={<DashboardPage />} />
+        </Route>
       </Routes>
     </Router>
   );
