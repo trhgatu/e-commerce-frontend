@@ -2,6 +2,9 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Laptop, Monitor, Smartphone, Headphones, Cpu, HardDrive, PlugZap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { setCategory } from '@/store/filterSlice';
+import { useAppDispatch } from '@/hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface Category {
   id: string;
@@ -15,7 +18,7 @@ const categories: Category[] = [
   {
     id: 'cat1',
     name: 'Laptop',
-    slug: 'laptop',
+    slug: 'gaming-laptop',
     icon: <Laptop className="h-10 w-10" />,
     count: 45
   },
@@ -71,6 +74,13 @@ const categories: Category[] = [
 ];
 
 const CategorySection: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (slug: string) => {
+    dispatch(setCategory(slug));
+    navigate(`/category/${slug}`);
+  }
   return (
     <div>
       <div className="container mx-auto px-4">
@@ -78,7 +88,10 @@ const CategorySection: React.FC = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
           {categories.map((category) => (
-            <Link key={category.id} to={`/category/${category.slug}`}>
+            <Link key={category.id}
+              to={`/category/${category.slug}`}
+              onClick={() => handleCategoryClick(category.slug)}>
+
               <Card className="hover:shadow-lg transition-shadow bg-white border-none">
                 <CardContent className="flex flex-col items-center justify-center p-4 text-center">
                   <div className="mb-3 text-blue-600">

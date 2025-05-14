@@ -2,7 +2,8 @@ const ROUTERS = {
     ADMIN: {
         root: "/admin",
         dashboard: "/admin/dashboard",
-        facility: "/admin/facility",
+        users: "/admin/users",
+        products: "/admin/products",
     },
 }
 export default ROUTERS;

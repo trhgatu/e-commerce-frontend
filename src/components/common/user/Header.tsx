@@ -2,13 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, ShoppingCart, Menu, Heart, Phone, X, ChevronDown, User } from 'lucide-react';
+import { Search, ShoppingCart, Menu, Heart, Phone, X, User } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { logout } from '@/store/authSlice';
 import { setSearch } from '@/store/filterSlice';
-import { mockProducts } from '@/mock/productData';
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,12 +16,6 @@ const Header: React.FC = () => {
   /* const cartItems = useAppSelector(state => state.cart.items); */
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
-  const categories = Array.from(new Set(mockProducts.map(p => p.categoryId.name))).map(name => ({
-    name,
-    slug: name.toLowerCase().replace(/\s+/g, '-'),
-  }));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,11 +42,6 @@ const Header: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const handleCategoryClick = (name: string, slug: string) => {
-    dispatch(setSearch(name));
-    navigate(`/category/${slug}`);
-    setIsMobileMenuOpen(false);
-  };
 
   const menuVariants = {
     closed: { opacity: 0, y: -20, transition: { duration: 0.2 } },
@@ -68,7 +56,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'
+      className={`fixed h-(--header-height) top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'
         }`}
     >
       <div className="bg-blue-600 text-white py-2">
@@ -212,88 +200,6 @@ const Header: React.FC = () => {
             </AnimatePresence>
           </button>
         </div>
-        <div className="mt-4 md:hidden">
-          <div className="relative w-full">
-            {loading ? (
-              <Skeleton className="h-10 w-full rounded-lg" />
-            ) : (
-              <Input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300"
-                onChange={(e) => {
-                  dispatch(setSearch(e.target.value));
-                  navigate(`/products`);
-                }}
-                aria-label="Search products"
-              />
-            )}
-            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-gray-100 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <nav className="hidden md:flex space-x-6 py-2 overflow-x-auto scrollbar-hide">
-            {categories.map(category => (
-              <div
-                key={category.slug}
-                className="relative"
-                onMouseEnter={() => setActiveCategory(category.slug)}
-                onMouseLeave={() => setActiveCategory(null)}
-              >
-                <button
-                  onClick={() => handleCategoryClick(category.name, category.slug)}
-                  className={`text-gray-700 hover:text-blue-600 flex items-center whitespace-nowrap ${activeCategory === category.slug ? 'text-blue-600' : ''
-                    }`}
-                >
-                  {category.name}
-                  <ChevronDown size={14} className="ml-1" />
-                </button>
-                <AnimatePresence>
-                  {activeCategory === category.slug && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg p-4 min-w-[200px] z-20"
-                    >
-                      <Link
-                        to={`/category/${category.slug}`}
-                        className="block text-gray-700 hover:text-blue-600 font-medium"
-                        onClick={() => handleCategoryClick(category.name, category.slug)}
-                      >
-                        Tất cả {category.name}
-                      </Link>
-                      <Link
-                        to={`/category/${category.slug}/bestseller`}
-                        className="block text-gray-700 hover:text-blue-600"
-                      >
-                        {category.name} Bán Chạy
-                      </Link>
-                      <Link
-                        to={`/category/${category.slug}/new`}
-                        className="block text-gray-700 hover:text-blue-600"
-                      >
-                        {category.name} Mới Nhất
-                      </Link>
-                      <Link
-                        to={`/category/${category.slug}/promotion`}
-                        className="block text-gray-700 hover:text-blue-600"
-                      >
-                        {category.name} Khuyến Mãi
-                      </Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-            <Link to="/promotions" className="text-red-600 font-medium hover:text-red-700 whitespace-nowrap">
-              Khuyến Mãi
-            </Link>
-          </nav>
-        </div>
       </div>
 
       <AnimatePresence>
@@ -380,32 +286,6 @@ const Header: React.FC = () => {
                   </motion.div>
                   <motion.span variants={menuItemVariants}>Giỏ Hàng</motion.span>
                 </Link>
-              </div>
-              <div className="mb-8">
-                <motion.h3 variants={menuItemVariants} className="text-xl font-bold mb-4 text-gray-800">
-                  Danh Mục Sản Phẩm
-                </motion.h3>
-                <nav className="flex flex-col space-y-2">
-                  {categories.map(category => (
-                    <motion.div key={category.slug} variants={menuItemVariants}>
-                      <button
-                        onClick={() => handleCategoryClick(category.name, category.slug)}
-                        className="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left"
-                      >
-                        {category.name}
-                      </button>
-                    </motion.div>
-                  ))}
-                  <motion.div variants={menuItemVariants}>
-                    <Link
-                      to="/promotions"
-                      className="block p-3 bg-red-50 rounded-lg hover:bg-red-100 text-red-600"
-                      onClick={toggleMobileMenu}
-                    >
-                      Khuyến Mãi
-                    </Link>
-                  </motion.div>
-                </nav>
               </div>
               <div>
                 <motion.h3 variants={menuItemVariants} className="text-xl font-bold mb-4 text-gray-800">

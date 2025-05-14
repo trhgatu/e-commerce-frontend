@@ -9,6 +9,8 @@ import ProductListingPage from '@/features/user/product/pages/ProductListingPage
 import { AdminLayout } from '@/components/layouts/AdminLayout';
 import DashboardPage from '@/pages/admin/Dashboard';
 import ROUTERS from '@/constants/routes';
+import { ProductManagementPage } from '@/features/admin/products-management/pages';
+import { UserManagementPage } from '@/features/admin/users-management/pages';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to={ROUTERS.ADMIN.dashboard} replace />} />
           <Route path={ROUTERS.ADMIN.dashboard} element={<DashboardPage />} />
+          <Route path={ROUTERS.ADMIN.products} element={<ProductManagementPage />} />
+          <Route path={ROUTERS.ADMIN.users} element={<UserManagementPage />} />
         </Route>
       </Routes>
     </Router>
