@@ -5,14 +5,15 @@ import { AxiosError } from 'axios';
 
 interface AuthState {
     isAuthenticated: boolean;
-    user: { _id: string; email: string; name: string, role: string } | null;
+    isInitialized: boolean;
+    user: { _id: string; email: string; username: string, role: string } | null;
     token: string | null;
     loading: boolean;
     error: string | null;
 }
 
 type AuthResponse = {
-    user: { _id: string; email: string; name: string, role: string };
+    user: { _id: string; email: string; username: string, role: string };
     token: string;
 };
 
@@ -22,6 +23,7 @@ type ErrorResponse = {
 
 const initialState: AuthState = {
     isAuthenticated: false,
+    isInitialized: false,
     user: null,
     token: null,
     loading: false,
@@ -43,7 +45,10 @@ export const restoreAuth = createAsyncThunk<
             const response = await axiosInstance.get('/users/me', {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            return response.data;
+            return {
+                token,
+                user: response.data.data,
+            };
         } catch (error) {
             const axiosError = error as AxiosError<ErrorResponse>;
             return rejectWithValue(axiosError.response?.data?.message || 'Failed to restore auth');
@@ -52,13 +57,13 @@ export const restoreAuth = createAsyncThunk<
 );
 export const login = createAsyncThunk<
     AuthResponse,
-    { email: string; password: string },
+    { identifier: string; password: string },
     { rejectValue: string }
 >(
     'auth/login',
-    async ({ email, password }, { rejectWithValue }) => {
+    async ({ identifier, password }, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.post('/auth/login', { email, password });
+            const response = await axiosInstance.post('/auth/login', { identifier, password });
             return response.data as AuthResponse;
         } catch (error) {
             const axiosError = error as AxiosError<ErrorResponse>;
@@ -104,12 +109,14 @@ const authSlice = createSlice({
             .addCase(restoreAuth.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isAuthenticated = true;
+                state.isInitialized = true;
                 state.user = action.payload.user;
                 state.token = action.payload.token;
             })
             .addCase(restoreAuth.rejected, (state) => {
                 state.loading = false;
                 state.isAuthenticated = false;
+                state.isInitialized = true;
                 state.user = null;
                 state.token = null;
                 localStorage.removeItem('token');

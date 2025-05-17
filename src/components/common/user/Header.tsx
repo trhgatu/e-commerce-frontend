@@ -70,7 +70,7 @@ const Header: React.FC = () => {
               <Skeleton className="h-6 w-24" />
             ) : isAuthenticated ? (
               <>
-                <span className="text-blue-200">Xin chào, {user?.name}</span>
+                <span className="text-blue-200">Xin chào, {user?.username}</span>
                 {user?.role === 'admin' && (
                   <Link to="/admin" className="hover:text-blue-200">
                     Admin
@@ -137,7 +137,7 @@ const Header: React.FC = () => {
                 <Button variant="ghost" asChild>
                   <Link to="/account" className="flex items-center">
                     <User size={20} className="mr-1" />
-                    {user?.name}
+                    {user?.username}
                   </Link>
                 </Button>
                 {user?.role === 'admin' && (
@@ -219,7 +219,7 @@ const Header: React.FC = () => {
                   <>
                     <motion.div variants={menuItemVariants} className="flex items-center justify-center">
                       <User size={24} className="mr-2" />
-                      <span className="text-lg font-medium">{user?.name}</span>
+                      <span className="text-lg font-medium">{user?.username}</span>
                     </motion.div>
                     {user?.role === 'admin' && (
                       <motion.div variants={menuItemVariants}>

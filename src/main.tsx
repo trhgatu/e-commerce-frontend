@@ -4,14 +4,14 @@ import './index.css'
 import App from './App.tsx'
 import { Provider } from 'react-redux'
 import { store } from '@/store/index.ts'
-import { restoreAuth } from '@/store/authSlice.ts'
-
-store.dispatch(restoreAuth());
+import AuthGate from '@/components/common/admin/AuthGate.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <AuthGate>
+        <App />
+      </AuthGate>
     </Provider>
   </StrictMode>
 )
