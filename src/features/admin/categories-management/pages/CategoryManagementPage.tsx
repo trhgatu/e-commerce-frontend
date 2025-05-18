@@ -1,24 +1,24 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button";
-import { getAllUsers } from "@/features/admin/users-management/services/userService";
-import { IUser } from "@/types";
-import { UserTable } from "@/features/admin/users-management/components/UserTable";
+import { ICategory } from "@/types";
+import { CategoryTable } from "@/features/admin/categories-management/components/CategoryTable";
 import { useNavigate } from "react-router-dom";
 import ROUTERS from "@/constants/routes";
+import { getAllCategories } from "@/features/admin/categories-management/services/categoryService";
 
-export const UserManagementPage = () => {
+export const CategoryManagementPage = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<IUser[]>([])
+  const [categories, setCategories] = useState<ICategory[]>([])
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
 
   useEffect(() => {
-  const fetchUsers = async () => {
-    const res = await getAllUsers(page + 1, 10);
-    setUsers(res.data); // ✅ sửa tại đây
+  const fetchCategories = async () => {
+    const res = await getAllCategories(page + 1, 10);
+    setCategories(res.data);
     setPageCount(res.totalPages);
   };
-  fetchUsers();
+  fetchCategories();
 }, [page]);
 
   /* const handleEdit = (user: IUser) => {
@@ -35,14 +35,14 @@ export const UserManagementPage = () => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold">
-          Users Management
+          Categories Management
         </h2>
-        <Button onClick={() => navigate(ROUTERS.ADMIN.users.create)}>
-          Create user
+        <Button onClick={() => navigate(ROUTERS.ADMIN.categories.create)}>
+          Create category
         </Button>
       </div>
-      <UserTable
-        data={users}
+      <CategoryTable
+        data={categories}
         /* onEdit={handleEdit} */
         pagination={{
           pageIndex: page,

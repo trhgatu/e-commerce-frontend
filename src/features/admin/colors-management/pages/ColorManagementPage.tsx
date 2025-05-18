@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button";
-import { getAllUsers } from "@/features/admin/users-management/services/userService";
-import { IUser } from "@/types";
-import { UserTable } from "@/features/admin/users-management/components/UserTable";
+import { IColor } from "@/types";
+import { ColorTable } from "@/features/admin/colors-management/components/ColorTable";
 import { useNavigate } from "react-router-dom";
 import ROUTERS from "@/constants/routes";
+import { getAllColors } from "@/features/admin/colors-management/services/colorService";
 
-export const UserManagementPage = () => {
+export const ColorManagementPage = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<IUser[]>([])
+  const [colors, setColors] = useState<IColor[]>([])
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
 
   useEffect(() => {
   const fetchUsers = async () => {
-    const res = await getAllUsers(page + 1, 10);
-    setUsers(res.data); // ✅ sửa tại đây
+    const res = await getAllColors(page + 1, 10);
+    setColors(res.data);
     setPageCount(res.totalPages);
   };
   fetchUsers();
@@ -35,14 +35,14 @@ export const UserManagementPage = () => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold">
-          Users Management
+          Colors Management
         </h2>
-        <Button onClick={() => navigate(ROUTERS.ADMIN.users.create)}>
-          Create user
+        <Button onClick={() => navigate(ROUTERS.ADMIN.colors.create)}>
+          Create color
         </Button>
       </div>
-      <UserTable
-        data={users}
+      <ColorTable
+        data={colors}
         /* onEdit={handleEdit} */
         pagination={{
           pageIndex: page,

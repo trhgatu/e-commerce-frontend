@@ -13,6 +13,10 @@ import { ProductManagementPage } from '@/features/admin/products-management/page
 import { UserManagementPage } from '@/features/admin/users-management/pages';
 import { AdminLoginPage } from '@/features/admin/auth/pages/AdminLoginPage';
 import AdminRoute from '@/routes/AdminRoute';
+import { CategoryManagementPage } from '@/features/admin/categories-management/pages';
+import { BrandManagementPage } from '@/features/admin/brands-management/pages';
+import { ColorManagementPage } from '@/features/admin/colors-management/pages';
+import { CreateProductPage } from '@/features/admin/products-management/pages/CreateProductPage';
 
 function App() {
   return (
@@ -33,6 +37,7 @@ function App() {
         </Route>
 
         <Route path="/admin/auth/login" element={<AdminLoginPage />} />
+
         <Route path="/admin" element={
           <AdminRoute>
             <AdminLayout />
@@ -40,8 +45,35 @@ function App() {
         }>
           <Route index element={<Navigate to={ROUTERS.ADMIN.dashboard} replace />} />
           <Route path={ROUTERS.ADMIN.dashboard} element={<DashboardPage />} />
-          <Route path={ROUTERS.ADMIN.products} element={<ProductManagementPage />} />
-          <Route path={ROUTERS.ADMIN.users} element={<UserManagementPage />} />
+
+          <Route path="products">
+            <Route index element={<ProductManagementPage />} />
+            <Route path="create" element={<CreateProductPage />} />
+          </Route>
+
+          <Route path="users">
+            <Route index element={<UserManagementPage />} />
+            {/* <Route path="create" element={<CreateUserPage />} />
+              <Route path="edit/:id" element={<EditUserPage />} /> */}
+          </Route>
+
+          <Route path="categories">
+            <Route index element={<CategoryManagementPage />} />
+            {/* <Route path="create" element={<CreateUserPage />} />
+              <Route path="edit/:id" element={<EditUserPage />} /> */}
+          </Route>
+
+          <Route path="brands">
+            <Route index element={<BrandManagementPage />} />
+            {/* <Route path="create" element={<CreateUserPage />} />
+              <Route path="edit/:id" element={<EditUserPage />} /> */}
+          </Route>
+
+          <Route path="colors">
+            <Route index element={<ColorManagementPage />} />
+            {/* <Route path="create" element={<CreateUserPage />} />
+              <Route path="edit/:id" element={<EditUserPage />} /> */}
+          </Route>
         </Route>
       </Routes>
     </Router>

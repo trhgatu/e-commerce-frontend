@@ -3,12 +3,10 @@ import * as React from "react"
 import {
   IconChartBar,
   IconDashboard,
-  IconFolder,
   IconHelp,
   IconListDetails,
   IconSearch,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -38,24 +36,31 @@ const data = {
     },
     {
       title: "Quản lý sản phẩm",
-      url: ROUTERS.ADMIN.products,
+      url: ROUTERS.ADMIN.products.root,
+      icon: IconListDetails,
+    },
+    {
+      title: "Quản lý danh mục",
+      url: ROUTERS.ADMIN.categories.root,
+      icon: IconListDetails,
+    },
+    {
+      title: "Quản lý màu sắc",
+      url: ROUTERS.ADMIN.colors.root,
+      icon: IconListDetails,
+    },
+    {
+      title: "Quản lý thương hiệu",
+      url: ROUTERS.ADMIN.brands.root,
       icon: IconListDetails,
     },
     {
       title: "Quản lý người dùng",
-      url: ROUTERS.ADMIN.users,
+      url: ROUTERS.ADMIN.users.root,
       icon: IconChartBar,
     },
-    {
-      title: "Quản lý ưu đãi",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
+
+
   ],
   navSecondary: [
     {

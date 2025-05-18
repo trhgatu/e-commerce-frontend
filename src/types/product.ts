@@ -1,4 +1,3 @@
-// src/types/product.ts
 import { IColor } from "@/types/color";
 import { ICategory } from "@/types/category";
 
@@ -24,4 +23,20 @@ export interface IProduct {
   isNew?: boolean;
   isBestSeller?: boolean;
   isTrending?: boolean;
+}
+
+// 👇 Gửi dữ liệu khi tạo sản phẩm
+export interface ProductCreateRequest {
+  name: string;
+  price: number;
+  description?: string;
+  images?: string[];
+  thumbnail?: string;
+  categoryId: string;
+  brand: string;
+  stock: number;
+  isFeatured?: boolean;
+  discountPercent?: number;
+  tags?: string[];
+  colorVariants?: { colorId: string; stock: number }[];
 }
