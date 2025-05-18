@@ -25,7 +25,6 @@ export interface IProduct {
   isTrending?: boolean;
 }
 
-// 👇 Gửi dữ liệu khi tạo sản phẩm
 export interface ProductCreateRequest {
   name: string;
   price: number;
@@ -33,7 +32,7 @@ export interface ProductCreateRequest {
   images?: string[];
   thumbnail?: string;
   categoryId: string;
-  brand: string;
+  brandId: string;
   stock: number;
   isFeatured?: boolean;
   discountPercent?: number;
