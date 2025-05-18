@@ -1,5 +1,7 @@
 // src/features/user/auth/pages/LoginPage.tsx
-import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,36 +12,35 @@ import { FaGoogle } from 'react-icons/fa';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { login } from '@/store/authSlice';
 import { Loader2 } from 'lucide-react';
+import { z } from 'zod'
 
+const schema = z.object({
+  identifier: z
+    .string()
+    .min(3, 'Vui lòng nhập email hoặc username hợp lệ'),
+  password: z
+    .string()
+    .min(1, 'Mật khẩu tối thiểu 1 ký tự'),
+});
+type LoginFormData = z.infer<typeof schema>;
 export const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { loading, error, isAuthenticated, user } = useAppSelector(state => state.auth);
-  const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { identifier: '', password: '' },
+  });
+  const onSubmit = async (data: LoginFormData) => {
+    await dispatch(login(data));
+  };
   useEffect(() => {
-    if (isAuthenticated && user) {
-      if (user.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
+    if (isAuthenticated && user?.role === 'user') {
+      navigate('/');
     }
   }, [isAuthenticated, user, navigate]);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!formData.email || !formData.password) {
-      return;
-    }
-    await dispatch(login(formData));
-  };
+  const [rememberMe, setRememberMe] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -64,24 +65,17 @@ export const LoginPage: React.FC = () => {
             </Alert>
           )}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             {/* Email field */}
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
+              <label htmlFor="identifier" className="block text-sm font-medium text-gray-700 mb-1">
+                identifier
               </label>
               <div className="relative">
-                <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="your.email@example.com"
-                  className="pl-10"
-                  required
-                  aria-label="Email"
-                />
+                <Input {...form.register('identifier')} placeholder="Email hoặc Username" />
+                {form.formState.errors.identifier && (
+                  <p className="text-red-500 text-sm">{form.formState.errors.identifier.message}</p>
+                )}
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                   <Mail size={18} />
                 </div>
@@ -94,17 +88,10 @@ export const LoginPage: React.FC = () => {
                 Mật khẩu
               </label>
               <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="pl-10 pr-10"
-                  required
-                  aria-label="Password"
-                />
+                <Input type="password" {...form.register('password')} placeholder="Mật khẩu" />
+                {form.formState.errors.password && (
+                  <p className="text-red-500 text-sm">{form.formState.errors.password.message}</p>
+                )}
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                   <Lock size={18} />
                 </div>
@@ -140,7 +127,7 @@ export const LoginPage: React.FC = () => {
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
-              disabled={loading || !formData.email || !formData.password}
+              disabled={loading}
             >
               {loading ? (
                 <span className="flex items-center">
