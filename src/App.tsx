@@ -13,8 +13,8 @@ import { ProductManagementPage } from '@/features/admin/products-management/page
 import { UserManagementPage } from '@/features/admin/users-management/pages';
 import { AdminLoginPage } from '@/features/admin/auth/pages/AdminLoginPage';
 import AdminRoute from '@/routes/AdminRoute';
-import { CategoryManagementPage } from '@/features/admin/categories-management/pages';
-import { BrandManagementPage } from '@/features/admin/brands-management/pages';
+import { CategoryManagementPage, CreateCategoryPage } from '@/features/admin/categories-management/pages';
+import { BrandManagementPage, CreateBrandPage } from '@/features/admin/brands-management/pages';
 import { ColorManagementPage } from '@/features/admin/colors-management/pages';
 import { CreateProductPage } from '@/features/admin/products-management/pages/CreateProductPage';
 
@@ -59,14 +59,12 @@ function App() {
 
           <Route path="categories">
             <Route index element={<CategoryManagementPage />} />
-            {/* <Route path="create" element={<CreateUserPage />} />
-              <Route path="edit/:id" element={<EditUserPage />} /> */}
+             <Route path="create" element={<CreateCategoryPage />} />
           </Route>
 
           <Route path="brands">
             <Route index element={<BrandManagementPage />} />
-            {/* <Route path="create" element={<CreateUserPage />} />
-              <Route path="edit/:id" element={<EditUserPage />} /> */}
+            <Route path="create" element={<CreateBrandPage />} />
           </Route>
 
           <Route path="colors">

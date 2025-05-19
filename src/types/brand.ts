@@ -6,3 +6,9 @@ export interface IBrand {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BrandCreateRequest {
+  name: string;
+  description?: string;
+  logo?: string;
+}

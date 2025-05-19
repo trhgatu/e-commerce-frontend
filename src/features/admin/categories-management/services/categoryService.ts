@@ -1,11 +1,10 @@
 import axiosInstance from "@/services/axios";
-
-// userService.ts
-export const getAllCategories = async (page: number, size: number) => {
+import { CategoryCreateRequest } from "@/types";
+export const getAllCategories = async (page: number, limit: number) => {
   const res = await axiosInstance.get("/categories", {
     params: {
-      pageNumber: page,
-      pageSize: size,
+      page: page,
+      limit: limit,
     },
   });
 
@@ -15,4 +14,14 @@ export const getAllCategories = async (page: number, size: number) => {
     totalPages: res.data.totalPages,
     totalItems: res.data.totalItems,
   };
+};
+
+export const createCategory = async (data: CategoryCreateRequest) => {
+  const response = await axiosInstance.post("/categories/create", data)
+  return response.data
+}
+
+export const deleteCategoryById = async (id: string) => {
+  const response = await axiosInstance.delete(`/categories/delete/${id}`);
+  return response.data;
 };

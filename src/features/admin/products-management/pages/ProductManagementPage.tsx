@@ -13,8 +13,6 @@ import {
   AlertDialogCancel,
   AlertDialogFooter,
   AlertDialogAction
-
-
 } from "@/components/ui/alert-dialog";
 import ROUTERS from "@/constants/routes";
 import { deleteProductById, getAllProducts } from "@/features/admin/products-management/services/productService";

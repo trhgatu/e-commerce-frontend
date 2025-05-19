@@ -1,10 +1,17 @@
 // src/types/category.ts
 export interface ICategory {
-    _id: string;
-    name: string;
-    parentId?: string;
-    description?: string;
-    icon?: string;
-    createdAt: string;
-    updatedAt: string;
-  }
+  _id: string;
+  name: string;
+  parentId?: string;
+  description?: string;
+  icon?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CategoryCreateRequest {
+  name: string;
+  description?: string;
+  icon?: string;
+  parentId?: string;
+}
