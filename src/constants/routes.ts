@@ -9,6 +9,7 @@ const ROUTERS = {
         products: {
             root: "/admin/products",
             create: "/admin/products/create",
+            trash: "/admin/products/trash-bin"
         },
         categories: {
             root: "/admin/categories",

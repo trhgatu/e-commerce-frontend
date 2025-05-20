@@ -25,27 +25,9 @@ import { ICategory } from "@/types/category";
 import { IBrand } from "@/types/brand";
 import { IColor } from "@/types";
 import { getAllColors } from "@/features/admin/colors-management/services/colorService";
+import { baseProductSchema } from "@/features/admin/products-management/validator/productValidator";
 
-const schema = z.object({
-  name: z.string().min(2, "Product name is required"),
-  price: z.number({ invalid_type_error: "Price must be a number" }).min(0),
-  stock: z.number({ invalid_type_error: "Stock must be a number" }).min(0),
-  description: z.string().optional(),
-  thumbnail: z.string().url("Thumbnail must be a valid URL").optional(),
-  isFeatured: z.boolean().optional(),
-  categoryId: z.string().min(1, "Category is required"),
-  brandId: z.string().min(1, "Brand is required"),
-  colorVariants: z
-    .array(
-      z.object({
-        colorId: z.string().min(1, "Color ID is required"),
-        stock: z.number().min(1, "Stock must be at least 1"),
-      })
-    )
-    .optional(),
-});
-
-type CreateProductFormData = z.infer<typeof schema>;
+type CreateProductFormData = z.infer<typeof baseProductSchema>;
 
 export const CreateProductPage = () => {
   const navigate = useNavigate();
@@ -61,7 +43,7 @@ export const CreateProductPage = () => {
     setValue,
     watch,
   } = useForm<CreateProductFormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(baseProductSchema),
     defaultValues: {
       isFeatured: false,
       colorVariants: [],
@@ -129,7 +111,7 @@ export const CreateProductPage = () => {
           {errors.thumbnail && <p className="text-sm text-red-500">{errors.thumbnail.message}</p>}
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="">
           <Controller
             name="categoryId"
             control={control}
@@ -210,6 +192,10 @@ export const CreateProductPage = () => {
                     }}
                   />
                   <span>{color.name}</span>
+                  <div
+                    className="w-4 h-4 rounded border"
+                    style={{ backgroundColor: color.hexCode }}
+                  />
                   {isSelected && (
                     <Input
                       type="number"
@@ -239,7 +225,7 @@ export const CreateProductPage = () => {
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating..." : "Create Product"}
           </Button>
-          </div>
+        </div>
       </form>
     </div>
   );

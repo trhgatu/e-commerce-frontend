@@ -1,12 +1,13 @@
 import axiosInstance from "@/services/axios";
 import { IProduct, ProductCreateRequest } from "@/types";
+import { ProductFilter } from "@/types";
 
-// userService.ts
-export const getAllProducts = async (page: number, size: number) => {
+export const getAllProducts = async (page: number, size: number, filter: ProductFilter = {}) => {
   const res = await axiosInstance.get("/products", {
     params: {
       pageNumber: page,
       pageSize: size,
+      ...filter,
     },
   });
 
@@ -28,8 +29,17 @@ export const getProductById = async (id: string): Promise<IProduct> => {
   return response.data.data
 }
 
-export const deleteProductById = async (id: string) => {
+export const softDeleteProductById = async (id: string) => {
   const response = await axiosInstance.delete(`/products/delete/${id}`);
   return response.data;
 };
 
+export const hardDeleteProductById = async (id: string) => {
+  const response = await axiosInstance.delete(`/products/hard-delete/${id}`);
+  return response.data;
+};
+
+export const restoreProductById = async (id: string) => {
+  const response = await axiosInstance.put(`/products/restore/${id}`);
+  return response.data;
+}

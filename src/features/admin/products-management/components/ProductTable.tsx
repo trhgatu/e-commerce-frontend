@@ -25,6 +25,7 @@ interface ProductTableProps {
     pageCount: number;
     onPageChange: (index: number) => void;
   };
+  actionRenderer?: (product: IProduct) => React.ReactNode;
 }
 
 export const ProductTable: React.FC<ProductTableProps> = ({
@@ -32,6 +33,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   onEdit,
   onDelete,
   pagination,
+  actionRenderer,
 }) => {
   const columns: ColumnDef<IProduct>[] = [
     {
@@ -79,24 +81,27 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     {
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => (
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => onEdit?.(row.original)}
-          >
-            Edit
-          </Button>
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={() => onDelete?.(row.original)}
-          >
-            Delete
-          </Button>
-        </div>
-      ),
+      cell: ({ row }) =>
+        actionRenderer ? actionRenderer(row.original)
+          : (
+
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onEdit?.(row.original)}
+              >
+                Sửa
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => onDelete?.(row.original)}
+              >
+                Xóa
+              </Button>
+            </div>
+          ),
     },
   ];
 

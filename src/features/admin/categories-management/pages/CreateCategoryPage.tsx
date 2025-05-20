@@ -45,7 +45,6 @@ export const CreateCategoryPage = () => {
 
 
     const onSubmit = async (data: CreateCategoryFormData) => {
-        console.log(data);
         const toastId = toast.loading("Creating category...");
         try {
             await createCategory(data);

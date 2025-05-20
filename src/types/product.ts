@@ -24,6 +24,16 @@ export interface IProduct {
   isBestSeller?: boolean;
   isTrending?: boolean;
 }
+export interface ProductFilter {
+  search?: string;
+  category?: string;
+  brand?: string;
+  priceMin?: number;
+  priceMax?: number;
+  isDeleted?: boolean;
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+}
 
 export interface ProductCreateRequest {
   name: string;

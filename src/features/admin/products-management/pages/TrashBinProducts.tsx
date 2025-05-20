@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button";
 import { IProduct } from "@/types";
-import { ProductTable } from "@/features/admin/products-management/components/ProductTable";
+import { ProductTable, ConfirmDeleteDialog } from "@/features/admin/products-management/components";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ConfirmDeleteDialog } from "@/features/admin/products-management/components";
 import ROUTERS from "@/constants/routes";
-import { softDeleteProductById, getAllProducts } from "@/features/admin/products-management/services/productService";
-import { Trash2, Plus } from "lucide-react";
+import { hardDeleteProductById, restoreProductById, getAllProducts } from "@/features/admin/products-management/services/productService";
+import { Undo2 } from "lucide-react";
 
-export const ProductManagementPage = () => {
+export const TrashBinProductPage = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProduct[]>([])
   const [page, setPage] = useState(0)
@@ -19,27 +18,31 @@ export const ProductManagementPage = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await getAllProducts(page + 1, 10, {
-        isDeleted : false
-      });
+      const res = await getAllProducts(page + 1, 10, { isDeleted: true });
       setProducts(res.data);
       setPageCount(res.totalPages);
     };
     fetchProducts();
   }, [page]);
 
-  /* const handleEdit = (user: IUser) => {
-    navigate(ROUTERS.ADMIN.user.edit(user.id))
-  } */
+  const handleRestore = async (product: IProduct) => {
+  try {
+    await restoreProductById(product._id);
+    setProducts((prev) => prev.filter((p) => p._id !== product._id));
+    toast.success(`Đã khôi phục sản phẩm "${product.name}"`);
+  } catch {
+    toast.error("Khôi phục thất bại");
+  }
+};
 
   const confirmDelete = async () => {
     if (productToDelete) {
       try {
-        await softDeleteProductById(productToDelete._id);
+        await hardDeleteProductById(productToDelete._id);
         setProducts((prev) => prev.filter((p) => p._id !== productToDelete._id));
-        toast.success("Xóa sản phẩm thành công");
+        toast.success("Product deleted successfully");
       } catch {
-        toast.error("Xóa sản phẩm thất bại");
+        toast.error("Failed to delete role");
       } finally {
         setProductToDelete(null);
       }
@@ -50,25 +53,38 @@ export const ProductManagementPage = () => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold">
-          Quản lý sản phẩm
+          Sản phẩm đã xóa
         </h2>
         <div className="flex items-center space-x-2">
-          <Button onClick={() => navigate(ROUTERS.ADMIN.products.trash)} variant="outline">Thùng rác <Trash2 /></Button>
-          <Button onClick={() => navigate(ROUTERS.ADMIN.products.create)}>
-            Thêm
-            <Plus />
-          </Button>
+          <Button onClick={() => navigate(ROUTERS.ADMIN.products.root)} variant="outline">Về trang sản phẩm<Undo2 /></Button>
         </div>
       </div>
       <ProductTable
         data={products}
-        /* onEdit={handleEdit} */
         onDelete={(product) => setProductToDelete(product)}
         pagination={{
           pageIndex: page,
           pageCount: pageCount,
           onPageChange: setPage,
         }}
+        actionRenderer={(product) => (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleRestore(product)}
+            >
+              Khôi phục
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => setProductToDelete(product)}
+            >
+              Xoá vĩnh viễn
+            </Button>
+          </div>
+        )}
       />
       <ConfirmDeleteDialog
         open={!!productToDelete}
@@ -77,5 +93,5 @@ export const ProductManagementPage = () => {
         onConfirm={confirmDelete}
       />
     </div>
-  )
+  );
 }
