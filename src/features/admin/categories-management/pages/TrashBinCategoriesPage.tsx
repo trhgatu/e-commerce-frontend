@@ -15,14 +15,23 @@ export const TrashBinCategoriesPage = () => {
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
   const [categoryToDelete, setCategoryToDelete] = useState<ICategory | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await getAllCategories(page + 1, 10, {
-        isDeleted: true
-      });
-      setCategories(res.data);
-      setPageCount(res.totalPages);
+      setLoading(true)
+      try {
+        const res = await getAllCategories(page + 1, 10, {
+          isDeleted: true
+        });
+        setCategories(res.data);
+        setPageCount(res.totalPages);
+      } catch (err) {
+        console.log(err);
+        toast.error("Lỗi khi tải danh sách danh mục sản phẩm");
+      } finally {
+        setLoading(false)
+      }
     };
     fetchCategories();
   }, [page]);
@@ -71,6 +80,7 @@ export const TrashBinCategoriesPage = () => {
         </div>
       </div>
       <CategoryTable
+        loading={loading}
         data={categories}
         onDelete={(category) => setCategoryToDelete(category)}
         pagination={{

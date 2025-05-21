@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { createCategory, getAllCategories } from "@/features/admin/categories-management/services/categoryService";
 import { buildCategoryTree } from "@/features/admin/categories-management/utils/convertToTreeData";
 import { TreeNode } from "@/features/admin/categories-management/utils/convertToTreeData";
+
 const schema = z.object({
     name: z.string().min(3, 'Category name must be at least 3 characters long').max(255, 'Category name must not exceed 255 characters'),
     description: z.string().optional(),

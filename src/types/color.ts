@@ -7,3 +7,9 @@ export interface IColor {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface ColorCreateRequest {
+  name: string;
+  hexCode: string;
+  description?: string
+}

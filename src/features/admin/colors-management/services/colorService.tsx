@@ -1,4 +1,5 @@
 import axiosInstance from "@/services/axios";
+import { ColorCreateRequest } from "@/types";
 
 // userService.ts
 export const getAllColors = async (page: number, size: number) => {
@@ -16,3 +17,8 @@ export const getAllColors = async (page: number, size: number) => {
     totalItems: res.data.totalItems,
   };
 };
+
+export const createColor = async (data: ColorCreateRequest) => {
+  const response = await axiosInstance.post("/colors/create", data)
+  return response.data
+}
