@@ -13,3 +13,8 @@ export interface ColorCreateRequest {
   hexCode: string;
   description?: string
 }
+
+export interface ColorFilter {
+  search?: string;
+  isDeleted?: boolean;
+}

@@ -22,7 +22,8 @@ const ROUTERS = {
         },
         colors: {
             root: "/admin/colors",
-            create: "/admin/colors/create"
+            create: "/admin/colors/create",
+            trash: "/admin/colors/trash-bin"
         }
     },
 }

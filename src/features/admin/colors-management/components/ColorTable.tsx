@@ -7,6 +7,8 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { PaginationControls } from "@/components/PaginationControls";
+import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 import {
   Table,
   TableBody,
@@ -20,17 +22,21 @@ interface ColorTableProps {
   data: IColor[];
   onEdit?: (color: IColor) => void;
   onDelete?: (color: IColor) => void;
+  loading?: boolean;
   pagination?: {
     pageIndex: number;
     pageCount: number;
     onPageChange: (index: number) => void;
   };
+  actionRenderer?: (product: IColor) => React.ReactNode;
 }
 
 export const ColorTable: React.FC<ColorTableProps> = ({
   data,
+  loading,
   onEdit,
   onDelete,
+  actionRenderer,
   pagination,
 }) => {
   const columns: ColumnDef<IColor>[] = [
@@ -65,24 +71,27 @@ export const ColorTable: React.FC<ColorTableProps> = ({
     {
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => (
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => onEdit?.(row.original)}
-          >
-            Edit
-          </Button>
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={() => onDelete?.(row.original)}
-          >
-            Delete
-          </Button>
-        </div>
-      ),
+      cell: ({ row }) =>
+        actionRenderer ? actionRenderer(row.original)
+          : (
+
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onEdit?.(row.original)}
+              >
+                Sửa
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => onDelete?.(row.original)}
+              >
+                Xóa
+              </Button>
+            </div>
+          ),
     },
   ];
 
@@ -110,7 +119,9 @@ export const ColorTable: React.FC<ColorTableProps> = ({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.length ? (
+          {loading ? (
+            <SkeletonTableRows columnCount={columns.length} thumbnailIndexes={[0]} />
+          ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -131,27 +142,11 @@ export const ColorTable: React.FC<ColorTableProps> = ({
       </Table>
 
       {pagination && (
-        <div className="flex justify-end items-center gap-4 p-4">
-          <span>
-            Page {pagination.pageIndex + 1} of {pagination.pageCount}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => pagination.onPageChange(pagination.pageIndex - 1)}
-            disabled={pagination.pageIndex <= 0}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => pagination.onPageChange(pagination.pageIndex + 1)}
-            disabled={pagination.pageIndex >= pagination.pageCount - 1}
-          >
-            Next
-          </Button>
-        </div>
+        <PaginationControls
+          pageIndex={pagination.pageIndex}
+          pageCount={pagination.pageCount}
+          onPageChange={pagination.onPageChange}
+        />
       )}
     </div>
   );

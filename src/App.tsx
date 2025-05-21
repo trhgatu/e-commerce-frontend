@@ -19,6 +19,7 @@ import { ColorManagementPage, CreateColorPage } from '@/features/admin/colors-ma
 import { CreateProductPage } from '@/features/admin/products-management/pages/CreateProductPage';
 import { TrashBinProductsPage } from '@/features/admin/products-management/pages/TrashBinProductsPage';
 import { TrashBinCategoriesPage } from '@/features/admin/categories-management/pages/TrashBinCategoriesPage';
+import { TrashBinColorsPage } from '@/features/admin/colors-management/pages/TrashBinColorsPage';
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
           <Route path="colors">
             <Route index element={<ColorManagementPage />} />
             <Route path="create" element={<CreateColorPage />} />
+             <Route path="trash-bin" element={<TrashBinColorsPage />} />
           </Route>
         </Route>
       </Routes>
