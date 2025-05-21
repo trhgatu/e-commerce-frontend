@@ -15,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PaginationControls } from "@/components/PaginationControls";
+import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 
 interface CategoryTableProps {
   data: ICategory[];
@@ -25,11 +27,13 @@ interface CategoryTableProps {
     pageCount: number;
     onPageChange: (index: number) => void;
   };
-   actionRenderer?: (category: ICategory) => React.ReactNode;
+  loading?: boolean;
+  actionRenderer?: (category: ICategory) => React.ReactNode;
 }
 
 export const CategoryTable: React.FC<CategoryTableProps> = ({
   data,
+  loading,
   onEdit,
   onDelete,
   pagination,
@@ -61,25 +65,25 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
       header: "Actions",
       cell: ({ row }) =>
         actionRenderer ? actionRenderer(row.original)
-      :
-        (
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => onEdit?.(row.original)}
-          >
-            Sửa
-          </Button>
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={() => onDelete?.(row.original)}
-          >
-            Xóa
-          </Button>
-        </div>
-      ),
+          :
+          (
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onEdit?.(row.original)}
+              >
+                Sửa
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={() => onDelete?.(row.original)}
+              >
+                Xóa
+              </Button>
+            </div>
+          ),
     },
   ];
 
@@ -104,7 +108,9 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.length ? (
+          {loading ? (
+            <SkeletonTableRows columnCount={columns.length} />
+          ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -125,27 +131,11 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
       </Table>
 
       {pagination && (
-        <div className="flex justify-end items-center gap-4 p-4">
-          <span>
-            Page {pagination.pageIndex + 1} of {pagination.pageCount}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => pagination.onPageChange(pagination.pageIndex - 1)}
-            disabled={pagination.pageIndex <= 0}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => pagination.onPageChange(pagination.pageIndex + 1)}
-            disabled={pagination.pageIndex >= pagination.pageCount - 1}
-          >
-            Next
-          </Button>
-        </div>
+        <PaginationControls
+          pageIndex={pagination.pageIndex}
+          pageCount={pagination.pageCount}
+          onPageChange={pagination.onPageChange}
+        />
       )}
     </div>
   );

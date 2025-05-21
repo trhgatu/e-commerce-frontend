@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { PaginationControls } from "@/components/PaginationControls";
-import { Skeleton } from "antd";
+import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 import {
   Table,
   TableBody,
@@ -135,19 +135,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
           </TableHeader>
           <TableBody>
             {loading ? (
-              Array.from({ length: 10 }).map((_, index) => (
-                <TableRow key={`skeleton-${index}`}>
-                  {columns.map((col, colIndex) => (
-                    <TableCell key={`skeleton-${index}-${colIndex}`}>
-                      {("id" in col && col.id === "thumbnail") || col.header === "Image" ? (
-                        <Skeleton.Avatar active size="large" shape="square" />
-                      ) : (
-                        <Skeleton active title={false} paragraph={{ rows: 1, width: "80%" }} />
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              <SkeletonTableRows columnCount={columns.length} thumbnailIndexes={[0]} />
             ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
