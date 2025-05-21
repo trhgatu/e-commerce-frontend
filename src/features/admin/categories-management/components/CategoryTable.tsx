@@ -25,6 +25,7 @@ interface CategoryTableProps {
     pageCount: number;
     onPageChange: (index: number) => void;
   };
+   actionRenderer?: (category: ICategory) => React.ReactNode;
 }
 
 export const CategoryTable: React.FC<CategoryTableProps> = ({
@@ -32,6 +33,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
   onEdit,
   onDelete,
   pagination,
+  actionRenderer
 }) => {
   const columns: ColumnDef<ICategory>[] = [
     {
@@ -57,21 +59,24 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
     {
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => (
+      cell: ({ row }) =>
+        actionRenderer ? actionRenderer(row.original)
+      :
+        (
         <div className="flex gap-2">
           <Button
             size="sm"
             variant="outline"
             onClick={() => onEdit?.(row.original)}
           >
-            Edit
+            Sửa
           </Button>
           <Button
             size="sm"
             variant="destructive"
             onClick={() => onDelete?.(row.original)}
           >
-            Delete
+            Xóa
           </Button>
         </div>
       ),

@@ -7,6 +7,12 @@ export interface ICategory {
   icon?: string;
   createdAt: string;
   updatedAt: string;
+  isDeleted: boolean
+}
+
+export interface CategoryFilter {
+  search?: string;
+  isDeleted?: boolean
 }
 
 export interface CategoryCreateRequest {

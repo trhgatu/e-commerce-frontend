@@ -7,6 +7,8 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { PaginationControls } from "@/components/PaginationControls";
+import { Skeleton } from "antd";
 import {
   Table,
   TableBody,
@@ -20,6 +22,7 @@ interface ProductTableProps {
   data: IProduct[];
   onEdit?: (product: IProduct) => void;
   onDelete?: (product: IProduct) => void;
+  loading?: boolean
   pagination?: {
     pageIndex: number;
     pageCount: number;
@@ -30,6 +33,7 @@ interface ProductTableProps {
 
 export const ProductTable: React.FC<ProductTableProps> = ({
   data,
+  loading,
   onEdit,
   onDelete,
   pagination,
@@ -112,65 +116,65 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   });
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+    <div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </TableHead>
                 ))}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="text-center">
-                No products found.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              Array.from({ length: 10 }).map((_, index) => (
+                <TableRow key={`skeleton-${index}`}>
+                  {columns.map((col, colIndex) => (
+                    <TableCell key={`skeleton-${index}-${colIndex}`}>
+                      {("id" in col && col.id === "thumbnail") || col.header === "Image" ? (
+                        <Skeleton.Avatar active size="large" shape="square" />
+                      ) : (
+                        <Skeleton active title={false} paragraph={{ rows: 1, width: "80%" }} />
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center">
+                  No products found.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
 
+        </Table>
+      </div>
       {pagination && (
-        <div className="flex justify-end items-center gap-4 p-4">
-          <span>
-            Page {pagination.pageIndex + 1} of {pagination.pageCount}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => pagination.onPageChange(pagination.pageIndex - 1)}
-            disabled={pagination.pageIndex <= 0}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => pagination.onPageChange(pagination.pageIndex + 1)}
-            disabled={pagination.pageIndex >= pagination.pageCount - 1}
-          >
-            Next
-          </Button>
-        </div>
+        <PaginationControls
+          pageIndex={pagination.pageIndex}
+          pageCount={pagination.pageCount}
+          onPageChange={pagination.onPageChange}
+        />
       )}
     </div>
   );

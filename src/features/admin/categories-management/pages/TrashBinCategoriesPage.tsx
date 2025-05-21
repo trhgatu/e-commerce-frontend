@@ -4,20 +4,22 @@ import { ICategory } from "@/types";
 import { CategoryTable } from "@/features/admin/categories-management/components/CategoryTable";
 import { useNavigate } from "react-router-dom";
 import ROUTERS from "@/constants/routes";
-import { getAllCategories, softDeleteCategoryById } from "@/features/admin/categories-management/services/categoryService";
+import { getAllCategories, restoreCategoryById, hardDeleteCategoryById } from "@/features/admin/categories-management/services/categoryService";
+import { Undo2 } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmDeleteDialog } from "@/components/ComfirmDeleteDialog";
-import { Plus, Trash2 } from "lucide-react";
-export const CategoryManagementPage = () => {
+
+export const TrashBinCategoriesPage = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<ICategory[]>([])
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
   const [categoryToDelete, setCategoryToDelete] = useState<ICategory | null>(null);
+
   useEffect(() => {
     const fetchCategories = async () => {
       const res = await getAllCategories(page + 1, 10, {
-        isDeleted: false
+        isDeleted: true
       });
       setCategories(res.data);
       setPageCount(res.totalPages);
@@ -25,14 +27,24 @@ export const CategoryManagementPage = () => {
     fetchCategories();
   }, [page]);
 
+  const handleRestore = async (category: ICategory) => {
+    try {
+      await restoreCategoryById(category._id);
+      setCategories((prev) => prev.filter((p) => p._id !== category._id));
+      toast.success(`Đã khôi phục danh mục "${category.name}"`);
+    } catch {
+      toast.error("Khôi phục thất bại");
+    }
+  };
+
   const confirmDelete = async () => {
     if (categoryToDelete) {
       try {
-        await softDeleteCategoryById(categoryToDelete._id);
-        setCategories((prev) => prev.filter((c) => c._id !== categoryToDelete._id));
-        toast.success("Xóa danh mục thành công");
+        await hardDeleteCategoryById(categoryToDelete._id);
+        setCategories((prev) => prev.filter((p) => p._id !== categoryToDelete._id));
+        toast.success("Product deleted successfully");
       } catch {
-        toast.error("Xóa danh mục thất bại");
+        toast.error("Failed to delete role");
       } finally {
         setCategoryToDelete(null);
       }
@@ -52,25 +64,38 @@ export const CategoryManagementPage = () => {
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-semibold">
-          Categories Management
+          Danh mục đã xóa
         </h2>
         <div className="flex items-center space-x-2">
-          <Button onClick={() => navigate(ROUTERS.ADMIN.categories.trash)} variant="outline">Thùng rác <Trash2 /></Button>
-          <Button onClick={() => navigate(ROUTERS.ADMIN.categories.create)}>
-            Thêm
-            <Plus />
-          </Button>
+          <Button onClick={() => navigate(ROUTERS.ADMIN.categories.root)} variant="outline">Về trang danh mục<Undo2 /></Button>
         </div>
       </div>
       <CategoryTable
         data={categories}
-        /* onEdit={handleEdit} */
         onDelete={(category) => setCategoryToDelete(category)}
         pagination={{
           pageIndex: page,
           pageCount: pageCount,
           onPageChange: setPage,
         }}
+        actionRenderer={(category) => (
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleRestore(category)}
+            >
+              Khôi phục
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => setCategoryToDelete(category)}
+            >
+              Xoá vĩnh viễn
+            </Button>
+          </div>
+        )}
       />
       <ConfirmDeleteDialog
         open={!!categoryToDelete}

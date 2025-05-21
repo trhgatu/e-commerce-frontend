@@ -17,7 +17,8 @@ import { CategoryManagementPage, CreateCategoryPage } from '@/features/admin/cat
 import { BrandManagementPage, CreateBrandPage } from '@/features/admin/brands-management/pages';
 import { ColorManagementPage } from '@/features/admin/colors-management/pages';
 import { CreateProductPage } from '@/features/admin/products-management/pages/CreateProductPage';
-import { TrashBinProductPage } from '@/features/admin/products-management/pages/TrashBinProducts';
+import { TrashBinProductsPage } from '@/features/admin/products-management/pages/TrashBinProductsPage';
+import { TrashBinCategoriesPage } from '@/features/admin/categories-management/pages/TrashBinCategoriesPage';
 
 function App() {
   return (
@@ -50,7 +51,7 @@ function App() {
           <Route path="products">
             <Route index element={<ProductManagementPage />} />
             <Route path="create" element={<CreateProductPage />} />
-            <Route path="trash-bin" element={<TrashBinProductPage />} />
+            <Route path="trash-bin" element={<TrashBinProductsPage />} />
           </Route>
 
           <Route path="users">
@@ -62,6 +63,7 @@ function App() {
           <Route path="categories">
             <Route index element={<CategoryManagementPage />} />
             <Route path="create" element={<CreateCategoryPage />} />
+            <Route path="trash-bin" element={<TrashBinCategoriesPage />} />
           </Route>
 
           <Route path="brands">

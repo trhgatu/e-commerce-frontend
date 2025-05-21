@@ -1,10 +1,11 @@
 import axiosInstance from "@/services/axios";
-import { CategoryCreateRequest } from "@/types";
-export const getAllCategories = async (page: number, limit: number) => {
+import { CategoryCreateRequest, CategoryFilter } from "@/types";
+export const getAllCategories = async (page: number, limit: number, filter: CategoryFilter = {}) => {
   const res = await axiosInstance.get("/categories", {
     params: {
       page: page,
       limit: limit,
+      ...filter
     },
   });
 
@@ -25,3 +26,18 @@ export const deleteCategoryById = async (id: string) => {
   const response = await axiosInstance.delete(`/categories/delete/${id}`);
   return response.data;
 };
+
+export const softDeleteCategoryById = async (id: string) => {
+  const response = await axiosInstance.delete(`/categories/delete/${id}`);
+  return response.data;
+};
+
+export const hardDeleteCategoryById = async (id: string) => {
+  const response = await axiosInstance.delete(`/categories/hard-delete/${id}`);
+  return response.data;
+};
+
+export const restoreCategoryById = async (id: string) => {
+  const response = await axiosInstance.put(`/categories/restore/${id}`);
+  return response.data;
+}

@@ -13,7 +13,8 @@ const ROUTERS = {
         },
         categories: {
             root: "/admin/categories",
-            create: "/admin/categories/create"
+            create: "/admin/categories/create",
+            trash: "/admin/categories/trash-bin"
         },
         brands: {
             root: "/admin/brands",

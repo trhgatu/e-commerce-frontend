@@ -2,11 +2,11 @@ import axiosInstance from "@/services/axios";
 import { IProduct, ProductCreateRequest } from "@/types";
 import { ProductFilter } from "@/types";
 
-export const getAllProducts = async (page: number, size: number, filter: ProductFilter = {}) => {
+export const getAllProducts = async (page: number, limit: number, filter: ProductFilter = {}) => {
   const res = await axiosInstance.get("/products", {
     params: {
       pageNumber: page,
-      pageSize: size,
+      limit: limit,
       ...filter,
     },
   });

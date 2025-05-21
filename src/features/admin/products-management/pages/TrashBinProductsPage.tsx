@@ -1,39 +1,49 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button";
 import { IProduct } from "@/types";
-import { ProductTable, ConfirmDeleteDialog } from "@/features/admin/products-management/components";
+import { ProductTable } from "@/features/admin/products-management/components";
+import { ConfirmDeleteDialog } from "@/components/ComfirmDeleteDialog";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ROUTERS from "@/constants/routes";
 import { hardDeleteProductById, restoreProductById, getAllProducts } from "@/features/admin/products-management/services/productService";
 import { Undo2 } from "lucide-react";
 
-export const TrashBinProductPage = () => {
+export const TrashBinProductsPage = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<IProduct[]>([])
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
   const [productToDelete, setProductToDelete] = useState<IProduct | null>(null);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await getAllProducts(page + 1, 10, { isDeleted: true });
-      setProducts(res.data);
-      setPageCount(res.totalPages);
+      setLoading(true)
+      try {
+        const res = await getAllProducts(page + 1, 10, { isDeleted: true });
+        setProducts(res.data);
+        setPageCount(res.totalPages);
+      } catch (err) {
+        console.log(err)
+        toast.error("Lỗi khi tải danh sách sản phẩm");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchProducts();
   }, [page]);
 
   const handleRestore = async (product: IProduct) => {
-  try {
-    await restoreProductById(product._id);
-    setProducts((prev) => prev.filter((p) => p._id !== product._id));
-    toast.success(`Đã khôi phục sản phẩm "${product.name}"`);
-  } catch {
-    toast.error("Khôi phục thất bại");
-  }
-};
+    try {
+      await restoreProductById(product._id);
+      setProducts((prev) => prev.filter((p) => p._id !== product._id));
+      toast.success(`Đã khôi phục sản phẩm "${product.name}"`);
+    } catch {
+      toast.error("Khôi phục thất bại");
+    }
+  };
 
   const confirmDelete = async () => {
     if (productToDelete) {
@@ -62,6 +72,7 @@ export const TrashBinProductPage = () => {
       <ProductTable
         data={products}
         onDelete={(product) => setProductToDelete(product)}
+        loading={loading}
         pagination={{
           pageIndex: page,
           pageCount: pageCount,

@@ -4,7 +4,7 @@ import { IProduct } from "@/types";
 import { ProductTable } from "@/features/admin/products-management/components/ProductTable";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { ConfirmDeleteDialog } from "@/features/admin/products-management/components";
+import { ConfirmDeleteDialog } from "@/components/ComfirmDeleteDialog";
 import ROUTERS from "@/constants/routes";
 import { softDeleteProductById, getAllProducts } from "@/features/admin/products-management/services/productService";
 import { Trash2, Plus } from "lucide-react";
@@ -15,18 +15,25 @@ export const ProductManagementPage = () => {
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
   const [productToDelete, setProductToDelete] = useState<IProduct | null>(null);
+  const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await getAllProducts(page + 1, 10, {
-        isDeleted : false
-      });
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllProducts(page + 1, 10, { isDeleted: false });
       setProducts(res.data);
       setPageCount(res.totalPages);
-    };
-    fetchProducts();
-  }, [page]);
+    } catch (err) {
+      console.log(err)
+      toast.error("Lỗi khi tải danh sách sản phẩm");
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchProducts();
+}, [page]);
 
   /* const handleEdit = (user: IUser) => {
     navigate(ROUTERS.ADMIN.user.edit(user.id))
@@ -40,8 +47,6 @@ export const ProductManagementPage = () => {
         toast.success("Xóa sản phẩm thành công");
       } catch {
         toast.error("Xóa sản phẩm thất bại");
-      } finally {
-        setProductToDelete(null);
       }
     }
   };
@@ -63,6 +68,7 @@ export const ProductManagementPage = () => {
       <ProductTable
         data={products}
         /* onEdit={handleEdit} */
+        loading={loading}
         onDelete={(product) => setProductToDelete(product)}
         pagination={{
           pageIndex: page,
