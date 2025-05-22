@@ -1,5 +1,7 @@
 // components/ThumbnailUploader.tsx
 import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Image } from 'antd';
 
 export const ProductThumbnailUploader = ({
   onFileSelected,
@@ -18,8 +20,8 @@ export const ProductThumbnailUploader = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      {preview && <img src={preview} alt="Preview" className="w-48 h-auto border rounded" />}
+      <Input type="file" accept="image/*" onChange={handleFileChange} />
+      {preview && <Image src={preview} alt="Preview"/>}
     </div>
   );
 };

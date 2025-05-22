@@ -79,6 +79,63 @@ export const ProductTable: React.FC<ProductTableProps> = ({
       cell: ({ row }) => (row.original.isFeatured ? "Yes" : "No"),
     },
     {
+      accessorKey: "categoryId.name",
+      header: "Category",
+      cell: ({ row }) =>
+        row.original.categoryId?.name || "—",
+    },
+    {
+      accessorKey: "brandId.name",
+      header: "Brand",
+      cell: ({ row }) =>
+        row.original.brandId?.name || "—",
+    },
+    {
+      accessorKey: "images",
+      header: "Gallery",
+      cell: ({ row }) =>
+        row.original.images?.length ? (
+          <div className="flex gap-1 flex-wrap">
+            {row.original.images.map((url, idx) => (
+              <img
+                key={idx}
+                src={url}
+                alt={`img-${idx}`}
+                className="w-12 h-12 object-cover rounded border"
+              />
+            ))}
+          </div>
+        ) : (
+          "—"
+        ),
+    },
+
+    {
+      accessorKey: "colorVariants",
+      header: "Colors",
+      cell: ({ row }) =>
+        row.original.colorVariants?.length ? (
+          <div className="flex gap-1 flex-wrap">
+            {row.original.colorVariants.map((cv, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-1 text-xs px-1 py-0.5 border rounded"
+                title={`${cv.colorId?.name || ''} - ${cv.stock} sản phẩm`}
+              >
+                <span>{cv.colorId?.name}</span>
+                <div
+                  className="w-4 h-4 rounded-full border"
+                  style={{ backgroundColor: cv.colorId?.hexCode || "#ccc" }}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          "—"
+        ),
+    },
+
+    {
       accessorKey: "createdAt",
       header: "Created At",
       cell: ({ row }) =>
@@ -103,7 +160,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                 variant="outline"
                 onClick={() => onShow?.(row.original)}
 
-                >Chi tiết</Button>
+              >Chi tiết</Button>
 
               <Button
                 size="sm"

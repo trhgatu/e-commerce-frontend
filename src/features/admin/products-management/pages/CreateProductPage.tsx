@@ -90,158 +90,271 @@ export const CreateProductPage = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl">
-      <h2 className="text-xl font-semibold mb-4">Create New Product</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <Label>Product Name</Label>
-          <Input type="text" {...register("name")} />
-          {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-6">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Product</h1>
+          <p className="text-gray-600">Add a new product to your inventory</p>
         </div>
 
-        <div>
-          <Label>Price (VND)</Label>
-          <Input type="number" step="1000" {...register("price", { valueAsNumber: true })} />
-          {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <div className="bg-white rounded-lg shadow-sm border p-6">
+            {/* Basic Information Section */}
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
+              Basic Information
+            </h2>
 
-        <div>
-          <Label>Stock</Label>
-          <Input type="number" {...register("stock", { valueAsNumber: true })} />
-          {errors.stock && <p className="text-sm text-red-500">{errors.stock.message}</p>}
-        </div>
-
-        <div>
-          <Label>Description</Label>
-          <Textarea rows={4} {...register("description")} />
-        </div>
-
-        <div>
-          <Label>Upload Thumbnail</Label>
-          <ProductThumbnailUploader onFileSelected={(file) => setThumbnailFile(file)} />
-        </div>
-
-        <div>
-          <Label>Upload Gallery Images</Label>
-          <ProductImageUploader onFilesSelected={setGalleryFiles} />
-        </div>
-
-        <div className="">
-          <Controller
-            name="categoryId"
-            control={control}
-            render={({ field }) => (
-              <div>
-                <Label>Category</Label>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Chọn danh mục" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Danh mục</SelectLabel>
-                      {categories.map((c) => (
-                        <SelectItem key={c._id} value={c._id}>
-                          {c.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {errors.categoryId && (
-                  <p className="text-sm text-red-500">{errors.categoryId.message}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                  Product Name *
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Enter product name"
+                  {...register("name")}
+                  className="h-10"
+                />
+                {errors.name && (
+                  <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
                 )}
               </div>
-            )}
-          />
 
-          <Controller
-            name="brandId"
-            control={control}
-            render={({ field }) => (
-              <div>
-                <Label>Brand</Label>
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Chọn thương hiệu" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Thương hiệu</SelectLabel>
-                      {brands.map((b) => (
-                        <SelectItem key={b._id} value={b._id}>
-                          {b.name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {errors.brandId && (
-                  <p className="text-sm text-red-500">{errors.brandId.message}</p>
+              <div className="space-y-2">
+                <Label htmlFor="price" className="text-sm font-medium text-gray-700">
+                  Price (VND) *
+                </Label>
+                <Input
+                  id="price"
+                  type="number"
+                  step="1000"
+                  placeholder="0"
+                  {...register("price", { valueAsNumber: true })}
+                  className="h-10"
+                />
+                {errors.price && (
+                  <p className="text-sm text-red-500 mt-1">{errors.price.message}</p>
                 )}
               </div>
-            )}
-          />
-          <div>
-            <Label>Color Variants</Label>
-            {colors.map((color) => {
-              const colorVariants = watch("colorVariants") || [];
-              const isSelected = colorVariants.some((v) => v.colorId === color._id);
-              const quantity = colorVariants.find((v) => v.colorId === color._id)?.stock || 0;
 
-              return (
-                <div key={color._id} className="flex items-center gap-2 mb-2">
+              <div className="space-y-2">
+                <Label htmlFor="stock" className="text-sm font-medium text-gray-700">
+                  Stock Quantity *
+                </Label>
+                <Input
+                  id="stock"
+                  type="number"
+                  placeholder="0"
+                  {...register("stock", { valueAsNumber: true })}
+                  className="h-10"
+                />
+                {errors.stock && (
+                  <p className="text-sm text-red-500 mt-1">{errors.stock.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center space-x-3 h-10">
                   <Checkbox
-                    checked={isSelected}
-                    onCheckedChange={(checked) => {
-                      const updated = checked
-                        ? [...colorVariants, { colorId: color._id, stock: 1 }]
-                        : colorVariants.filter((v) => v.colorId !== color._id);
-                      setValue("colorVariants", updated);
-                    }}
+                    id="featured"
+                    checked={isFeatured}
+                    onCheckedChange={(checked) => setValue("isFeatured", Boolean(checked))}
                   />
-                  <span>{color.name}</span>
-                  <div
-                    className="w-4 h-4 rounded border"
-                    style={{ backgroundColor: color.hexCode }}
-                  />
-                  {isSelected && (
-                    <Input
-                      type="number"
-                      value={quantity}
-                      className="w-20"
-                      onChange={(e) => {
-                        const updated = colorVariants.map((v) =>
-                          v.colorId === color._id ? { ...v, stock: Number(e.target.value) } : v
-                        );
-                        setValue("colorVariants", updated);
-                      }}
-                    />
-                  )}
+                  <Label htmlFor="featured" className="text-sm font-medium text-gray-700">
+                    Mark as featured product
+                  </Label>
                 </div>
-              );
-            })}
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <Label htmlFor="description" className="text-sm font-medium text-gray-700">
+                Description
+              </Label>
+              <Textarea
+                id="description"
+                rows={4}
+                placeholder="Enter product description..."
+                {...register("description")}
+                className="mt-2 resize-none"
+              />
+            </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              checked={isFeatured}
-              onCheckedChange={(checked) => setValue("isFeatured", Boolean(checked))}
-            />
-            <Label>Mark as featured</Label>
+          {/* Category & Brand Section */}
+          <div className="bg-white rounded-lg shadow-sm border p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
+              Category & Brand
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Controller
+                name="categoryId"
+                control={control}
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-gray-700">Category *</Label>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Categories</SelectLabel>
+                          {categories.map((c) => (
+                            <SelectItem key={c._id} value={c._id}>
+                              {c.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    {errors.categoryId && (
+                      <p className="text-sm text-red-500 mt-1">{errors.categoryId.message}</p>
+                    )}
+                  </div>
+                )}
+              />
+
+              <Controller
+                name="brandId"
+                control={control}
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-gray-700">Brand *</Label>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="h-10">
+                        <SelectValue placeholder="Select brand" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Brands</SelectLabel>
+                          {brands.map((b) => (
+                            <SelectItem key={b._id} value={b._id}>
+                              {b.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    {errors.brandId && (
+                      <p className="text-sm text-red-500 mt-1">{errors.brandId.message}</p>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
           </div>
 
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Creating..." : "Create Product"}
-          </Button>
-        </div>
-      </form>
+          {/* Images Section */}
+          <div className="bg-white rounded-lg shadow-sm border p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
+              Product Images
+            </h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <Label className="text-sm font-medium text-gray-700">
+                  Thumbnail Image
+                </Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors">
+                  <ProductThumbnailUploader onFileSelected={(file) => setThumbnailFile(file)} />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Label className="text-sm font-medium text-gray-700">
+                  Gallery Images
+                </Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors">
+                  <ProductImageUploader onFilesSelected={setGalleryFiles} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Color Variants Section */}
+          <div className="bg-white rounded-lg shadow-sm border p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
+              Color Variants
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {colors.map((color) => {
+                const colorVariants = watch("colorVariants") || [];
+                const isSelected = colorVariants.some((v) => v.colorId === color._id);
+                const quantity = colorVariants.find((v) => v.colorId === color._id)?.stock || 0;
+
+                return (
+                  <div
+                    key={color._id}
+                    className={`border rounded-lg p-4 transition-all ${
+                      isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <Checkbox
+                        checked={isSelected}
+                        onCheckedChange={(checked) => {
+                          const updated = checked
+                            ? [...colorVariants, { colorId: color._id, stock: 1 }]
+                            : colorVariants.filter((v) => v.colorId !== color._id);
+                          setValue("colorVariants", updated);
+                        }}
+                      />
+                      <div
+                        className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
+                        style={{ backgroundColor: color.hexCode }}
+                      />
+                      <span className="font-medium text-gray-900">{color.name}</span>
+                    </div>
+
+                    {isSelected && (
+                      <div className="mt-3">
+                        <Label className="text-xs text-gray-600 mb-1 block">Stock Quantity</Label>
+                        <Input
+                          type="number"
+                          value={quantity}
+                          min="0"
+                          className="h-8 text-sm"
+                          placeholder="0"
+                          onChange={(e) => {
+                            const updated = colorVariants.map((v) =>
+                              v.colorId === color._id ? { ...v, stock: Number(e.target.value) } : v
+                            );
+                            setValue("colorVariants", updated);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end gap-4 pt-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate("/admin/products")}
+              className="px-8"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-8"
+            >
+              {isSubmitting ? "Creating..." : "Create Product"}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

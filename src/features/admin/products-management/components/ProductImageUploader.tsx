@@ -1,3 +1,5 @@
+import { Input } from '@/components/ui/input';
+import { Image } from 'antd';
 import { useState } from 'react';
 
 export const ProductImageUploader = ({
@@ -17,10 +19,10 @@ export const ProductImageUploader = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <input type="file" accept="image/*" multiple onChange={handleFileChange} />
+      <Input type="file" accept="image/*" multiple onChange={handleFileChange} />
       <div className="flex gap-2 flex-wrap">
         {previews.map((src, idx) => (
-          <img key={idx} src={src} className="w-32 h-auto border rounded" />
+          <Image key={idx} src={src} />
         ))}
       </div>
     </div>
