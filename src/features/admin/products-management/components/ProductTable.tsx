@@ -28,6 +28,7 @@ interface ProductTableProps {
     pageCount: number;
     onPageChange: (index: number) => void;
   };
+  onShow?: (producrt: IProduct) => void;
   actionRenderer?: (product: IProduct) => React.ReactNode;
 }
 
@@ -36,6 +37,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   loading,
   onEdit,
   onDelete,
+  onShow,
   pagination,
   actionRenderer,
 }) => {
@@ -88,7 +90,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
       cell: ({ row }) =>
         actionRenderer ? actionRenderer(row.original)
           : (
-
             <div className="flex gap-2">
               <Button
                 size="sm"
@@ -97,6 +98,13 @@ export const ProductTable: React.FC<ProductTableProps> = ({
               >
                 Sửa
               </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onShow?.(row.original)}
+
+                >Chi tiết</Button>
+
               <Button
                 size="sm"
                 variant="destructive"

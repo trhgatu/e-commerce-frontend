@@ -22,7 +22,7 @@ export const ProductManagementPage = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await getAllProducts(page + 1, 10, { isDeleted: false });
+      const res = await getAllProducts(page + 1, 10);
       setProducts(res.data);
       setPageCount(res.totalPages);
     } catch (err) {
@@ -68,6 +68,7 @@ export const ProductManagementPage = () => {
       <ProductTable
         data={products}
         /* onEdit={handleEdit} */
+        onShow={(product) => navigate(ROUTERS.ADMIN.products.show(product._id))}
         loading={loading}
         onDelete={(product) => setProductToDelete(product)}
         pagination={{

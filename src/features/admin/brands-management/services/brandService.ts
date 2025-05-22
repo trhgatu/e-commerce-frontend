@@ -1,12 +1,13 @@
 import axiosInstance from "@/services/axios";
-import { BrandCreateRequest } from "@/types";
+import { BrandCreateRequest, BrandFilter } from "@/types";
 
 // userService.ts
-export const getAllBrands = async (page: number, limit: number) => {
+export const getAllBrands = async (page: number, limit: number, filter: BrandFilter = {}) => {
   const res = await axiosInstance.get("/brands", {
     params: {
       page: page,
-      limit: limit
+      limit: limit,
+      ...filter,
     },
   });
 

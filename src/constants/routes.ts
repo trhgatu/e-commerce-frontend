@@ -9,6 +9,7 @@ const ROUTERS = {
         products: {
             root: "/admin/products",
             create: "/admin/products/create",
+            show: (id: string) => `/admin/products/detail/${id}`,
             trash: "/admin/products/trash-bin"
         },
         categories: {
@@ -18,7 +19,8 @@ const ROUTERS = {
         },
         brands: {
             root: "/admin/brands",
-            create: "/admin/brands/create"
+            create: "/admin/brands/create",
+            trash: "/admin/brands/trash-bin"
         },
         colors: {
             root: "/admin/colors",

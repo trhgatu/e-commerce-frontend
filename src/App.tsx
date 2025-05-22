@@ -7,7 +7,6 @@ import { RegisterPage, LoginPage } from '@/features/user/auth/pages';
 import CartPage from '@/features/user/cart/pages/CartPage';
 import ProductListingPage from '@/features/user/product/pages/ProductListingPage';
 import { AdminLayout } from '@/components/layouts/AdminLayout';
-import DashboardPage from '@/pages/admin/Dashboard';
 import ROUTERS from '@/constants/routes';
 import { ProductManagementPage } from '@/features/admin/products-management/pages';
 import { UserManagementPage } from '@/features/admin/users-management/pages';
@@ -20,6 +19,9 @@ import { CreateProductPage } from '@/features/admin/products-management/pages/Cr
 import { TrashBinProductsPage } from '@/features/admin/products-management/pages/TrashBinProductsPage';
 import { TrashBinCategoriesPage } from '@/features/admin/categories-management/pages/TrashBinCategoriesPage';
 import { TrashBinColorsPage } from '@/features/admin/colors-management/pages/TrashBinColorsPage';
+import { TrashBinBrandsPage } from '@/features/admin/brands-management/pages/TrashBinBrandsPage';
+import DashboardPage from '@/features/admin/dashboard/pages/Dashboard';
+import { DetailProductPage } from '@/features/admin/products-management/pages/DetailProductPage';
 
 function App() {
   return (
@@ -52,6 +54,7 @@ function App() {
           <Route path="products">
             <Route index element={<ProductManagementPage />} />
             <Route path="create" element={<CreateProductPage />} />
+            <Route path="detail/:id" element={<DetailProductPage />} />
             <Route path="trash-bin" element={<TrashBinProductsPage />} />
           </Route>
 
@@ -70,6 +73,7 @@ function App() {
           <Route path="brands">
             <Route index element={<BrandManagementPage />} />
             <Route path="create" element={<CreateBrandPage />} />
+            <Route path="trash-bin" element={<TrashBinBrandsPage />} />
           </Route>
 
           <Route path="colors">

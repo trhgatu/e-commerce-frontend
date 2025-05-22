@@ -21,11 +21,11 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { getAllCategories } from "@/features/admin/categories-management/services/categoryService";
 import { getAllBrands } from "@/features/admin/brands-management/services/brandService";
-import { ICategory } from "@/types/category";
-import { IBrand } from "@/types/brand";
-import { IColor } from "@/types";
+import { ICategory, IColor, IBrand } from "@/types";
 import { getAllColors } from "@/features/admin/colors-management/services/colorService";
 import { baseProductSchema } from "@/features/admin/products-management/validator/productValidator";
+import { ProductImageUploader, ProductThumbnailUploader } from "@/features/admin/products-management/components";
+import { uploadProductImage } from "@/features/admin/products-management/services/imageUploadService";
 
 type CreateProductFormData = z.infer<typeof baseProductSchema>;
 
@@ -34,7 +34,8 @@ export const CreateProductPage = () => {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [brands, setBrands] = useState<IBrand[]>([]);
   const [colors, setColors] = useState<IColor[]>([])
-
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const {
     register,
     handleSubmit,
@@ -69,6 +70,16 @@ export const CreateProductPage = () => {
   const onSubmit = async (data: CreateProductFormData) => {
     const toastId = toast.loading("Creating product...");
     try {
+      if (thumbnailFile) {
+        const url = await uploadProductImage(thumbnailFile);
+        data.thumbnail = url;
+      }
+      if (galleryFiles.length) {
+        const urls = await Promise.all(
+          galleryFiles.map((file) => uploadProductImage(file))
+        );
+        data.images = urls;
+      }
       await createProduct(data);
       toast.success("Product created successfully!", { id: toastId });
       navigate("/admin/products");
@@ -106,9 +117,13 @@ export const CreateProductPage = () => {
         </div>
 
         <div>
-          <Label>Thumbnail URL</Label>
-          <Input type="url" {...register("thumbnail")} />
-          {errors.thumbnail && <p className="text-sm text-red-500">{errors.thumbnail.message}</p>}
+          <Label>Upload Thumbnail</Label>
+          <ProductThumbnailUploader onFileSelected={(file) => setThumbnailFile(file)} />
+        </div>
+
+        <div>
+          <Label>Upload Gallery Images</Label>
+          <ProductImageUploader onFilesSelected={setGalleryFiles} />
         </div>
 
         <div className="">

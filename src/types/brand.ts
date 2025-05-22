@@ -12,3 +12,8 @@ export interface BrandCreateRequest {
   description?: string;
   logo?: string;
 }
+
+export interface BrandFilter {
+  search?: string;
+  isDeleted?: boolean;
+}

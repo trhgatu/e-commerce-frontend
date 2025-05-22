@@ -1,5 +1,6 @@
 import { IColor } from "@/types/color";
 import { ICategory } from "@/types/category";
+import { IBrand } from "@/types/brand";
 
 export interface IProduct {
   _id: string;
@@ -9,7 +10,7 @@ export interface IProduct {
   images: string[];
   thumbnail?: string;
   categoryId: ICategory;
-  brand: string;
+  brandId: IBrand;
   rating: number;
   reviewCount: number;
   stock: number;

@@ -6,16 +6,7 @@ import ROUTERS from "@/constants/routes";
 import { IBrand } from "@/types";
 import { BrandTable } from "@/features/admin/brands-management/components/BrandTable";
 import { toast } from "sonner";
-import {
-    AlertDialog,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogDescription,
-    AlertDialogTitle,
-    AlertDialogCancel,
-    AlertDialogFooter,
-    AlertDialogAction
-} from "@/components/ui/alert-dialog";
+import { ConfirmDeleteDialog } from "@/components/ComfirmDeleteDialog";
 
 export const BrandManagementPage = () => {
     const navigate = useNavigate();
@@ -26,7 +17,9 @@ export const BrandManagementPage = () => {
 
     useEffect(() => {
         const fetchBrands = async () => {
-            const res = await getAllBrands(page + 1, 10);
+            const res = await getAllBrands(page + 1, 10, {
+                isDeleted: false
+            });
             setBrands(res.data);
             setPageCount(res.totalPages);
         };
@@ -57,39 +50,37 @@ export const BrandManagementPage = () => {
       }
     } */
     return (
-        <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold">
-                    Brands Management
-                </h2>
-                <Button onClick={() => navigate(ROUTERS.ADMIN.brands.create)}>
-                    Create brand
-                </Button>
+        <div>
+            <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-semibold">
+                        Quản lý thương hiệu
+                    </h2>
+                    <div className="flex items-center space-x-2">
+                        <Button onClick={() => navigate(ROUTERS.ADMIN.brands.create)}>
+                            Tạo mới
+                        </Button>
+                        <Button onClick={() => navigate(ROUTERS.ADMIN.brands.trash)}> Thùng rác </Button>
+                    </div>
+                </div>
+                <BrandTable
+                    data={brands}
+                    /* onEdit={handleEdit} */
+                    onDelete={(brand) => setBrandToDelete(brand)}
+                    pagination={{
+                        pageIndex: page,
+                        pageCount: pageCount,
+                        onPageChange: setPage,
+                    }}
+                />
+
             </div>
-            <BrandTable
-                data={brands}
-                /* onEdit={handleEdit} */
-                onDelete={(brand) => setBrandToDelete(brand)}
-                pagination={{
-                    pageIndex: page,
-                    pageCount: pageCount,
-                    onPageChange: setPage,
-                }}
+            <ConfirmDeleteDialog
+                open={!!brandToDelete}
+                itemName={brandToDelete?.name || ""}
+                onCancel={() => setBrandToDelete(null)}
+                onConfirm={confirmDelete}
             />
-            <AlertDialog open={!!brandToDelete} onOpenChange={(open) => !open && setBrandToDelete(null)}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Xác nhận xoá</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Bạn có chắc chắn muốn xoá thương hiệu <strong>{brandToDelete?.name}</strong> không? Hành động này không thể hoàn tác.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Huỷ</AlertDialogCancel>
-                        <AlertDialogAction onClick={confirmDelete}>Xoá</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </div>
     )
 }
