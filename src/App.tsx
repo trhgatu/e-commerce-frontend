@@ -8,20 +8,17 @@ import CartPage from '@/features/user/cart/pages/CartPage';
 import ProductListingPage from '@/features/user/product/pages/ProductListingPage';
 import { AdminLayout } from '@/components/layouts/AdminLayout';
 import ROUTERS from '@/constants/routes';
-import { ProductManagementPage } from '@/features/admin/products-management/pages';
 import { UserManagementPage } from '@/features/admin/users-management/pages';
 import { AdminLoginPage } from '@/features/admin/auth/pages/AdminLoginPage';
 import AdminRoute from '@/routes/AdminRoute';
 import { CategoryManagementPage, CreateCategoryPage } from '@/features/admin/categories-management/pages';
 import { BrandManagementPage, CreateBrandPage } from '@/features/admin/brands-management/pages';
 import { ColorManagementPage, CreateColorPage } from '@/features/admin/colors-management/pages';
-import { CreateProductPage } from '@/features/admin/products-management/pages/CreateProductPage';
-import { TrashBinProductsPage } from '@/features/admin/products-management/pages/TrashBinProductsPage';
 import { TrashBinCategoriesPage } from '@/features/admin/categories-management/pages/TrashBinCategoriesPage';
 import { TrashBinColorsPage } from '@/features/admin/colors-management/pages/TrashBinColorsPage';
 import { TrashBinBrandsPage } from '@/features/admin/brands-management/pages/TrashBinBrandsPage';
 import DashboardPage from '@/features/admin/dashboard/pages/Dashboard';
-import { DetailProductPage } from '@/features/admin/products-management/pages/DetailProductPage';
+import {ProductManagementPage, DetailProductPage, EditProductPage, TrashBinProductsPage, CreateProductPage } from '@/features/admin/products-management/pages';
 
 function App() {
   return (
@@ -56,6 +53,7 @@ function App() {
             <Route path="create" element={<CreateProductPage />} />
             <Route path="detail/:id" element={<DetailProductPage />} />
             <Route path="trash-bin" element={<TrashBinProductsPage />} />
+            <Route path="edit/:id" element={<EditProductPage />} />
           </Route>
 
           <Route path="users">
@@ -79,7 +77,7 @@ function App() {
           <Route path="colors">
             <Route index element={<ColorManagementPage />} />
             <Route path="create" element={<CreateColorPage />} />
-             <Route path="trash-bin" element={<TrashBinColorsPage />} />
+            <Route path="trash-bin" element={<TrashBinColorsPage />} />
           </Route>
         </Route>
       </Routes>

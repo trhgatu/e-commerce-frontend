@@ -50,3 +50,4 @@ export interface ProductCreateRequest {
   tags?: string[];
   colorVariants?: { colorId: string; stock: number }[];
 }
+

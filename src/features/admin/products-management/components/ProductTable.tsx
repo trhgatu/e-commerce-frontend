@@ -44,7 +44,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   const columns: ColumnDef<IProduct>[] = [
     {
       accessorKey: "thumbnail",
-      header: "Image",
+      header: "Ảnh bìa",
       cell: ({ row }) =>
         row.original.thumbnail ? (
           <img
@@ -58,11 +58,11 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     },
     {
       accessorKey: "name",
-      header: "Name",
+      header: "Tên sản phẩm",
     },
     {
       accessorKey: "price",
-      header: "Price",
+      header: "Giá",
       cell: ({ row }) =>
         row.original.price.toLocaleString("en-US", {
           style: "currency",
@@ -71,28 +71,28 @@ export const ProductTable: React.FC<ProductTableProps> = ({
     },
     {
       accessorKey: "stock",
-      header: "Stock",
+      header: "Kho",
     },
     {
       accessorKey: "isFeatured",
-      header: "Featured",
+      header: "Nổi bật",
       cell: ({ row }) => (row.original.isFeatured ? "Yes" : "No"),
     },
     {
       accessorKey: "categoryId.name",
-      header: "Category",
+      header: "Danh mục",
       cell: ({ row }) =>
         row.original.categoryId?.name || "—",
     },
     {
       accessorKey: "brandId.name",
-      header: "Brand",
+      header: "Thương hiệu",
       cell: ({ row }) =>
         row.original.brandId?.name || "—",
     },
     {
       accessorKey: "images",
-      header: "Gallery",
+      header: "Thư viện ảnh",
       cell: ({ row }) =>
         row.original.images?.length ? (
           <div className="flex gap-1 flex-wrap">
@@ -112,7 +112,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
 
     {
       accessorKey: "colorVariants",
-      header: "Colors",
+      header: "Màu sắc",
       cell: ({ row }) =>
         row.original.colorVariants?.length ? (
           <div className="flex gap-1 flex-wrap">
@@ -137,13 +137,13 @@ export const ProductTable: React.FC<ProductTableProps> = ({
 
     {
       accessorKey: "createdAt",
-      header: "Created At",
+      header: "Thời gian tạo",
       cell: ({ row }) =>
         new Date(row.original.createdAt).toLocaleDateString(),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: "Thao tác",
       cell: ({ row }) =>
         actionRenderer ? actionRenderer(row.original)
           : (
@@ -214,7 +214,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  No products found.
+                  Không có sản phẩm nào.
                 </TableCell>
               </TableRow>
             )}

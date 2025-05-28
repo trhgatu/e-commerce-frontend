@@ -91,10 +91,10 @@ export const CreateProductPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Product</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Tạo sản phẩm mới</h1>
           <p className="text-gray-600">Add a new product to your inventory</p>
         </div>
 
@@ -102,18 +102,18 @@ export const CreateProductPage = () => {
           <div className="bg-white rounded-lg shadow-sm border p-6">
             {/* Basic Information Section */}
             <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
-              Basic Information
+              Thông tin cơ bản
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                  Product Name *
+                  Tên sản phẩm *
                 </Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Enter product name"
+                  placeholder="Nhập tên sản phẩm"
                   {...register("name")}
                   className="h-10"
                 />
@@ -124,7 +124,7 @@ export const CreateProductPage = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="price" className="text-sm font-medium text-gray-700">
-                  Price (VND) *
+                  Giá tiền (VND) *
                 </Label>
                 <Input
                   id="price"
@@ -141,7 +141,7 @@ export const CreateProductPage = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="stock" className="text-sm font-medium text-gray-700">
-                  Stock Quantity *
+                  Số lượng trong kho *
                 </Label>
                 <Input
                   id="stock"
@@ -163,7 +163,7 @@ export const CreateProductPage = () => {
                     onCheckedChange={(checked) => setValue("isFeatured", Boolean(checked))}
                   />
                   <Label htmlFor="featured" className="text-sm font-medium text-gray-700">
-                    Mark as featured product
+                    Nổi bật
                   </Label>
                 </div>
               </div>
@@ -171,7 +171,7 @@ export const CreateProductPage = () => {
 
             <div className="mt-6">
               <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-                Description
+                Mô tả sản phẩm
               </Label>
               <Textarea
                 id="description"
@@ -186,7 +186,7 @@ export const CreateProductPage = () => {
           {/* Category & Brand Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
-              Category & Brand
+              Danh mục & Thương hiệu
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -195,10 +195,10 @@ export const CreateProductPage = () => {
                 control={control}
                 render={({ field }) => (
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">Category *</Label>
+                    <Label className="text-sm font-medium text-gray-700">Danh mục *</Label>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="h-10">
-                        <SelectValue placeholder="Select category" />
+                        <SelectValue placeholder="Chọn danh mục" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
@@ -223,10 +223,10 @@ export const CreateProductPage = () => {
                 control={control}
                 render={({ field }) => (
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">Brand *</Label>
+                    <Label className="text-sm font-medium text-gray-700">Thương hiệu *</Label>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="h-10">
-                        <SelectValue placeholder="Select brand" />
+                        <SelectValue placeholder="Chọn thương hiệu" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
@@ -251,13 +251,13 @@ export const CreateProductPage = () => {
           {/* Images Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
-              Product Images
+              Ảnh sản phẩm
             </h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <Label className="text-sm font-medium text-gray-700">
-                  Thumbnail Image
+                  Ảnh đại diện
                 </Label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors">
                   <ProductThumbnailUploader onFileSelected={(file) => setThumbnailFile(file)} />
@@ -266,7 +266,7 @@ export const CreateProductPage = () => {
 
               <div className="space-y-3">
                 <Label className="text-sm font-medium text-gray-700">
-                  Gallery Images
+                  Bộ sưu tập ảnh
                 </Label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors">
                   <ProductImageUploader onFilesSelected={setGalleryFiles} />
@@ -278,7 +278,7 @@ export const CreateProductPage = () => {
           {/* Color Variants Section */}
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b border-gray-200">
-              Color Variants
+              Màu sắc và Biến thể
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -313,7 +313,9 @@ export const CreateProductPage = () => {
 
                     {isSelected && (
                       <div className="mt-3">
-                        <Label className="text-xs text-gray-600 mb-1 block">Stock Quantity</Label>
+                        <Label className="text-xs text-gray-600 mb-1 block">
+                          Số lượng trong kho
+                        </Label>
                         <Input
                           type="number"
                           value={quantity}

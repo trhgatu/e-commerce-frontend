@@ -1,1 +1,5 @@
 export * from './ProductManagementPage'
+export * from './CreateProductPage'
+export * from './DetailProductPage'
+export * from './TrashBinProductsPage'
+export * from './EditProductPage'

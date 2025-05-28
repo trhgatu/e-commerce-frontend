@@ -113,7 +113,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="space-y-2 mb-3 text-sm text-gray-500">
           <div className="flex items-center">
             <span className="font-medium text-blue-500 mr-2">Thương hiệu:</span>
-            <span>{product.brand}</span>
+            <span>{product.brandId.name}</span>
           </div>
           <div className="flex items-center">
             <span className="font-medium text-blue-500 mr-2">Tình trạng:</span>

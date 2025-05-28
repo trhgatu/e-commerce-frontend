@@ -43,3 +43,8 @@ export const restoreProductById = async (id: string) => {
   const response = await axiosInstance.put(`/products/restore/${id}`);
   return response.data;
 }
+
+export const updateProductById = async (id: string, data: ProductCreateRequest) => {
+  const response = await axiosInstance.put(`/products/update/${id}`, data);
+  return response.data;
+};
