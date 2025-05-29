@@ -48,12 +48,12 @@ export const CategoryManagementPage = () => {
       }
     }
   };
-  /* const handleEdit = (user: IUser) => {
-    navigate(ROUTERS.ADMIN.user.edit(user.id))
-  } */
- const handleShow = (category: ICategory) => {
-  navigate(ROUTERS.ADMIN.categories.show(category._id));
- }
+  const handleEdit = (category: ICategory) => {
+    navigate(ROUTERS.ADMIN.categories.edit(category._id))
+  }
+  const handleShow = (category: ICategory) => {
+    navigate(ROUTERS.ADMIN.categories.show(category._id));
+  }
 
   /* const handleDelete = async (role: Role) => {
     if (window.confirm(`Are you sure you want to delete ${role.roleName}?`)) {
@@ -78,7 +78,7 @@ export const CategoryManagementPage = () => {
       <CategoryTable
         data={categories}
         loading={loading}
-        /* onEdit={handleEdit} */
+        onEdit={handleEdit}
         onDelete={(category) => setCategoryToDelete(category)}
         onShow={handleShow}
         pagination={{

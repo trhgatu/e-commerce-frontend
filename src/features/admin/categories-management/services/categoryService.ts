@@ -46,3 +46,7 @@ export const restoreCategoryById = async (id: string) => {
   const response = await axiosInstance.put(`/categories/restore/${id}`);
   return response.data;
 }
+export const updateCategoryById = async (id: string, data: CategoryCreateRequest) => {
+  const response = await axiosInstance.put(`/categories/update/${id}`, data);
+  return response.data;
+}

@@ -16,6 +16,7 @@ const ROUTERS = {
             root: "/admin/categories",
             create: "/admin/categories/create",
             trash: "/admin/categories/trash-bin",
+            edit: (id: string) => `/admin/categories/edit/${id}`,
             show: (id: string) => `/admin/categories/detail/${id}`
         },
         brands: {
