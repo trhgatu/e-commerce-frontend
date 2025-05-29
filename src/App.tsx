@@ -11,7 +11,7 @@ import ROUTERS from '@/constants/routes';
 import { UserManagementPage } from '@/features/admin/users-management/pages';
 import { AdminLoginPage } from '@/features/admin/auth/pages/AdminLoginPage';
 import AdminRoute from '@/routes/AdminRoute';
-import { CategoryManagementPage, CreateCategoryPage } from '@/features/admin/categories-management/pages';
+import { CategoryManagementPage, CreateCategoryPage, DetailCategoryPage } from '@/features/admin/categories-management/pages';
 import { BrandManagementPage, CreateBrandPage } from '@/features/admin/brands-management/pages';
 import { ColorManagementPage, CreateColorPage } from '@/features/admin/colors-management/pages';
 import { TrashBinCategoriesPage } from '@/features/admin/categories-management/pages/TrashBinCategoriesPage';
@@ -65,6 +65,7 @@ function App() {
           <Route path="categories">
             <Route index element={<CategoryManagementPage />} />
             <Route path="create" element={<CreateCategoryPage />} />
+            <Route path="detail/:id" element={<DetailCategoryPage />} />
             <Route path="trash-bin" element={<TrashBinCategoriesPage />} />
           </Route>
 

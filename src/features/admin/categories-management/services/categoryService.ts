@@ -17,6 +17,11 @@ export const getAllCategories = async (page: number, limit: number, filter: Cate
   };
 };
 
+export const getCategoryById = async (id: string) => {
+  const response = await axiosInstance.get(`/categories/${id}`);
+  return response.data;
+};
+
 export const createCategory = async (data: CategoryCreateRequest) => {
   const response = await axiosInstance.post("/categories/create", data)
   return response.data

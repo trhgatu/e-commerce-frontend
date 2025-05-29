@@ -22,6 +22,7 @@ interface CategoryTableProps {
   data: ICategory[];
   onEdit?: (category: ICategory) => void;
   onDelete?: (category: ICategory) => void;
+  onShow?: (category: ICategory) => void;
   pagination?: {
     pageIndex: number;
     pageCount: number;
@@ -35,6 +36,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
   data,
   loading,
   onEdit,
+  onShow,
   onDelete,
   pagination,
   actionRenderer
@@ -74,6 +76,13 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
                 onClick={() => onEdit?.(row.original)}
               >
                 Sửa
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onShow?.(row.original)}
+              >
+                Xem
               </Button>
               <Button
                 size="sm"
