@@ -6,6 +6,13 @@ const ROUTERS = {
             root: "/admin/users",
             create: "/admin/users/create",
         },
+        roles: {
+            root: "/admin/roles",
+            create: "/admin/roles/create",
+            edit: (id: string) => `/admin/roles/edit/${id}`,
+            show: (id: string) => `/admin/roles/detail/${id}`,
+            trash: "/admin/roles/trash-bin"
+        },
         products: {
             root: "/admin/products",
             create: "/admin/products/create",

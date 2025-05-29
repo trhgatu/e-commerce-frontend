@@ -59,6 +59,11 @@ const data = {
       url: ROUTERS.ADMIN.users.root,
       icon: IconChartBar,
     },
+    {
+      title: "Quản lý vai trò",
+      url: ROUTERS.ADMIN.roles.root,
+      icon: IconChartBar,
+    },
 
 
   ],
