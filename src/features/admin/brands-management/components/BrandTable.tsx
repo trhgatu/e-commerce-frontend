@@ -65,7 +65,7 @@ export const BrandTable: React.FC<BrandTableProps> = ({
         },
         {
             id: "actions",
-            header: "Actions",
+            header: "Thao tác",
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     <Button

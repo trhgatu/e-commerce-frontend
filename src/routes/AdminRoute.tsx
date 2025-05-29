@@ -11,7 +11,7 @@ const AdminRoute = ({ children }: { children: React.ReactElement }) => {
   }
 
 
-  if (!isAuthenticated || user?.role.name !== 'Admin') {
+  if (!isAuthenticated || user?.roleId.name !== 'Admin') {
     return <Navigate to="/admin/auth/login" replace />;
   }
 

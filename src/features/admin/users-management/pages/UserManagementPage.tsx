@@ -16,7 +16,6 @@ import {
   Plus,
   RefreshCw,
   Download,
-  Search,
   Filter
 } from "lucide-react";
 import { SearchInput } from "@/components/common/searchInput";
@@ -99,7 +98,7 @@ export const UserManagementPage = () => {
     },
     {
       title: "Quản trị viên",
-      value: users.filter(u => u.role === 'admin').length,
+      value: users.filter(u => u.roleId?.name === 'Admin').length,
       icon: Crown,
       color: "text-purple-600",
       bgColor: "bg-purple-50",
@@ -172,7 +171,6 @@ export const UserManagementPage = () => {
                 <SearchInput
                   placeholder="Tìm kiếm theo tên, email..."
                   onSearch={handleSearch}
-                  className="max-w-md"
                 />
                 <Button variant="outline" size="sm">
                   <Filter className="h-4 w-4 mr-2" />
@@ -208,7 +206,7 @@ export const UserManagementPage = () => {
             </div>
             <Separator />
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 px-6">
             <UserTable
               data={users}
               loading={loading}

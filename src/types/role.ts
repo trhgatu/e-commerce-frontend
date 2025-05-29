@@ -5,6 +5,7 @@ export interface IRole {
     permissions: string[];
     createdAt: string;
     updatedAt: string;
+    isDeleted: boolean;
 }
 export interface RoleCreateRequest {
     name: string;

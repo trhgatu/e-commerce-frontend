@@ -116,13 +116,13 @@ export const BrandManagementPage = () => {
             color: "text-green-600",
             bgColor: "bg-green-50",
         },
-        {
+        /* {
             title: "Phổ biến",
             value: brands.filter(b => b.isPopular).length,
             icon: TrendingUp,
             color: "text-orange-600",
             bgColor: "bg-orange-50",
-        },
+        }, */
     ];
 
     return (
@@ -246,7 +246,7 @@ export const BrandManagementPage = () => {
                         </div>
                         <Separator />
                     </CardHeader>
-                    <CardContent className="p-0">
+                    <CardContent className="p-0 px-6">
                         <BrandTable
                             data={brands}
                             loading={loading}

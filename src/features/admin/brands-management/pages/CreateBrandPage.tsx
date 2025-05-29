@@ -29,7 +29,6 @@ export const CreateBrandPage = () => {
     });
 
     const onSubmit = async (data: CreateBrandFormData) => {
-        console.log(data);
         const toastId = toast.loading("Creating brand...");
         try {
             await createBrand(data);

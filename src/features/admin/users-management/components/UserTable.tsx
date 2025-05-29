@@ -6,6 +6,7 @@ import {
   useReactTable,
   flexRender,
 } from "@tanstack/react-table";
+import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -20,31 +21,47 @@ interface UserTableProps {
   data: IUser[];
   onEdit?: (user: IUser) => void;
   onDelete?: (user: IUser) => void;
+  onShow?: (user: IUser) => void;
   pagination?: {
     pageIndex: number;
     pageCount: number;
     onPageChange: (index: number) => void;
   };
+  loading?: boolean;
 }
 
 export const UserTable: React.FC<UserTableProps> = ({
   data,
   onEdit,
+  onShow,
   onDelete,
   pagination,
+  loading
 }) => {
   const columns: ColumnDef<IUser>[] = [
-    { accessorKey: "fullName", header: "Full Name" },
+    { accessorKey: "fullName", header: "Họ tên" },
     { accessorKey: "email", header: "Email" },
-    { accessorKey: "role", header: "Role" },
+    { accessorKey: "roleId.name", header: "Vai trò" },
     {
-      accessorKey: "isActive",
-      header: "Active",
-      cell: ({ row }) => (row.original.isActive ? "Yes" : "No"),
+      accessorKey: "status",
+      header: "Trạng thái",
+      cell: ({ row }) => {
+        const status = row.original.status;
+        switch (status) {
+          case "active":
+            return <span className="text-green-600 font-medium">Đang hoạt động</span>;
+          case "inactive":
+            return <span className="text-gray-500">Tạm khóa</span>;
+          case "banned":
+            return <span className="text-red-600 font-medium">Đã bị chặn</span>;
+          default:
+            return <span className="text-muted-foreground">Không xác định</span>;
+        }
+      },
     },
     {
       accessorKey: "createdAt",
-      header: "Created At",
+      header: "Thời gian tạo",
       cell: ({ row }) =>
         new Date(row.original.createdAt).toLocaleDateString(),
     },
@@ -54,14 +71,17 @@ export const UserTable: React.FC<UserTableProps> = ({
       cell: ({ row }) => (
         <div className="flex gap-2">
           <Button size="sm" variant="outline" onClick={() => onEdit?.(row.original)}>
-            Edit
+            Sửa
+          </Button>
+          <Button size="sm" variant="outline" onClick={() => onShow?.(row.original)}>
+            Xem
           </Button>
           <Button
             size="sm"
             variant="destructive"
             onClick={() => onDelete?.(row.original)}
           >
-            Delete
+            Xóa
           </Button>
         </div>
       ),
@@ -89,7 +109,9 @@ export const UserTable: React.FC<UserTableProps> = ({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.length ? (
+          {loading ? (
+            <SkeletonTableRows columnCount={columns.length} thumbnailIndexes={[0]} />
+          ) : table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -102,7 +124,7 @@ export const UserTable: React.FC<UserTableProps> = ({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="text-center">
-                No users found.
+                Không có người dùng nào.
               </TableCell>
             </TableRow>
           )}

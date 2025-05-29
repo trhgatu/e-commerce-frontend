@@ -139,14 +139,14 @@ export const RoleManagementPage = () => {
                     <div className="flex items-center space-x-3">
                         <Button
                             variant="outline"
-                            onClick={() => navigate(ROUTERS.ADMIN.products.trash)}
+                            onClick={() => navigate(ROUTERS.ADMIN.roles.trash)}
                             className="text-gray-600 hover:text-gray-900"
                         >
                             <Trash2 className="h-4 w-4 mr-2" />
                             Thùng rác
                         </Button>
                         <Button
-                            onClick={() => navigate(ROUTERS.ADMIN.products.create)}
+                            onClick={() => navigate(ROUTERS.ADMIN.roles.create)}
                             className="bg-blue-600 hover:bg-blue-700"
                         >
                             <Plus className="h-4 w-4 mr-2" />
@@ -154,9 +154,6 @@ export const RoleManagementPage = () => {
                         </Button>
                     </div>
                 </div>
-
-
-
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-lg font-semibold">
                         Danh sách vai trò
@@ -204,7 +201,7 @@ export const RoleManagementPage = () => {
                                     Xóa bộ lọc
                                 </Button>
                             ) : (
-                                <Button onClick={() => navigate(ROUTERS.ADMIN.products.create)}>
+                                <Button onClick={() => navigate(ROUTERS.ADMIN.roles.create)}>
                                     <Plus className="h-4 w-4 mr-2" />
                                     Thêm vai trò đầu tiên
                                 </Button>

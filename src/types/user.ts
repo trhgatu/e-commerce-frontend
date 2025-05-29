@@ -12,8 +12,9 @@ export interface IUser {
   address?: string;
   gender?: 'male' | 'female' | 'other';
   birthDate?: string;
-  role: IRole;
+  roleId: IRole;
   isActive: boolean;
+  status: string;
   emailVerified: boolean;
   lastLoginAt?: string;
   membershipRankId?: string;

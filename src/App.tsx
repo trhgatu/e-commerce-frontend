@@ -19,7 +19,7 @@ import { TrashBinColorsPage } from '@/features/admin/colors-management/pages/Tra
 import { TrashBinBrandsPage } from '@/features/admin/brands-management/pages/TrashBinBrandsPage';
 import DashboardPage from '@/features/admin/dashboard/pages/Dashboard';
 import {ProductManagementPage, DetailProductPage, EditProductPage, TrashBinProductsPage, CreateProductPage } from '@/features/admin/products-management/pages';
-import { RoleManagementPage } from '@/features/admin/roles-management/pages';
+import { RoleManagementPage, CreateRolePage } from '@/features/admin/roles-management/pages';
 
 function App() {
   return (
@@ -59,6 +59,7 @@ function App() {
 
           <Route path="roles">
             <Route index element={<RoleManagementPage />} />
+            <Route path="create" element={<CreateRolePage />} />
           </Route>
 
           <Route path="users">
