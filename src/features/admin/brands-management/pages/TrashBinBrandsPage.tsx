@@ -66,7 +66,7 @@ export const TrashBinBrandsPage = () => {
           Sản phẩm đã xóa
         </h2>
         <div className="flex items-center space-x-2">
-          <Button onClick={() => navigate(ROUTERS.ADMIN.products.root)} variant="outline">Về trang sản phẩm<Undo2 /></Button>
+          <Button onClick={() => navigate(ROUTERS.ADMIN.brands.root)} variant="outline">Về trang thương hiệu<Undo2 /></Button>
         </div>
       </div>
       <ProductTable

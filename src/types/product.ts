@@ -9,8 +9,8 @@ export interface IProduct {
   description?: string;
   images: string[];
   thumbnail?: string;
-  categoryId: ICategory;
-  brandId: IBrand;
+  categoryId?: ICategory;
+  brandId?: IBrand;
   rating: number;
   reviewCount: number;
   stock: number;

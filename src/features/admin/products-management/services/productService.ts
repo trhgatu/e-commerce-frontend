@@ -48,3 +48,4 @@ export const updateProductById = async (id: string, data: ProductCreateRequest) 
   const response = await axiosInstance.put(`/products/update/${id}`, data);
   return response.data;
 };
+

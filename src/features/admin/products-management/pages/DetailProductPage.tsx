@@ -179,7 +179,10 @@ export const DetailProductPage = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Danh mục</p>
-                      <p className="text-lg font-semibold text-gray-900">{product.categoryId.name}</p>
+                      <p className="text-lg font-semibold text-gray-900">
+                        {product.categoryId?.name || "Chưa có danh mục"}
+                      </p>
+
                     </div>
                   </div>
                 </div>
@@ -191,7 +194,7 @@ export const DetailProductPage = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Thương hiệu</p>
-                      <p className="text-lg font-semibold text-gray-900">{product.brandId.name}</p>
+                      <p className="text-lg font-semibold text-gray-900">{product.brandId?.name || "Không có thương hiệu"}</p>
                     </div>
                   </div>
 
