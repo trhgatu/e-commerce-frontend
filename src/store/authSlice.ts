@@ -2,18 +2,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '@/services/axios';
 import { AxiosError } from 'axios';
+import { IUser } from '@/types';
 
 interface AuthState {
     isAuthenticated: boolean;
     isInitialized: boolean;
-    user: { _id: string; email: string; username: string, role: string } | null;
+    user: IUser | null;
     token: string | null;
     loading: boolean;
     error: string | null;
 }
 
 type AuthResponse = {
-    user: { _id: string; email: string; username: string, role: string };
+    user: IUser;
     token: string;
 };
 
@@ -95,6 +96,7 @@ const authSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.isAuthenticated = false;
+            state.isInitialized = true;
             state.user = null;
             state.token = null;
             localStorage.removeItem('token');
@@ -103,6 +105,7 @@ const authSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(restoreAuth.pending, state => {
+                state.isInitialized = false;
                 state.loading = true;
                 state.error = null;
             })
@@ -127,6 +130,7 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
+                state.isInitialized = true;
                 state.isAuthenticated = true;
                 state.user = action.payload.user;
                 state.token = action.payload.token;

@@ -7,11 +7,11 @@ const AdminRoute = ({ children }: { children: React.ReactElement }) => {
   const { isAuthenticated, user, loading } = useAppSelector(state => state.auth);
 
   if (loading) {
-  return <Loading message="Đang kiểm tra quyền truy cập admin..." />;
-}
+    return <Loading message="Đang kiểm tra quyền truy cập admin..." />;
+  }
 
 
-  if (!isAuthenticated || user?.role !== 'admin') {
+  if (!isAuthenticated || user?.role.name !== 'Admin') {
     return <Navigate to="/admin/auth/login" replace />;
   }
 

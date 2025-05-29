@@ -36,7 +36,7 @@ export const LoginPage: React.FC = () => {
     await dispatch(login(data));
   };
   useEffect(() => {
-    if (isAuthenticated && user?.role === 'user') {
+    if (isAuthenticated && user?.role.name === 'user') {
       navigate('/');
     }
   }, [isAuthenticated, user, navigate]);

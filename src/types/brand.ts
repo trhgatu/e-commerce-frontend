@@ -5,6 +5,8 @@ export interface IBrand {
   logo?: string;
   createdAt: string;
   updatedAt: string;
+  isDeleted?: boolean;
+  isActive?: boolean;
 }
 
 export interface BrandCreateRequest {

@@ -1,11 +1,12 @@
 import axiosInstance from "@/services/axios";
-
+import { UserFilter } from "@/types";
 // userService.ts
-export const getAllUsers = async (page: number, size: number) => {
+export const getAllUsers = async (page: number, size: number, filter : UserFilter = {}) => {
   const res = await axiosInstance.get("/users", {
     params: {
       pageNumber: page,
       pageSize: size,
+      ...filter
     },
   });
 

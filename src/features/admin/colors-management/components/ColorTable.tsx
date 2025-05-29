@@ -22,6 +22,7 @@ interface ColorTableProps {
   data: IColor[];
   onEdit?: (color: IColor) => void;
   onDelete?: (color: IColor) => void;
+  onShow?: (color: IColor) => void;
   loading?: boolean;
   pagination?: {
     pageIndex: number;
@@ -35,6 +36,7 @@ export const ColorTable: React.FC<ColorTableProps> = ({
   data,
   loading,
   onEdit,
+  onShow,
   onDelete,
   actionRenderer,
   pagination,
@@ -82,6 +84,13 @@ export const ColorTable: React.FC<ColorTableProps> = ({
                 onClick={() => onEdit?.(row.original)}
               >
                 Sửa
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => onShow?.(row.original)}
+              >
+                Xem
               </Button>
               <Button
                 size="sm"

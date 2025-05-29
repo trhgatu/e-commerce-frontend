@@ -34,7 +34,7 @@ export const AdminLoginPage = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated && user?.role === 'admin') {
+    if (isAuthenticated && user?.role.name === 'Admin') {
       navigate('/admin/dashboard');
     }
   }, [isAuthenticated, user, navigate]);

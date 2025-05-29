@@ -1,5 +1,6 @@
 import * as React from "react";
 import { IBrand } from "@/types/brand"
+import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 import {
     ColumnDef,
     getCoreRowModel,
@@ -20,6 +21,8 @@ interface BrandTableProps {
     data: IBrand[];
     onEdit?: (brand: IBrand) => void;
     onDelete?: (brand: IBrand) => void;
+    onShow?: (brand: IBrand) => void;
+    loading?: boolean;
     pagination?: {
         pageIndex: number;
         pageCount: number;
@@ -31,6 +34,7 @@ export const BrandTable: React.FC<BrandTableProps> = ({
     data,
     onEdit,
     onDelete,
+    loading,
     pagination,
 }) => {
     const columns: ColumnDef<IBrand>[] = [
@@ -107,7 +111,9 @@ export const BrandTable: React.FC<BrandTableProps> = ({
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows.length ? (
+                    {loading ? (
+                        <SkeletonTableRows columnCount={columns.length} thumbnailIndexes={[0]} />
+                    ) : table.getRowModel().rows.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map((cell) => (
@@ -120,7 +126,7 @@ export const BrandTable: React.FC<BrandTableProps> = ({
                     ) : (
                         <TableRow>
                             <TableCell colSpan={columns.length} className="text-center">
-                                No brands found.
+                                Không có thương hiệu nào.
                             </TableCell>
                         </TableRow>
                     )}

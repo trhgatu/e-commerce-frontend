@@ -22,7 +22,9 @@ const ROUTERS = {
         brands: {
             root: "/admin/brands",
             create: "/admin/brands/create",
-            trash: "/admin/brands/trash-bin"
+            trash: "/admin/brands/trash-bin",
+            show: (id: string) => `/admin/brands/detail/${id}`,
+            edit: (id: string) => `/admin/brands/edit/${id}`
         },
         colors: {
             root: "/admin/colors",
