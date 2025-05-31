@@ -48,3 +48,7 @@ export const updateRoleById = async (id: string, data: RoleCreateRequest) => {
   return response.data;
 };
 
+export const assignPermissionsToRole = async (roleId: string, permissionsIds: string[]) => {
+  const response = await axiosInstance.put(`/assign-permissions/${roleId}`, permissionsIds);
+  return response.data;
+}

@@ -10,7 +10,9 @@ import {
   IconPalette,
   IconBrandMedium,
   IconUsers,
-  IconUserCheck
+  IconUserCheck,
+  IconUserShield,
+  IconReceipt
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -68,6 +70,23 @@ const data = {
       url: ROUTERS.ADMIN.roles.root,
       icon: IconUserCheck,
     },
+    {
+      title: "Phân quyền",
+      url: ROUTERS.ADMIN.roles.permissions,
+      icon: IconUserShield
+    },
+    {
+      title: "Quản lý quyền",
+      url: ROUTERS.ADMIN.permissions.root,
+      icon: IconUserShield
+    },
+
+    {
+      title: "Quản lý đơn hàng",
+      url: ROUTERS.ADMIN.orders.root,
+      icon: IconReceipt
+    },
+
 
 
   ],

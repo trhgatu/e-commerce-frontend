@@ -18,8 +18,9 @@ import { TrashBinCategoriesPage } from '@/features/admin/categories-management/p
 import { TrashBinColorsPage } from '@/features/admin/colors-management/pages/TrashBinColorsPage';
 import { TrashBinBrandsPage } from '@/features/admin/brands-management/pages/TrashBinBrandsPage';
 import DashboardPage from '@/features/admin/dashboard/pages/Dashboard';
-import {ProductManagementPage, DetailProductPage, EditProductPage, TrashBinProductsPage, CreateProductPage } from '@/features/admin/products-management/pages';
-import { RoleManagementPage, CreateRolePage } from '@/features/admin/roles-management/pages';
+import { ProductManagementPage, DetailProductPage, EditProductPage, TrashBinProductsPage, CreateProductPage } from '@/features/admin/products-management/pages';
+import { RoleManagementPage, CreateRolePage, RolePermissionMatrixPage } from '@/features/admin/roles-management/pages';
+import { PermissionManagementPage } from '@/features/admin/permissions-management/pages';
 
 function App() {
   return (
@@ -60,6 +61,11 @@ function App() {
           <Route path="roles">
             <Route index element={<RoleManagementPage />} />
             <Route path="create" element={<CreateRolePage />} />
+            <Route path="permissions" element={<RolePermissionMatrixPage />} />
+          </Route>
+
+          <Route path="permissions">
+            <Route index element={<PermissionManagementPage />} />
           </Route>
 
           <Route path="users">

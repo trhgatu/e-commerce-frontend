@@ -8,10 +8,18 @@ const ROUTERS = {
         },
         roles: {
             root: "/admin/roles",
+            permissions: "/admin/roles/permissions",
             create: "/admin/roles/create",
             edit: (id: string) => `/admin/roles/edit/${id}`,
             show: (id: string) => `/admin/roles/detail/${id}`,
             trash: "/admin/roles/trash-bin"
+        },
+        permissions: {
+            root: "/admin/permissions",
+            create: "/admin/permissions/create",
+            edit: (id: string) => `/admin/permissions/edit/${id}`,
+            show: (id: string) => `/admin/permissions/detail/${id}`,
+            trash: "/admin/permissions/trash-bin"
         },
         products: {
             root: "/admin/products",
@@ -38,6 +46,10 @@ const ROUTERS = {
             root: "/admin/colors",
             create: "/admin/colors/create",
             trash: "/admin/colors/trash-bin"
+        },
+        orders : {
+            root: "/admin/orders",
+
         }
     },
 }
