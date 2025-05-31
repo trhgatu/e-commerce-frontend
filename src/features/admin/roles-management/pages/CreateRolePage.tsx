@@ -114,30 +114,49 @@ export const CreateRolePage = () => {
                     </div>
                 </Card>
                 <div className="mt-6">
-                    <Label className="text-sm font-medium text-gray-700">
-                        Quyền được gán *
-                    </Label>
+                    <Card className="shadow-sm">
+                        <div className="mb-6">
+                            <Title level={3} className="!text-xl !font-semibold !text-gray-900 !mb-0">
+                                Gán quyền cho vai trò *
+                            </Title>
+                            <div className="w-full h-px bg-gray-200 mt-3"></div>
+                        </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                        {permissions.map((perm) => (
-                            <label key={perm._id} className="flex items-center space-x-2">
-                                <input
-                                    type="checkbox"
-                                    value={perm._id}
-                                    {...register("permissions")}
-                                    className="checkbox"
-                                />
-                                <span className="text-sm text-gray-700">
-                                    {perm.label} – <i className="text-gray-500">{perm.description}</i>
-                                </span>
-                            </label>
+                        {Object.entries(
+                            permissions.reduce((acc, perm) => {
+                                const group = perm.group || "Khác";
+                                if (!acc[group]) acc[group] = [];
+                                acc[group].push(perm);
+                                return acc;
+                            }, {} as Record<string, IPermission[]>)
+                        ).map(([group, perms]) => (
+                            <div key={group} className="mb-4">
+                                <Title level={5} className="!text-gray-800 !mb-2">
+                                    {group}
+                                </Title>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 pl-2">
+                                    {perms.map((perm) => (
+                                        <label key={perm._id} className="flex items-center space-x-2">
+                                            <input
+                                                type="checkbox"
+                                                value={perm._id}
+                                                {...register("permissions")}
+                                                className="accent-blue-600"
+                                            />
+                                            <span className="text-sm text-gray-700">
+                                                {perm.label}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
                         ))}
-                    </div>
 
+                        {errors.permissions && (
+                            <p className="text-sm text-red-500 mt-1">{errors.permissions.message}</p>
+                        )}
+                    </Card>
 
-                    {errors.permissions && (
-                        <p className="text-sm text-red-500 mt-1">{errors.permissions.message}</p>
-                    )}
                 </div>
 
                 {/* Category Hierarchy Info */}
