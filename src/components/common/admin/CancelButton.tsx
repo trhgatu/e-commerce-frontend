@@ -15,7 +15,7 @@ const CancelButton: React.FC<CancelButtonProps> = ({ to, label = "Hủy bỏ", c
       type="button"
       variant="outline"
       onClick={() => navigate(to)}
-      className={`px-8 h-10 ${className}`}
+      className={`${className}`}
     >
       {label}
     </Button>

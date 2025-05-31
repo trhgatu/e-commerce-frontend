@@ -12,6 +12,7 @@ import { useState } from "react";
 import { baseColorSchema } from "@/features/admin/colors-management/validator/colorValidator";
 import { createColor } from "@/features/admin/colors-management/services/colorService";
 import ROUTERS from "@/constants/routes";
+import CancelButton from "@/components/common/admin/CancelButton";
 
 type CreateColorFormData = z.infer<typeof baseColorSchema>;
 
@@ -141,14 +142,7 @@ export const CreateColorPage = () => {
 
                 {/* Submit Buttons */}
                 <div className="flex justify-end gap-4 pt-6">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => navigate(ROUTERS.ADMIN.colors.root)}
-                    className="px-8"
-                  >
-                    Hủy
-                  </Button>
+                  <CancelButton to={ROUTERS.ADMIN.colors.root}/>
                   <Button
                     type="submit"
                     disabled={isSubmitting}

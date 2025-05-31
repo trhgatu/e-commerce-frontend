@@ -1,4 +1,4 @@
-import { IColor } from "@/types/color";
+import { IColorVariant } from "@/types/color";
 import { ICategory } from "@/types/category";
 import { IBrand } from "@/types/brand";
 
@@ -14,7 +14,7 @@ export interface IProduct {
   rating: number;
   reviewCount: number;
   stock: number;
-  colorVariants: { colorId: IColor; stock: number }[];
+  colorVariants: IColorVariant[];
   createdAt: Date;
   updatedAt: Date;
   isFeatured: boolean;

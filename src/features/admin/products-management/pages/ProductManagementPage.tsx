@@ -222,6 +222,7 @@ export const ProductManagementPage = () => {
           <ProductTable
             data={products}
             onShow={(product) => navigate(ROUTERS.ADMIN.products.show(product._id))}
+            onEdit={(product) => navigate(ROUTERS.ADMIN.products.edit(product._id))}
             loading={loading}
             onDelete={(product) => setProductToDelete(product)}
             pagination={{
@@ -263,7 +264,6 @@ export const ProductManagementPage = () => {
           )}
         </CardContent>
 
-        {/* Delete Confirmation Dialog */}
         <ConfirmDeleteDialog
           open={!!productToDelete}
           itemName={productToDelete?.name || ""}

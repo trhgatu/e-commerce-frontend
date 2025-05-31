@@ -1,4 +1,9 @@
 // src/types/color.ts
+export interface IColorVariant {
+  colorId: IColor;
+  stock: number;
+}
+
 export interface IColor {
   _id: string;
   name: string;

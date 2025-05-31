@@ -13,7 +13,6 @@ import { ConfirmDeleteDialog } from "@/components/ComfirmDeleteDialog";
 import {
   Building2,
   Tag,
-  TrendingUp,
   Plus,
   Trash2,
   RefreshCw,

@@ -16,6 +16,7 @@ const ROUTERS = {
         products: {
             root: "/admin/products",
             create: "/admin/products/create",
+            edit: (id: string) => `/admin/products/edit/${id}`,
             show: (id: string) => `/admin/products/detail/${id}`,
             trash: "/admin/products/trash-bin"
         },
