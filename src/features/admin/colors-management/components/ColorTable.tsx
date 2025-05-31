@@ -48,7 +48,7 @@ export const ColorTable: React.FC<ColorTableProps> = ({
     },
     {
       accessorKey: "hexCode",
-      header: "Hex Code",
+      header: "Hex code",
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <div
@@ -61,18 +61,18 @@ export const ColorTable: React.FC<ColorTableProps> = ({
     },
     {
       accessorKey: "description",
-      header: "Description",
+      header: "Mô tả",
       cell: ({ row }) => row.original.description || "—",
     },
     {
       accessorKey: "createdAt",
-      header: "Created At",
+      header: "Thời gian tạo",
       cell: ({ row }) =>
         new Date(row.original.createdAt).toLocaleDateString(),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: "Thao tác",
       cell: ({ row }) =>
         actionRenderer ? actionRenderer(row.original)
           : (

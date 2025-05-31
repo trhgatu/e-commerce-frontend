@@ -48,7 +48,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
     },
     {
       accessorKey: "description",
-      header: "Description",
+      header: "Mô tả",
       cell: ({ row }) => row.original.description || "—",
     },
     {
@@ -58,13 +58,13 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
     },
     {
       accessorKey: "createdAt",
-      header: "Created At",
+      header: "Thời gian tạo",
       cell: ({ row }) =>
         new Date(row.original.createdAt).toLocaleDateString(),
     },
     {
       id: "actions",
-      header: "Actions",
+      header: "Thao tác",
       cell: ({ row }) =>
         actionRenderer ? actionRenderer(row.original)
           :

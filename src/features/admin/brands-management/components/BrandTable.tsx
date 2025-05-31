@@ -40,11 +40,11 @@ export const BrandTable: React.FC<BrandTableProps> = ({
     const columns: ColumnDef<IBrand>[] = [
         {
             accessorKey: "name",
-            header: "Name",
+            header: "Tên thương hiệu",
         },
         {
             accessorKey: "description",
-            header: "Description",
+            header: "Mô tả",
             cell: ({ row }) => row.original.description || "—",
         },
         {
@@ -59,7 +59,7 @@ export const BrandTable: React.FC<BrandTableProps> = ({
         },
         {
             accessorKey: "createdAt",
-            header: "Created At",
+            header: "Thời gian tạo",
             cell: ({ row }) =>
                 new Date(row.original.createdAt).toLocaleDateString(),
         },

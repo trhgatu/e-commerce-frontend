@@ -1,12 +1,16 @@
 import ROUTERS from "@/constants/routes"
 import * as React from "react"
 import {
-  IconChartBar,
   IconDashboard,
   IconHelp,
   IconListDetails,
   IconSearch,
   IconSettings,
+  IconBox,
+  IconPalette,
+  IconBrandMedium,
+  IconUsers,
+  IconUserCheck
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -37,7 +41,7 @@ const data = {
     {
       title: "Quản lý sản phẩm",
       url: ROUTERS.ADMIN.products.root,
-      icon: IconListDetails,
+      icon: IconBox,
     },
     {
       title: "Quản lý danh mục",
@@ -47,22 +51,22 @@ const data = {
     {
       title: "Quản lý màu sắc",
       url: ROUTERS.ADMIN.colors.root,
-      icon: IconListDetails,
+      icon: IconPalette,
     },
     {
       title: "Quản lý thương hiệu",
       url: ROUTERS.ADMIN.brands.root,
-      icon: IconListDetails,
+      icon: IconBrandMedium,
     },
     {
       title: "Quản lý người dùng",
       url: ROUTERS.ADMIN.users.root,
-      icon: IconChartBar,
+      icon: IconUsers,
     },
     {
       title: "Quản lý vai trò",
       url: ROUTERS.ADMIN.roles.root,
-      icon: IconChartBar,
+      icon: IconUserCheck,
     },
 
 

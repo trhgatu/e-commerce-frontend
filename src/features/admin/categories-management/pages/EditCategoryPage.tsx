@@ -20,6 +20,8 @@ import { buildCategoryTree } from "@/features/admin/categories-management/utils/
 import { TreeNode } from "@/features/admin/categories-management/utils/convertToTreeData";
 import { baseCategorySchema } from "@/features/admin/categories-management/validator/category";
 import { ICategory } from "@/types";
+import CancelButton from "@/components/common/admin/CancelButton";
+import ROUTERS from "@/constants/routes";
 
 const { Title, Text } = Typography;
 
@@ -65,8 +67,6 @@ export const EditCategoryPage = () => {
 
             try {
                 setLoading(true);
-
-                // Fetch category details and all categories in parallel
                 const [categoryRes, categoriesRes] = await Promise.all([
                     getCategoryById(id),
                     getAllCategories(1, 100)
@@ -75,12 +75,10 @@ export const EditCategoryPage = () => {
                 const categoryData = categoryRes.data;
                 setCategory(categoryData);
 
-                // Build category tree excluding current category to prevent circular references
                 const filteredCategories: ICategory[] = categoriesRes.data.filter((cat: ICategory) => cat._id !== id);
                 const tree = buildCategoryTree(filteredCategories);
                 setCategoryTree(tree);
 
-                // Populate form with existing data
                 reset({
                     name: categoryData.name,
                     description: categoryData.description || "",
@@ -112,10 +110,6 @@ export const EditCategoryPage = () => {
             console.error(error);
             toast.error("Failed to update category.", { id: toastId });
         }
-    };
-
-    const handleCancel = () => {
-        navigate(`/admin/categories/${id}`);
     };
 
     if (loading) {
@@ -279,14 +273,7 @@ export const EditCategoryPage = () => {
 
                 {/* Submit Buttons */}
                 <div className="flex justify-end gap-4 pt-6">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleCancel}
-                        className="px-8 h-10"
-                    >
-                        Hủy bỏ
-                    </Button>
+                    <CancelButton to={ROUTERS.ADMIN.categories.root}/>
                     <Button
                         type="submit"
                         disabled={isSubmitting}
