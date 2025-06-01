@@ -1,4 +1,4 @@
-import { RoleTable } from "@/features/admin/roles-management/components/RoleTable"
+import { RoleTable } from "@/features/admin/roles-management/components"
 import { IRole } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";

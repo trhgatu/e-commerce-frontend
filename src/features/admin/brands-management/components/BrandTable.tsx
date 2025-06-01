@@ -73,14 +73,14 @@ export const BrandTable: React.FC<BrandTableProps> = ({
                         variant="outline"
                         onClick={() => onEdit?.(row.original)}
                     >
-                        Edit
+                        Sửa
                     </Button>
                     <Button
                         size="sm"
                         variant="destructive"
                         onClick={() => onDelete?.(row.original)}
                     >
-                        Delete
+                        Xóa
                     </Button>
                 </div>
             ),

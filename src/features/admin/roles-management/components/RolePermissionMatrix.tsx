@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Checkbox, Spin, Typography, message, Space } from 'antd';
-import axios from 'axios';
+import { Table, Checkbox, Spin, Typography, message, Space, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { IRole, IPermission } from '@/types';
-import { getAllRoles } from '@/features/admin/roles-management/services/roleService';
+import { getAllRoles, assignPermissionsToRole } from '@/features/admin/roles-management/services/roleService';
 import { getAllPermissions } from '@/features/admin/permissions-management/services/permissionService';
+import { toast } from 'sonner';
 
 interface MatrixRow {
   key: string;
@@ -12,10 +12,11 @@ interface MatrixRow {
   permissions: IPermission[];
 }
 
-const RolePermissionMatrix: React.FC = () => {
+export const RolePermissionMatrix: React.FC = () => {
   const [roles, setRoles] = useState<IRole[]>([]);
   const [permissions, setPermissions] = useState<IPermission[]>([]);
   const [loading, setLoading] = useState(false);
+  const [rolePermissionsMap, setRolePermissionsMap] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,8 +26,14 @@ const RolePermissionMatrix: React.FC = () => {
           getAllRoles(1, 100),
           getAllPermissions(1, 100),
         ]);
-        setRoles(roleRes.data.map((r: IRole) => ({ ...r, permissions: r.permissions ?? [] })));
+        const rolesData = roleRes.data;
+        const roleMap: Record<string, string[]> = {};
+        rolesData.forEach((role: IRole) => {
+          roleMap[role._id] = role.permissions?.map(p => p._id) ?? [];
+        });
+        setRoles(rolesData);
         setPermissions(permRes.data);
+        setRolePermissionsMap(roleMap);
       } catch (error) {
         console.error('Error fetching roles or permissions:', error);
         message.error('Không thể tải dữ liệu từ máy chủ.');
@@ -36,6 +43,37 @@ const RolePermissionMatrix: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  const handleToggle = (roleId: string, permissionId: string, isChecked: boolean) => {
+    setRolePermissionsMap((prev) => {
+      const prevPermissions = prev[roleId] ?? [];
+      const updated = isChecked
+        ? [...new Set([...prevPermissions, permissionId])]
+        : prevPermissions.filter((id) => id !== permissionId);
+
+      return {
+        ...prev,
+        [roleId]: updated,
+      };
+    });
+  };
+
+  const handleSubmit = async () => {
+    const toastId = toast.loading("Đang lưu phân quyền...");
+
+    try {
+      await Promise.all(
+        Object.entries(rolePermissionsMap).map(([roleId, permissionIds]) =>
+          assignPermissionsToRole(roleId, permissionIds)
+        )
+      );
+      toast.success("Phân quyền đã được cập nhật!", { id: toastId });
+    } catch (err) {
+      console.error('Error updating role permissions:', err);
+      toast.error("Cập nhật thất bại!", { id: toastId });
+    }
+  };
+
 
   const groupedPermissions: Record<string, IPermission[]> = permissions.reduce((acc, perm) => {
     const group = perm.group || 'Khác';
@@ -49,36 +87,6 @@ const RolePermissionMatrix: React.FC = () => {
     module: group,
     permissions: perms,
   }));
-
-  const handleToggle = async (
-    roleId: string,
-    permissionId: string,
-    isChecked: boolean
-  ) => {
-    const role = roles.find((r) => r._id === roleId);
-    if (!role) return;
-
-    const updatedPermissions = isChecked
-      ? [...role.permissions, permissions.find((p) => p._id === permissionId)!]
-      : role.permissions.filter((p) => p._id !== permissionId);
-
-    try {
-      await axios.patch(`/api/roles/${roleId}`, {
-        permissions: updatedPermissions.map((p) => p._id),
-      });
-
-      setRoles((prev) =>
-        prev.map((r) =>
-          r._id === roleId ? { ...r, permissions: updatedPermissions } : r
-        )
-      );
-
-      message.success('Cập nhật quyền thành công');
-    } catch (err) {
-        console.error('Error updating role permissions:', err);
-      message.error('Cập nhật quyền thất bại');
-    }
-  };
 
   const columns: ColumnsType<MatrixRow> = [
     {
@@ -95,7 +103,7 @@ const RolePermissionMatrix: React.FC = () => {
         return (
           <Space wrap>
             {record.permissions.map((perm) => {
-              const checked = role.permissions?.some((p) => p._id === perm._id);
+              const checked = rolePermissionsMap[role._id]?.includes(perm._id);
               const label = perm.name.split('_')[1];
               return (
                 <Checkbox
@@ -121,16 +129,19 @@ const RolePermissionMatrix: React.FC = () => {
       {loading ? (
         <Spin />
       ) : (
-        <Table
-          columns={columns}
-          dataSource={dataSource}
-          pagination={false}
-          rowKey="key"
-          scroll={{ x: 'max-content' }}
-        />
+        <div>
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            rowKey="key"
+            scroll={{ x: 'max-content' }}
+          />
+          <Button type='primary' onClick={handleSubmit}>
+            Lưu
+          </Button>
+        </div>
       )}
     </div>
   );
 };
-
-export default RolePermissionMatrix;
