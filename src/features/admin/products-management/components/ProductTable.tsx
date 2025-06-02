@@ -7,7 +7,6 @@ import {
   flexRender,
 } from "@tanstack/react-table";;
 import { PaginationControls } from "@/components/PaginationControls";
-import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 import {
   Table,
   TableBody,
@@ -23,7 +22,6 @@ interface ProductTableProps {
   data: IProduct[];
   onEdit?: (product: IProduct) => void;
   onDelete?: (product: IProduct) => void;
-  loading?: boolean
   pagination?: {
     pageIndex: number;
     pageCount: number;
@@ -35,7 +33,6 @@ interface ProductTableProps {
 
 export const ProductTable: React.FC<ProductTableProps> = ({
   data,
-  loading,
   onEdit,
   onDelete,
   onShow,
@@ -248,9 +245,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
             ))}
           </TableHeader>
           <TableBody>
-            {loading ? (
-              <SkeletonTableRows columnCount={columns.length} thumbnailIndexes={[0]} />
-            ) : table.getRowModel().rows.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
@@ -267,6 +262,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                 </TableCell>
               </TableRow>
             )}
+
           </TableBody>
 
         </Table>

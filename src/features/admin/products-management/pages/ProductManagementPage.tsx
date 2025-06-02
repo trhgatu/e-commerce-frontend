@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
   Select,
+  Spin,
+  Card,
+  Space,
+  Button
 } from 'antd';
 import {
   FilterOutlined
 } from '@ant-design/icons';
 const { Option } = Select;
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { IProduct } from "@/types";
 import { ProductTable } from "@/features/admin/products-management/components/ProductTable";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +22,6 @@ import {
   Trash2,
   Plus,
   Package,
-  TrendingUp,
   Download,
   RefreshCw
 } from "lucide-react";
@@ -118,96 +118,40 @@ export const ProductManagementPage = () => {
     }
   };
 
-  // Mock statistics - replace with real data
-  const stats = [
-    {
-      title: "Tổng sản phẩm",
-      value: products.length,
-      icon: Package,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-    },
-    /* {
-      title: "Đang bán",
-      value: products.filter(p => p.status === 'active').length,
-      icon: ShoppingCart,
-      color: "text-green-600",
-      bgColor: "bg-green-50",
-    }, */
-    {
-      title: "Hết hàng",
-      value: products.filter(p => p.stock === 0).length,
-      icon: TrendingUp,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-50/30">
-      <div className="p-6 space-y-6">
-        {/* Header Section */}
-        <div className="flex flex-col space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-                Quản lý sản phẩm
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Quản lý toàn bộ sản phẩm trong hệ thống
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                disabled={loading}
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                Làm mới
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Xuất Excel
-              </Button>
-            </div>
+    <div className="p-6">
+      <Card className="shadow-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
+          <div>
+            <p className="text-2xl font-semibold">
+              Quản lý sản phẩm
+            </p>
+            <p className="text-gray-600 mt-1">
+              Quản lý toàn bộ sản phẩm trong hệ thống
+            </p>
           </div>
-
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {stats.map((stat, index) => (
-              <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow">
-
-
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 mb-1">
-                        {stat.title}
-                      </p>
-                      <p className="text-2xl font-bold text-gray-900">
-                        {stat.value}
-                      </p>
-                    </div>
-                    <div className={`p-3 rounded-full ${stat.bgColor}`}>
-                      <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Space className="flex-shrink-0">
+            <Button
+              onClick={handleRefresh}
+              disabled={loading}
+              variant="solid"
+              color="primary"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Làm mới
+            </Button>
+            <Button>
+              <Download className="h-4 w-4 mr-2" />
+              Xuất Excel
+            </Button>
+          </Space>
         </div>
 
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
 
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
-            <div className="flex items-center space-x-4 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <Space className="flex-shrink-0">
               <SearchInput
                 placeholder="Tìm kiếm theo tên..."
                 onSearch={handleSearch}
@@ -223,60 +167,57 @@ export const ProductManagementPage = () => {
                 <Option value="active">Hoạt động</Option>
                 <Option value="inactive">Không hoạt động</Option>
               </Select>
-              <div>
-                <Button onClick={clearFilters} className="w-full md:w-auto">
-                  Xóa bộ lọc
-                </Button>
-              </div>
-            </div>
+              <Button onClick={clearFilters} variant="solid" color="primary"  className="w-full md:w-auto">
+                Xóa bộ lọc
+              </Button>
+            </Space>
           </div>
 
 
-          <div className="flex items-center space-x-3">
+          <Space className="flex-shrink-0">
             <Button
-              variant="outline"
               onClick={() => navigate(ROUTERS.ADMIN.products.trash)}
-              className="text-gray-600 hover:text-gray-900"
+              variant="dashed"
+              color="danger"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Thùng rác
             </Button>
             <Button
               onClick={() => navigate(ROUTERS.ADMIN.products.create)}
-              className="bg-blue-600 hover:bg-blue-700"
+              color="default"
+              variant="solid"
             >
               <Plus className="h-4 w-4 mr-2" />
               Thêm sản phẩm
             </Button>
-          </div>
+          </Space>
         </div>
-
-
-
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold">
-            Danh sách sản phẩm
-          </CardTitle>
           {searchTerm && (
             <Badge variant="secondary" className="text-xs">
               Kết quả cho: "{searchTerm}"
             </Badge>
           )}
         </div>
-        <Separator />
-        <CardContent className="p-0">
-          <ProductTable
-            data={filteredProducts}
-            onShow={(product) => navigate(ROUTERS.ADMIN.products.show(product._id))}
-            onEdit={(product) => navigate(ROUTERS.ADMIN.products.edit(product._id))}
-            loading={loading}
-            onDelete={(product) => setProductToDelete(product)}
-            pagination={{
-              pageIndex: page,
-              pageCount: pageCount,
-              onPageChange: setPage,
-            }}
-          />
+        <div className="p-0">
+          <Spin spinning={loading}
+            tip="Đang tải danh sách sản phẩm..."
+          >
+            <div className="overflow-x-auto">
+              <ProductTable
+                data={filteredProducts}
+                onShow={(product) => navigate(ROUTERS.ADMIN.products.show(product._id))}
+                onEdit={(product) => navigate(ROUTERS.ADMIN.products.edit(product._id))}
+                onDelete={(product) => setProductToDelete(product)}
+                pagination={{
+                  pageIndex: page,
+                  pageCount: pageCount,
+                  onPageChange: setPage,
+                }}
+              />
+            </div>
+          </Spin>
 
           {!loading && products.length === 0 && (
             <div className="flex flex-col items-center justify-center py-12 px-4">
@@ -292,7 +233,6 @@ export const ProductManagementPage = () => {
               </p>
               {searchTerm ? (
                 <Button
-                  variant="outline"
                   onClick={() => {
                     clearFilters();
                     handleSearch("");
@@ -308,7 +248,7 @@ export const ProductManagementPage = () => {
               )}
             </div>
           )}
-        </CardContent>
+        </div>
 
         <ConfirmDeleteDialog
           open={!!productToDelete}
@@ -316,7 +256,7 @@ export const ProductManagementPage = () => {
           onCancel={() => setProductToDelete(null)}
           onConfirm={confirmDelete}
         />
-      </div>
-    </div>
+      </Card >
+    </div >
   );
 };
