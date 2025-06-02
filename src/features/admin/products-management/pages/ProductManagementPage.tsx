@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+} from 'antd';
+import {
+  FilterOutlined
+} from '@ant-design/icons';
+const { Option } = Select;
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { IProduct } from "@/types";
@@ -15,7 +22,6 @@ import {
   Plus,
   Package,
   TrendingUp,
-  Filter,
   Download,
   RefreshCw
 } from "lucide-react";
@@ -27,8 +33,10 @@ export const ProductManagementPage = () => {
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
   const [productToDelete, setProductToDelete] = useState<IProduct | null>(null);
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -47,12 +55,32 @@ export const ProductManagementPage = () => {
     fetchProducts();
   }, [page]);
 
+  useEffect(() => {
+    let filtered = products;
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(category => {
+        if (statusFilter === 'active') return category.status === 'active';
+        if (statusFilter === 'inactive') return !category.status || category.status === 'inactive';
+        return true;
+      });
+    }
+
+    setFilteredProducts(filtered);
+  }, [products, statusFilter]);
+  const handleStatusFilter = (value: string) => {
+    setStatusFilter(value);
+  };
+
+  const clearFilters = () => {
+    setStatusFilter('all');
+  };
   const handleSearch = async (query: string) => {
     setSearchTerm(query);
     setLoading(true);
     try {
       const res = await getAllProducts(1, 10, { search: query });
       setProducts(res.data);
+      setFilteredProducts(res.data);
       setPageCount(res.totalPages);
       setPage(0);
     } catch (err) {
@@ -153,6 +181,8 @@ export const ProductManagementPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {stats.map((stat, index) => (
               <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow">
+
+
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -175,16 +205,32 @@ export const ProductManagementPage = () => {
 
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center space-x-4 flex-1">
-            <SearchInput
-              placeholder="Tìm kiếm theo tên..."
-              onSearch={handleSearch}
-            />
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              Bộ lọc
-            </Button>
+
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+            <div className="flex items-center space-x-4 w-full md:w-auto">
+              <SearchInput
+                placeholder="Tìm kiếm theo tên..."
+                onSearch={handleSearch}
+              />
+              <Select
+                className="w-full"
+                placeholder="Lọc theo trạng thái"
+                value={statusFilter}
+                onChange={handleStatusFilter}
+                suffixIcon={<FilterOutlined />}
+              >
+                <Option value="all">Tất cả trạng thái</Option>
+                <Option value="active">Hoạt động</Option>
+                <Option value="inactive">Không hoạt động</Option>
+              </Select>
+              <div>
+                <Button onClick={clearFilters} className="w-full md:w-auto">
+                  Xóa bộ lọc
+                </Button>
+              </div>
+            </div>
           </div>
+
 
           <div className="flex items-center space-x-3">
             <Button
@@ -220,7 +266,7 @@ export const ProductManagementPage = () => {
         <Separator />
         <CardContent className="p-0">
           <ProductTable
-            data={products}
+            data={filteredProducts}
             onShow={(product) => navigate(ROUTERS.ADMIN.products.show(product._id))}
             onEdit={(product) => navigate(ROUTERS.ADMIN.products.edit(product._id))}
             loading={loading}
@@ -248,7 +294,7 @@ export const ProductManagementPage = () => {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    setSearchTerm("");
+                    clearFilters();
                     handleSearch("");
                   }}
                 >

@@ -5,8 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
   flexRender,
-} from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
+} from "@tanstack/react-table";;
 import { PaginationControls } from "@/components/PaginationControls";
 import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 import {
@@ -17,6 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Badge, Tooltip, Space, Button, Image } from "antd";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 
 interface ProductTableProps {
   data: IProduct[];
@@ -47,11 +48,26 @@ export const ProductTable: React.FC<ProductTableProps> = ({
       header: "Ảnh bìa",
       cell: ({ row }) =>
         row.original.thumbnail ? (
-          <img
-            src={row.original.thumbnail}
-            alt={row.original.name}
-            className="h-10 w-10 object-cover rounded"
-          />
+          <div
+            style={{
+              width: 70,
+              height: 70,
+              borderRadius: 4,
+              overflow: "hidden",
+            }}
+          >
+            <Image
+              src={row.original.thumbnail}
+              alt={row.original.name}
+              width={60}
+              height={60}
+              style={{
+                objectFit: "cover",
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </div>
         ) : (
           "—"
         ),
@@ -95,21 +111,29 @@ export const ProductTable: React.FC<ProductTableProps> = ({
       header: "Thư viện ảnh",
       cell: ({ row }) =>
         row.original.images?.length ? (
-          <div className="flex gap-1 flex-wrap">
-            {row.original.images.map((url, idx) => (
-              <img
-                key={idx}
-                src={url}
-                alt={`img-${idx}`}
-                className="w-12 h-12 object-cover rounded border"
-              />
-            ))}
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <Image.PreviewGroup>
+              {row.original.images.map((url: string, idx: number) => (
+                <Image
+                  key={idx}
+                  src={url}
+                  alt={`img-${idx}`}
+                  width={48}
+                  height={48}
+                  preview={{ maskClassName: "custom-preview-mask" }}
+                  style={{
+                    objectFit: "cover",
+                    borderRadius: 4,
+                    border: "1px solid #f0f0f0",
+                  }}
+                />
+              ))}
+            </Image.PreviewGroup>
           </div>
         ) : (
           "—"
         ),
     },
-
     {
       accessorKey: "colorVariants",
       header: "Màu sắc",
@@ -134,7 +158,26 @@ export const ProductTable: React.FC<ProductTableProps> = ({
           "—"
         ),
     },
+    {
+      accessorKey: "status",
+      header: "Trạng thái",
+      cell: ({ row }) => {
+        const status: string = row.original.status || "unknown";
 
+        const getStatusColor = (status: string): "success" | "error" | "default" => {
+          if (status === "active") return "success";
+          if (status === "inactive") return "error";
+          return "default";
+        };
+
+        return (
+          <Badge
+            status={getStatusColor(status)}
+            text={status.charAt(0).toUpperCase() + status.slice(1)}
+          />
+        );
+      },
+    },
     {
       accessorKey: "createdAt",
       header: "Thời gian tạo",
@@ -145,33 +188,39 @@ export const ProductTable: React.FC<ProductTableProps> = ({
       id: "actions",
       header: "Thao tác",
       cell: ({ row }) =>
-        actionRenderer ? actionRenderer(row.original)
-          : (
-            <div className="flex gap-2">
+        actionRenderer ? (
+          actionRenderer(row.original)
+        ) : (
+          <Space size="small">
+            <Tooltip title="Xem chi tiết">
               <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onEdit?.(row.original)}
-              >
-                Sửa
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
+                type="text"
+                icon={<EyeOutlined />}
+                size="small"
                 onClick={() => onShow?.(row.original)}
-
-              >Chi tiết</Button>
-
+              />
+            </Tooltip>
+            <Tooltip title="Chỉnh sửa">
               <Button
-                size="sm"
-                variant="destructive"
+                type="text"
+                icon={<EditOutlined />}
+                size="small"
+                onClick={() => onEdit?.(row.original)}
+              />
+            </Tooltip>
+            <Tooltip title="Xóa">
+              <Button
+                type="text"
+                icon={<DeleteOutlined />}
+                danger
+                size="small"
                 onClick={() => onDelete?.(row.original)}
-              >
-                Xóa
-              </Button>
-            </div>
-          ),
-    },
+              />
+            </Tooltip>
+          </Space>
+        ),
+    }
+
   ];
 
   const table = useReactTable({

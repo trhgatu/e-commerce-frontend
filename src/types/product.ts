@@ -7,6 +7,7 @@ export interface IProduct {
   name: string;
   price: number;
   description?: string;
+  status?: string;
   images: string[];
   thumbnail?: string;
   categoryId?: ICategory;
