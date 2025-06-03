@@ -6,7 +6,6 @@ import {
   useReactTable,
   flexRender,
 } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -16,7 +15,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PaginationControls } from "@/components/PaginationControls";
-import { SkeletonTableRows } from "@/components/SkeletonTableRows";
+import { Badge, Tooltip, Space, Button } from "antd";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+
 
 interface CategoryTableProps {
   data: ICategory[];
@@ -28,13 +29,11 @@ interface CategoryTableProps {
     pageCount: number;
     onPageChange: (index: number) => void;
   };
-  loading?: boolean;
   actionRenderer?: (category: ICategory) => React.ReactNode;
 }
 
 export const CategoryTable: React.FC<CategoryTableProps> = ({
   data,
-  loading,
   onEdit,
   onShow,
   onDelete,
@@ -57,6 +56,26 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
       cell: ({ row }) => row.original.icon || "—",
     },
     {
+      accessorKey: "status",
+      header: "Trạng thái",
+      cell: ({ row }) => {
+        const status: string = row.original.status || "unknown";
+
+        const getStatusColor = (status: string): "success" | "error" | "default" => {
+          if (status === "active") return "success";
+          if (status === "inactive") return "error";
+          return "default";
+        };
+
+        return (
+          <Badge
+            status={getStatusColor(status)}
+            text={status.charAt(0).toUpperCase() + status.slice(1)}
+          />
+        );
+      },
+    },
+    {
       accessorKey: "createdAt",
       header: "Thời gian tạo",
       cell: ({ row }) =>
@@ -69,29 +88,33 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
         actionRenderer ? actionRenderer(row.original)
           :
           (
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onEdit?.(row.original)}
-              >
-                Sửa
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onShow?.(row.original)}
-              >
-                Xem
-              </Button>
-              <Button
-                size="sm"
-                variant="destructive"
-                onClick={() => onDelete?.(row.original)}
-              >
-                Xóa
-              </Button>
-            </div>
+            <Space size="small">
+              <Tooltip title="Xem chi tiết">
+                <Button
+                  type="text"
+                  icon={<EyeOutlined />}
+                  size="small"
+                  onClick={() => onShow?.(row.original)}
+                />
+              </Tooltip>
+              <Tooltip title="Chỉnh sửa">
+                <Button
+                  type="text"
+                  icon={<EditOutlined />}
+                  size="small"
+                  onClick={() => onEdit?.(row.original)}
+                />
+              </Tooltip>
+              <Tooltip title="Xóa">
+                <Button
+                  type="text"
+                  icon={<DeleteOutlined />}
+                  danger
+                  size="small"
+                  onClick={() => onDelete?.(row.original)}
+                />
+              </Tooltip>
+            </Space>
           ),
     },
   ];
@@ -117,9 +140,7 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
           ))}
         </TableHeader>
         <TableBody>
-          {loading ? (
-            <SkeletonTableRows columnCount={columns.length} />
-          ) : table.getRowModel().rows.length ? (
+          {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -132,10 +153,11 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="text-center">
-                No categories found.
+                Không có danh mục nào.
               </TableCell>
             </TableRow>
           )}
+
         </TableBody>
       </Table>
 
