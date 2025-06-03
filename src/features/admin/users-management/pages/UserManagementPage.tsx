@@ -1,32 +1,38 @@
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Spin,
+  Card,
+  Space,
+  Button
+} from 'antd';
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { getAllUsers } from "@/features/admin/users-management/services/userService";
 import { IUser } from "@/types";
 import { UserTable } from "@/features/admin/users-management/components/UserTable";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { ConfirmDeleteDialog } from "@/components/ComfirmDeleteDialog";
 import ROUTERS from "@/constants/routes";
+import { getAllUsers, softDeleteUserById } from "@/features/admin/users-management/services/userService";
 import {
-  Users,
-  UserCheck,
-  UserX,
-  Crown,
+  Trash2,
   Plus,
-  RefreshCw,
+  Users,
   Download,
-  Filter
+  RefreshCw
 } from "lucide-react";
-import { SearchInput } from "@/components/common/searchInput";
+import StatusFilter from "@/components/StatusFilter";
+import { SearchInput } from "@/components/common/SearchInput";
 
 export const UserManagementPage = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState<IUser[]>([])
   const [page, setPage] = useState(0)
   const [pageCount, setPageCount] = useState(1)
+  const [userToDelete, setUserToDelete] = useState<IUser | null>(null);
+  const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,7 +42,8 @@ export const UserManagementPage = () => {
         setUsers(res.data);
         setPageCount(res.totalPages);
       } catch (err) {
-        console.log(err);
+        console.log(err)
+        toast.error("Lỗi khi tải danh sách người dùng");
       } finally {
         setLoading(false);
       }
@@ -44,17 +51,39 @@ export const UserManagementPage = () => {
     fetchUsers();
   }, [page]);
 
+  useEffect(() => {
+    let filtered = users;
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(user => {
+        if (statusFilter === 'active') return user.status === 'active';
+        if (statusFilter === 'inactive') return user.status === 'inactive';
+        return true;
+      });
+    }
+
+    setFilteredUsers(filtered);
+  }, [users, statusFilter]);
+
+  const handleStatusFilter = (value: string) => {
+    setStatusFilter(value);
+  };
+
+  const clearFilters = () => {
+    setStatusFilter('all');
+  };
+
   const handleSearch = async (query: string) => {
     setSearchTerm(query);
     setLoading(true);
     try {
-      // Assuming your API supports search
       const res = await getAllUsers(1, 10, { search: query });
       setUsers(res.data);
+      setFilteredUsers(res.data);
       setPageCount(res.totalPages);
       setPage(0);
     } catch (err) {
       console.log(err);
+      toast.error("Lỗi khi tìm kiếm người dùng");
     } finally {
       setLoading(false);
     }
@@ -66,191 +95,169 @@ export const UserManagementPage = () => {
       const res = await getAllUsers(page + 1, 10);
       setUsers(res.data);
       setPageCount(res.totalPages);
+      toast.success("Đã làm mới danh sách người dùng");
     } catch (err) {
       console.log(err);
+      toast.error("Lỗi khi làm mới danh sách");
     } finally {
       setLoading(false);
     }
   };
 
-  // Mock statistics - replace with real data
-  const stats = [
-    {
-      title: "Tổng người dùng",
-      value: users.length,
-      icon: Users,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-    },
-    {
-      title: "Đang hoạt động",
-      value: users.filter(u => u.status === 'active').length,
-      icon: UserCheck,
-      color: "text-green-600",
-      bgColor: "bg-green-50",
-    },
-    {
-      title: "Bị khóa",
-      value: users.filter(u => u.status === 'inactive').length,
-      icon: UserX,
-      color: "text-red-600",
-      bgColor: "bg-red-50",
-    },
-    {
-      title: "Quản trị viên",
-      value: users.filter(u => u.roleId?.name === 'Admin').length,
-      icon: Crown,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-    },
-  ];
+  const confirmDelete = async () => {
+    if (userToDelete) {
+      try {
+        await softDeleteUserById(userToDelete._id);
+        setUsers((prev) => prev.filter((u) => u._id !== userToDelete._id));
+        toast.success("Xóa người dùng thành công");
+      } catch {
+        toast.error("Xóa người dùng thất bại");
+      }
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50/30">
-      <div className="p-6 space-y-6">
-        {/* Header Section */}
-        <div className="flex flex-col space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-                Quản lý người dùng
-              </h1>
-              <p className="text-gray-600 mt-1">
-                Quản lý tất cả người dùng trong hệ thống
-              </p>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                disabled={loading}
-              >
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                Làm mới
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Xuất Excel
-              </Button>
-            </div>
+    <div className="p-6">
+      <Card className="shadow-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
+          <div>
+            <p className="text-2xl font-semibold">
+              Quản lý người dùng
+            </p>
+            <p className="text-gray-600 mt-1">
+              Quản lý toàn bộ người dùng trong hệ thống
+            </p>
           </div>
-
-          {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map((stat, index) => (
-              <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 mb-1">
-                        {stat.title}
-                      </p>
-                      <p className="text-2xl font-bold text-gray-900">
-                        {stat.value}
-                      </p>
-                    </div>
-                    <div className={`p-3 rounded-full ${stat.bgColor}`}>
-                      <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Space className="flex-shrink-0">
+            <Button
+              onClick={handleRefresh}
+              disabled={loading}
+              variant="solid"
+              color="primary"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Làm mới
+            </Button>
+            <Button>
+              <Download className="h-4 w-4 mr-2" />
+              Xuất Excel
+            </Button>
+          </Space>
         </div>
 
-        {/* Action Bar */}
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center space-x-4 flex-1">
-                <SearchInput
-                  placeholder="Tìm kiếm theo tên, email..."
-                  onSearch={handleSearch}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <Space className="flex-shrink-0">
+              <div className="md:col-span-2 lg:col-span-1">
+                {/* Nội dung nếu có */}
+              </div>
+              <SearchInput
+                placeholder="Tìm kiếm theo tên, email..."
+                onSearch={handleSearch}
+              />
+              <div>
+                <StatusFilter
+                  value={statusFilter}
+                  onChange={handleStatusFilter}
                 />
-                <Button variant="outline" size="sm">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Bộ lọc
-                </Button>
               </div>
+              <Button
+                onClick={clearFilters}
+                variant="solid"
+                color="primary"
+                className="w-full md:w-auto"
+                style={{ width: '150px' }}
+              >
+                Xóa bộ lọc
+              </Button>
+            </Space>
+          </div>
 
-              <div className="flex items-center space-x-3">
-                <Button
-                  onClick={() => navigate(ROUTERS.ADMIN.users.create)}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Thêm người dùng
-                </Button>
-              </div>
+          <Space className="flex-shrink-0">
+            <Button
+              onClick={() => navigate(ROUTERS.ADMIN.users.trash)}
+              variant="dashed"
+              color="danger"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Thùng rác
+            </Button>
+            <Button
+              onClick={() => navigate(ROUTERS.ADMIN.users.create)}
+              color="default"
+              variant="solid"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Thêm người dùng
+            </Button>
+          </Space>
+        </div>
+
+        <div className="flex items-center justify-between">
+          {searchTerm && (
+            <Badge variant="secondary" className="text-xs">
+              Kết quả cho: "{searchTerm}"
+            </Badge>
+          )}
+        </div>
+
+        <div className="p-0">
+          <Spin spinning={loading}
+            tip="Đang tải danh sách người dùng..."
+          >
+            <div className="overflow-x-auto">
+              <UserTable
+                data={filteredUsers}
+                onShow={(user) => navigate(ROUTERS.ADMIN.users.show(user._id))}
+                onEdit={(user) => navigate(ROUTERS.ADMIN.users.edit(user._id))}
+                onDelete={(user) => setUserToDelete(user)}
+                pagination={{
+                  pageIndex: page,
+                  pageCount: pageCount,
+                  onPageChange: setPage,
+                }}
+              />
             </div>
-          </CardContent>
-        </Card>
+          </Spin>
 
-        {/* Users Table */}
-        <Card className="border-0 shadow-sm">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg font-semibold">
-                Danh sách người dùng
-              </CardTitle>
-              {searchTerm && (
-                <Badge variant="secondary" className="text-xs">
-                  Kết quả cho: "{searchTerm}"
-                </Badge>
+          {!loading && users.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-12 px-4">
+              <Users className="h-12 w-12 text-gray-400 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {searchTerm ? "Không tìm thấy người dùng" : "Chưa có người dùng nào"}
+              </h3>
+              <p className="text-gray-600 text-center mb-6 max-w-md">
+                {searchTerm
+                  ? `Không tìm thấy người dùng nào phù hợp với từ khóa "${searchTerm}". Thử tìm kiếm với từ khóa khác.`
+                  : "Bắt đầu bằng cách thêm người dùng đầu tiên vào hệ thống."
+                }
+              </p>
+              {searchTerm ? (
+                <Button
+                  onClick={() => {
+                    clearFilters();
+                    handleSearch("");
+                  }}
+                >
+                  Xóa bộ lọc
+                </Button>
+              ) : (
+                <Button onClick={() => navigate(ROUTERS.ADMIN.users.create)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm người dùng đầu tiên
+                </Button>
               )}
             </div>
-            <Separator />
-          </CardHeader>
-          <CardContent className="p-0 px-6">
-            <UserTable
-              data={users}
-              loading={loading}
-              pagination={{
-                pageIndex: page,
-                pageCount: pageCount,
-                onPageChange: setPage,
-              }}
-            />
+          )}
+        </div>
 
-            {/* Empty State */}
-            {!loading && users.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-12 px-4">
-                <Users className="h-12 w-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {searchTerm ? "Không tìm thấy người dùng" : "Chưa có người dùng nào"}
-                </h3>
-                <p className="text-gray-600 text-center mb-6 max-w-md">
-                  {searchTerm
-                    ? `Không tìm thấy người dùng nào phù hợp với từ khóa "${searchTerm}". Thử tìm kiếm với từ khóa khác.`
-                    : "Bắt đầu bằng cách thêm người dùng đầu tiên vào hệ thống."
-                  }
-                </p>
-                {searchTerm ? (
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSearchTerm("");
-                      handleSearch("");
-                    }}
-                  >
-                    Xóa bộ lọc
-                  </Button>
-                ) : (
-                  <Button onClick={() => navigate(ROUTERS.ADMIN.users.create)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Thêm người dùng đầu tiên
-                  </Button>
-                )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+        <ConfirmDeleteDialog
+          open={!!userToDelete}
+          itemName={userToDelete?.fullName || userToDelete?.email || ""}
+          onCancel={() => setUserToDelete(null)}
+          onConfirm={confirmDelete}
+        />
+      </Card>
     </div>
   );
 };

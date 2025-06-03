@@ -5,6 +5,9 @@ const ROUTERS = {
         users: {
             root: "/admin/users",
             create: "/admin/users/create",
+            edit: (id: string) => `/admin/users/edit/${id}`,
+            show: (id: string) => `/admin/users/detail/${id}`,
+            trash: "/admin/users/trash-bin"
         },
         roles: {
             root: "/admin/roles",

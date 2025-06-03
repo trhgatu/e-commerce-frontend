@@ -5,6 +5,7 @@ export interface ICategory {
   parentId?: string;
   description?: string;
   icon?: string;
+  status?: string;
   createdAt: string;
   updatedAt: string;
   isDeleted?: boolean

@@ -176,7 +176,7 @@ export const CreateProductPage = () => {
               <Textarea
                 id="description"
                 rows={4}
-                placeholder="Enter product description..."
+                placeholder="Nhập mô tả sản phẩm..."
                 {...register("description")}
                 className="mt-2 resize-none"
               />

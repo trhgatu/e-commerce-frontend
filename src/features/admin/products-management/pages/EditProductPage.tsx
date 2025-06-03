@@ -28,6 +28,7 @@ import { baseProductSchema } from "@/features/admin/products-management/validato
 import { ProductImageUploader, ProductThumbnailUploader } from "@/features/admin/products-management/components";
 import { uploadProductImage } from "@/features/admin/products-management/services/imageUploadService";
 import { Loader2 } from "lucide-react";
+import ROUTERS from "@/constants/routes";
 
 type EditProductFormData = z.infer<typeof baseProductSchema>;
 
@@ -126,11 +127,11 @@ export const EditProductPage = () => {
             }
 
             await updateProductById(id, data);
-            toast.success("Product updated successfully!", { id: toastId });
-            navigate(`/admin/products/`);
+            toast.success("Cập nhật thông tin sản phẩm thành công!", { id: toastId });
+            navigate(ROUTERS.ADMIN.products.root);
         } catch (error) {
             console.error(error);
-            toast.error("Failed to update product.", { id: toastId });
+            toast.error("Lỗi khi cập nhật sản phẩm.", { id: toastId });
         }
     };
 
@@ -170,7 +171,7 @@ export const EditProductPage = () => {
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">
                             Chỉnh sửa sản phẩm: {product.name}
                         </h1>
-                        <p className="text-gray-600">Update product information</p>
+                        <p className="text-gray-600">Cập nhật thông tin sản phẩm</p>
                     </div>
                 </div>
 
@@ -454,7 +455,7 @@ export const EditProductPage = () => {
                             disabled={isSubmitting}
                             className="px-8"
                         >
-                            {isSubmitting ? "Updating..." : "Update Product"}
+                            {isSubmitting ? "Đang cập nhật..." : "Cập nhật sản phẩm"}
                         </Button>
                     </div>
                 </form>

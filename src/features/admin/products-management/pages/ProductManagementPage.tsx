@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react"
 import {
-  Select,
   Spin,
   Card,
   Space,
   Button
 } from 'antd';
-import {
-  FilterOutlined
-} from '@ant-design/icons';
-const { Option } = Select;
 import { Badge } from "@/components/ui/badge";
 import { IProduct } from "@/types";
 import { ProductTable } from "@/features/admin/products-management/components/ProductTable";
@@ -25,7 +20,8 @@ import {
   Download,
   RefreshCw
 } from "lucide-react";
-import { SearchInput } from "@/components/common/searchInput";
+import { SearchInput } from "@/components/common/SearchInput";
+import StatusFilter from "@/components/StatusFilter";
 
 export const ProductManagementPage = () => {
   const navigate = useNavigate();
@@ -152,22 +148,26 @@ export const ProductManagementPage = () => {
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <Space className="flex-shrink-0">
+              <div className="md:col-span-2 lg:col-span-1">
+                {/* Nội dung nếu có */}
+              </div>
               <SearchInput
                 placeholder="Tìm kiếm theo tên..."
                 onSearch={handleSearch}
               />
-              <Select
-                className="w-full"
-                placeholder="Lọc theo trạng thái"
-                value={statusFilter}
-                onChange={handleStatusFilter}
-                suffixIcon={<FilterOutlined />}
+              <div>
+                <StatusFilter
+                  value={statusFilter}
+                  onChange={handleStatusFilter}
+                />
+              </div>
+              <Button
+                onClick={clearFilters}
+                variant="solid"
+                color="primary"
+                className="w-full md:w-auto"
+                style={{ width: '150px' }} // Cố định chiều rộng của Button
               >
-                <Option value="all">Tất cả trạng thái</Option>
-                <Option value="active">Hoạt động</Option>
-                <Option value="inactive">Không hoạt động</Option>
-              </Select>
-              <Button onClick={clearFilters} variant="solid" color="primary"  className="w-full md:w-auto">
                 Xóa bộ lọc
               </Button>
             </Space>

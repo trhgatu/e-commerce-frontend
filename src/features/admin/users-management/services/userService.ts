@@ -17,3 +17,8 @@ export const getAllUsers = async (page: number, limit: number, filter : UserFilt
     totalItems: res.data.totalItems,
   };
 };
+
+export const softDeleteUserById = async (id: string) => {
+  const response = await axiosInstance.delete(`/users/delete/${id}`);
+  return response.data;
+};
