@@ -8,6 +8,7 @@ export interface IRole {
     createdAt: string;
     updatedAt: string;
     isDeleted: boolean;
+    isActive: boolean
 }
 export interface RoleCreateRequest {
     name: string;

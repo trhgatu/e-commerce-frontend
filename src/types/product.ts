@@ -2,12 +2,21 @@ import { IColorVariant } from "@/types/color";
 import { ICategory } from "@/types/category";
 import { IBrand } from "@/types/brand";
 
+
+export enum ProductStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  DRAFT = 'draft',
+  OUT_OF_STOCK = 'out_of_stock',
+  DISCONTINUED = 'discontinued',
+}
+
 export interface IProduct {
   _id: string;
   name: string;
   price: number;
   description?: string;
-  status?: string;
+  status?: ProductStatus;
   images: string[];
   thumbnail?: string;
   categoryId?: ICategory;

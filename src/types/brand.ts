@@ -1,12 +1,19 @@
+
+export enum BrandStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  ARCHIVED = 'archived',
+}
+
 export interface IBrand {
   _id: string;
   name: string;
   description?: string;
+  status: BrandStatus;
   logo?: string;
   createdAt: string;
   updatedAt: string;
   isDeleted?: boolean;
-  isActive?: boolean;
 }
 
 export interface BrandCreateRequest {

@@ -2,6 +2,12 @@
 
 import { IRole } from "@/types/role";
 
+export enum UserStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  BANNED = 'banned',
+  PENDING = 'pending'
+}
 export interface IUser {
   _id: string;
   username: string;
@@ -13,8 +19,7 @@ export interface IUser {
   gender?: 'male' | 'female' | 'other';
   birthDate?: string;
   roleId: IRole;
-  isActive: boolean;
-  status: string;
+  status: UserStatus;
   emailVerified: boolean;
   lastLoginAt?: string;
   membershipRankId?: string;
