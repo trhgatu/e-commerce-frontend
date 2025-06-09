@@ -39,6 +39,7 @@ export interface ProductFilter {
   search?: string;
   category?: string;
   brand?: string;
+  status?: ProductStatus;
   priceMin?: number;
   priceMax?: number;
   isDeleted?: boolean;

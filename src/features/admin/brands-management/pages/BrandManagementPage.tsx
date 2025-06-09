@@ -6,7 +6,7 @@ import {
   Button
 } from 'antd';
 import { Badge } from "@/components/ui/badge";
-import { IBrand } from "@/types";
+import { BrandFilter, BrandStatus, IBrand } from "@/types";
 import { BrandTable } from "@/features/admin/brands-management/components/BrandTable";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -20,7 +20,7 @@ import {
   Download,
   RefreshCw
 } from "lucide-react";
-import { SearchInput } from "@/components/common/searchInput";
+import { SearchInput } from "@/components/common/SearchInput";
 import StatusFilter from "@/components/StatusFilter";
 
 export const BrandManagementPage = () => {
@@ -38,9 +38,11 @@ export const BrandManagementPage = () => {
     const fetchBrands = async () => {
       setLoading(true);
       try {
-        const res = await getAllBrands(page + 1, 10, {
-          isDeleted: false
-        });
+        const filters: BrandFilter = {};
+        if (statusFilter !== 'all') {
+          filters.status = statusFilter as BrandStatus;
+        }
+        const res = await getAllBrands(page + 1, 10, filters);
         setBrands(res.data);
         setPageCount(res.totalPages);
       } catch (err) {
@@ -51,20 +53,7 @@ export const BrandManagementPage = () => {
       }
     };
     fetchBrands();
-  }, [page]);
-
-  useEffect(() => {
-    let filtered = brands;
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(brand => {
-        if (statusFilter === 'active') return brand.isActive;
-        if (statusFilter === 'inactive') return !brand.isActive;
-        return true;
-      });
-    }
-
-    setFilteredBrands(filtered);
-  }, [brands, statusFilter]);
+  }, [page, statusFilter]);
 
   const handleStatusFilter = (value: string) => {
     setStatusFilter(value);

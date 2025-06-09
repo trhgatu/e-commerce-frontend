@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IProduct } from "@/types";
+import { IProduct, ProductStatus } from "@/types";
 import {
   ColumnDef,
   getCoreRowModel,
@@ -159,18 +159,45 @@ export const ProductTable: React.FC<ProductTableProps> = ({
       accessorKey: "status",
       header: "Trạng thái",
       cell: ({ row }) => {
-        const status: string = row.original.status || "unknown";
+        const status: ProductStatus = row.original.status ?? ProductStatus.DRAFT;
 
-        const getStatusColor = (status: string): "success" | "error" | "default" => {
-          if (status === "active") return "success";
-          if (status === "inactive") return "error";
-          return "default";
+        const getStatusColor = (status: ProductStatus): "success" | "error" | "warning" | "default" => {
+          switch (status) {
+            case ProductStatus.ACTIVE:
+              return "success";
+            case ProductStatus.INACTIVE:
+              return "error";
+            case ProductStatus.DRAFT:
+              return "warning";
+            case ProductStatus.OUT_OF_STOCK:
+            case ProductStatus.DISCONTINUED:
+              return "error";
+            default:
+              return "default";
+          }
+        };
+
+        const getStatusLabel = (status: ProductStatus) => {
+          switch (status) {
+            case ProductStatus.ACTIVE:
+              return "Hoạt động";
+            case ProductStatus.INACTIVE:
+              return "Ngưng hoạt động";
+            case ProductStatus.DRAFT:
+              return "Bản nháp";
+            case ProductStatus.OUT_OF_STOCK:
+              return "Hết hàng";
+            case ProductStatus.DISCONTINUED:
+              return "Ngừng bán";
+            default:
+              return "Không xác định";
+          }
         };
 
         return (
           <Badge
             status={getStatusColor(status)}
-            text={status.charAt(0).toUpperCase() + status.slice(1)}
+            text={getStatusLabel(status)}
           />
         );
       },

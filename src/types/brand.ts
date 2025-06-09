@@ -23,6 +23,7 @@ export interface BrandCreateRequest {
 }
 
 export interface BrandFilter {
+  status?: BrandStatus;
   search?: string;
   isDeleted?: boolean;
 }

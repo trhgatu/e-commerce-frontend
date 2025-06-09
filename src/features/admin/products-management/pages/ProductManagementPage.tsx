@@ -6,7 +6,7 @@ import {
   Button
 } from 'antd';
 import { Badge } from "@/components/ui/badge";
-import { IProduct } from "@/types";
+import { IProduct, ProductFilter, ProductStatus } from "@/types";
 import { ProductTable } from "@/features/admin/products-management/components/ProductTable";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -38,7 +38,11 @@ export const ProductManagementPage = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const res = await getAllProducts(page + 1, 10);
+        const filters: ProductFilter = {};
+        if (statusFilter !== 'all') {
+          filters.status = statusFilter as ProductStatus;
+        }
+        const res = await getAllProducts(page + 1, 10, filters);
         setProducts(res.data);
         setPageCount(res.totalPages);
       } catch (err) {
@@ -49,20 +53,8 @@ export const ProductManagementPage = () => {
       }
     };
     fetchProducts();
-  }, [page]);
+  }, [page, statusFilter]);
 
-  useEffect(() => {
-    let filtered = products;
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(category => {
-        if (statusFilter === 'active') return category.status === 'active';
-        if (statusFilter === 'inactive') return !category.status || category.status === 'inactive';
-        return true;
-      });
-    }
-
-    setFilteredProducts(filtered);
-  }, [products, statusFilter]);
   const handleStatusFilter = (value: string) => {
     setStatusFilter(value);
   };

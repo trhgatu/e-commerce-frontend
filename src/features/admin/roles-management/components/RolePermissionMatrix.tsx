@@ -339,54 +339,6 @@ export const RolePermissionMatrix: React.FC = () => {
   return (
     <div className=" p-6">
       <Space size="large" direction='vertical' className='w-full'>
-
-        {/* Header Card */}
-        <Card className="rounded-2xl border-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-          <div className="relative z-10">
-            <Row align="middle" justify="space-between">
-              <Col>
-                <div className="flex items-center space-x-4">
-                  <div className="p-3 bg-white bg-opacity-20 rounded-xl">
-                    <SecurityScanOutlined className="text-3xl text-white" />
-                  </div>
-                  <div>
-                    <Title level={1} className="!m-0 !text-white font-bold">
-                      Ma trận phân quyền
-                    </Title>
-                    <Text className="text-blue-100 text-base">
-                      Quản lý quyền truy cập toàn diện cho hệ thống
-                    </Text>
-                  </div>
-                </div>
-              </Col>
-              <Col>
-                <div className="flex space-x-8">
-                  <div className="text-center p-4 bg-white bg-opacity-10 rounded-xl backdrop-blur-sm">
-                    <div className="text-3xl font-bold text-white">
-                      {totalRoles}
-                    </div>
-                    <Text className="text-blue-100 text-sm font-medium">Vai trò</Text>
-                  </div>
-                  <div className="text-center p-4 bg-white bg-opacity-10 rounded-xl backdrop-blur-sm">
-                    <div className="text-3xl font-bold text-white">
-                      {totalPermissions}
-                    </div>
-                    <Text className="text-blue-100 text-sm font-medium">Quyền hạn</Text>
-                  </div>
-                  <div className="text-center p-4 bg-white bg-opacity-10 rounded-xl backdrop-blur-sm">
-                    <div className="text-3xl font-bold text-white">
-                      {Math.round(assignmentPercentage)}%
-                    </div>
-                    <Text className="text-blue-100 text-sm font-medium">Hoàn thành</Text>
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </Card>
-
-        {/* Main Content Card */}
         <Card className="rounded-2xl shadow-lg border-0 overflow-hidden">
 
           {/* Action Bar */}
@@ -397,7 +349,7 @@ export const RolePermissionMatrix: React.FC = () => {
                   <ExclamationCircleOutlined className="text-xl text-amber-500" />
                   <div>
                     <Text className="text-base font-medium text-gray-800">
-                      Cấu hình ma trận phân quyền
+                      Cấu hình phân quyền
                     </Text>
                     <br />
                     <Text className="text-sm text-gray-600">
@@ -412,9 +364,6 @@ export const RolePermissionMatrix: React.FC = () => {
                   icon={<SaveOutlined />}
                   onClick={handleSubmit}
                   loading={saving}
-                  size="large"
-                  className="rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-600 border-0 px-8 py-2 h-auto"
-                  style={{ minHeight: '48px' }}
                 >
                   {saving ? 'Đang lưu...' : 'Lưu thay đổi'}
                 </Button>
