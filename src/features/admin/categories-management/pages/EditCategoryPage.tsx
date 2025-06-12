@@ -149,7 +149,7 @@ export const EditCategoryPage = () => {
                 <div className="flex items-center gap-4 mb-4">
                     <AntButton
                         icon={<ArrowLeftOutlined />}
-                        onClick={() => navigate(`/admin/categories/${id}`)}
+                        onClick={() => navigate(ROUTERS.ADMIN.categories.root)}
                         className="flex items-center"
                     >
                         Quay lại

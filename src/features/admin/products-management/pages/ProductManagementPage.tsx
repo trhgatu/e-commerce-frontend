@@ -44,6 +44,7 @@ export const ProductManagementPage = () => {
         }
         const res = await getAllProducts(page + 1, 10, filters);
         setProducts(res.data);
+        setFilteredProducts(res.data);
         setPageCount(res.totalPages);
       } catch (err) {
         console.log(err)
@@ -61,7 +62,10 @@ export const ProductManagementPage = () => {
 
   const clearFilters = () => {
     setStatusFilter('all');
+    setSearchTerm('');
   };
+
+
   const handleSearch = async (query: string) => {
     setSearchTerm(query);
     setLoading(true);
