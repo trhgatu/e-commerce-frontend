@@ -27,17 +27,6 @@ const { Title, Text } = Typography;
 
 type EditCategoryFormData = z.infer<typeof baseCategorySchema>;
 
-interface CategoryData {
-    _id: string;
-    name: string;
-    parentId: string | null;
-    description: string;
-    isDeleted: boolean;
-    slug: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-}
 
 export const EditCategoryPage = () => {
     const navigate = useNavigate();
@@ -45,7 +34,7 @@ export const EditCategoryPage = () => {
     const [categoryTree, setCategoryTree] = useState<TreeNode[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [category, setCategory] = useState<CategoryData | null>(null);
+    const [category, setCategory] = useState<ICategory | null>(null);
 
     const {
         register,
@@ -273,7 +262,7 @@ export const EditCategoryPage = () => {
 
                 {/* Submit Buttons */}
                 <div className="flex justify-end gap-4 pt-6">
-                    <CancelButton to={ROUTERS.ADMIN.categories.root}/>
+                    <CancelButton to={ROUTERS.ADMIN.categories.root} />
                     <Button
                         type="submit"
                         disabled={isSubmitting}

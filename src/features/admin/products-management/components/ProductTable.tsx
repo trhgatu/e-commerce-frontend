@@ -83,7 +83,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
         }),
     },
     {
-      accessorKey: "stock",
+      accessorKey: "totalStock",
       header: "Kho",
     },
     {
@@ -132,21 +132,21 @@ export const ProductTable: React.FC<ProductTableProps> = ({
         ),
     },
     {
-      accessorKey: "colorVariants",
+      accessorKey: "availableColors",
       header: "Màu sắc",
       cell: ({ row }) =>
-        row.original.colorVariants?.length ? (
+        row.original.availableColors?.length ? (
           <div className="flex gap-1 flex-wrap">
-            {row.original.colorVariants.map((cv, idx) => (
+            {row.original.availableColors.map((color, idx) => (
               <div
                 key={idx}
                 className="flex items-center gap-1 text-xs px-1 py-0.5 border rounded"
-                title={`${cv.colorId?.name || ''} - ${cv.stock} sản phẩm`}
+                title={color.name}
               >
-                <span>{cv.colorId?.name}</span>
+                <span>{color.name}</span>
                 <div
                   className="w-4 h-4 rounded-full border"
-                  style={{ backgroundColor: cv.colorId?.hexCode || "#ccc" }}
+                  style={{ backgroundColor: color.hexCode || "#ccc" }}
                 />
               </div>
             ))}

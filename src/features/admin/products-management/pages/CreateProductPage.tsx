@@ -47,7 +47,7 @@ export const CreateProductPage = () => {
     resolver: zodResolver(baseProductSchema),
     defaultValues: {
       isFeatured: false,
-      colorVariants: [],
+      availableColors: [],
     },
   });
 
@@ -144,14 +144,14 @@ export const CreateProductPage = () => {
                   Số lượng trong kho *
                 </Label>
                 <Input
-                  id="stock"
+                  id="totalStock"
                   type="number"
                   placeholder="0"
-                  {...register("stock", { valueAsNumber: true })}
+                  {...register("totalStock", { valueAsNumber: true })}
                   className="h-10"
                 />
-                {errors.stock && (
-                  <p className="text-sm text-red-500 mt-1">{errors.stock.message}</p>
+                {errors.totalStock && (
+                  <p className="text-sm text-red-500 mt-1">{errors.totalStock.message}</p>
                 )}
               </div>
 
@@ -283,25 +283,23 @@ export const CreateProductPage = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {colors.map((color) => {
-                const colorVariants = watch("colorVariants") || [];
-                const isSelected = colorVariants.some((v) => v.colorId === color._id);
-                const quantity = colorVariants.find((v) => v.colorId === color._id)?.stock || 0;
+                const selectedColorIds = watch("availableColors") || [];
+                const isSelected = selectedColorIds.includes(color._id);
 
                 return (
                   <div
                     key={color._id}
-                    className={`border rounded-lg p-4 transition-all ${
-                      isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`border rounded-lg p-4 transition-all ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                      }`}
                   >
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex items-center gap-3 mb-1">
                       <Checkbox
                         checked={isSelected}
                         onCheckedChange={(checked) => {
                           const updated = checked
-                            ? [...colorVariants, { colorId: color._id, stock: 1 }]
-                            : colorVariants.filter((v) => v.colorId !== color._id);
-                          setValue("colorVariants", updated);
+                            ? [...selectedColorIds, color._id]
+                            : selectedColorIds.filter((id) => id !== color._id);
+                          setValue("availableColors", updated);
                         }}
                       />
                       <div
@@ -310,31 +308,11 @@ export const CreateProductPage = () => {
                       />
                       <span className="font-medium text-gray-900">{color.name}</span>
                     </div>
-
-                    {isSelected && (
-                      <div className="mt-3">
-                        <Label className="text-xs text-gray-600 mb-1 block">
-                          Số lượng trong kho
-                        </Label>
-                        <Input
-                          type="number"
-                          value={quantity}
-                          min="0"
-                          className="h-8 text-sm"
-                          placeholder="0"
-                          onChange={(e) => {
-                            const updated = colorVariants.map((v) =>
-                              v.colorId === color._id ? { ...v, stock: Number(e.target.value) } : v
-                            );
-                            setValue("colorVariants", updated);
-                          }}
-                        />
-                      </div>
-                    )}
                   </div>
                 );
               })}
             </div>
+
           </div>
 
           {/* Submit Button */}

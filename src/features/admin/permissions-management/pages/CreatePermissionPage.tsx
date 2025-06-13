@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, Typography, Select } from "antd";
+import { Card, Typography, Select, Space } from "antd";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
@@ -26,6 +26,7 @@ const PERMISSION_GROUPS = [
     "Quản lý danh mục",
     "Quản lý vai trò",
     "Quản lý quyền",
+    "Quản lý thương hiệu",
     "Báo cáo",
     "Cài đặt hệ thống",
     "Khác"
@@ -73,8 +74,9 @@ export const CreatePermissionPage = () => {
                 </Text>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                <Card className="shadow-sm">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-full">
+                <Space size="middle" direction="vertical">
+                    <Card className="shadow-sm">
                     <div className="mb-6">
                         <Title level={3} className="!text-xl !font-semibold !text-gray-900 !mb-0">
                             Thông tin cơ bản
@@ -174,6 +176,7 @@ export const CreatePermissionPage = () => {
                         </div>
                     </div>
                 </Card>
+                </Space>
 
                 {/* Submit Buttons */}
                 <div className="flex justify-end gap-4 pt-6">

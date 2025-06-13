@@ -11,6 +11,7 @@ export interface ICategory {
   name: string;
   parentId?: string;
   description?: string;
+  slug: string;
   icon?: string;
   status: CategoryStatus;
   createdAt: string;

@@ -55,10 +55,9 @@ export const EditProductPage = () => {
         resolver: zodResolver(baseProductSchema),
         defaultValues: {
             isFeatured: false,
-            colorVariants: [],
+            availableColors: [],
         },
     });
-
     const isFeatured = watch("isFeatured");
 
     useEffect(() => {
@@ -87,14 +86,14 @@ export const EditProductPage = () => {
                     name: productRes.name,
                     description: productRes.description || "",
                     price: productRes.price,
-                    stock: productRes.stock,
+                    totalStock: productRes.totalStock,
                     categoryId: productRes.categoryId?._id,
                     brandId: productRes.brandId?._id,
                     isFeatured: productRes.isFeatured || false,
-                    colorVariants: productRes.colorVariants?.map((variant): { colorId: string; stock: number } => ({
-                        colorId: typeof variant.colorId === "string" ? variant.colorId : variant.colorId?._id,
-                        stock: variant.stock
-                    })),
+                    availableColors: productRes.availableColors?.map((color) =>
+                        typeof color === "string" ? color : color._id
+                    ) || [],
+
                     thumbnail: productRes.thumbnail,
                     images: productRes.images || []
                 });
@@ -221,14 +220,14 @@ export const EditProductPage = () => {
                                     Số lượng trong kho *
                                 </Label>
                                 <Input
-                                    id="stock"
+                                    id="totalStock"
                                     type="number"
                                     placeholder="0"
-                                    {...register("stock", { valueAsNumber: true })}
+                                    {...register("totalStock", { valueAsNumber: true })}
                                     className="h-10"
                                 />
-                                {errors.stock && (
-                                    <p className="text-sm text-red-500 mt-1">{errors.stock.message}</p>
+                                {errors.totalStock && (
+                                    <p className="text-sm text-red-500 mt-1">{errors.totalStock.message}</p>
                                 )}
                             </div>
 
@@ -387,9 +386,8 @@ export const EditProductPage = () => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {colors.map((color: IColor) => {
-                                const colorVariants = watch("colorVariants") || [];
-                                const isSelected = colorVariants.some((v) => v.colorId === color._id);
-                                const quantity = colorVariants.find((v) => v.colorId === color._id)?.stock || 0;
+                                const selectedColorIds = watch("availableColors") || [];
+                                const isSelected = selectedColorIds.includes(color._id);
 
                                 return (
                                     <div
@@ -397,14 +395,14 @@ export const EditProductPage = () => {
                                         className={`border rounded-lg p-4 transition-all ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
                                             }`}
                                     >
-                                        <div className="flex items-center gap-3 mb-3">
+                                        <div className="flex items-center gap-3 mb-1">
                                             <Checkbox
                                                 checked={isSelected}
                                                 onCheckedChange={(checked) => {
                                                     const updated = checked
-                                                        ? [...colorVariants, { colorId: color._id, stock: 1 }]
-                                                        : colorVariants.filter((v) => v.colorId !== color._id);
-                                                    setValue("colorVariants", updated);
+                                                        ? [...selectedColorIds, color._id]
+                                                        : selectedColorIds.filter((id) => id !== color._id);
+                                                    setValue("availableColors", updated);
                                                 }}
                                             />
                                             <div
@@ -413,31 +411,11 @@ export const EditProductPage = () => {
                                             />
                                             <span className="font-medium text-gray-900">{color.name}</span>
                                         </div>
-
-                                        {isSelected && (
-                                            <div className="mt-3">
-                                                <Label className="text-xs text-gray-600 mb-1 block">
-                                                    Số lượng trong kho
-                                                </Label>
-                                                <Input
-                                                    type="number"
-                                                    value={quantity}
-                                                    min="0"
-                                                    className="h-8 text-sm"
-                                                    placeholder="0"
-                                                    onChange={(e) => {
-                                                        const updated = colorVariants.map((v) =>
-                                                            v.colorId === color._id ? { ...v, stock: Number(e.target.value) } : v
-                                                        );
-                                                        setValue("colorVariants", updated);
-                                                    }}
-                                                />
-                                            </div>
-                                        )}
                                     </div>
                                 );
                             })}
                         </div>
+
                     </div>
 
                     {/* Submit Button */}

@@ -1,4 +1,4 @@
-import { IColorVariant } from "@/types/color";
+import { IColor } from "@/types/color";
 import { ICategory } from "@/types/category";
 import { IBrand } from "@/types/brand";
 
@@ -23,8 +23,9 @@ export interface IProduct {
   brandId?: IBrand;
   rating: number;
   reviewCount: number;
-  stock: number;
-  colorVariants: IColorVariant[];
+  totalStock: number;
+  availableColors?: IColor[];
+  availableSizes?: string[];
   createdAt: Date;
   updatedAt: Date;
   isFeatured: boolean;
@@ -55,10 +56,9 @@ export interface ProductCreateRequest {
   thumbnail?: string;
   categoryId: string;
   brandId: string;
-  stock: number;
   isFeatured?: boolean;
   discountPercent?: number;
   tags?: string[];
-  colorVariants?: { colorId: string; stock: number }[];
+  availableColors?: string[];
 }
 

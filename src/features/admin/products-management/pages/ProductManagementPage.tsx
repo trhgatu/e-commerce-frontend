@@ -145,7 +145,6 @@ export const ProductManagementPage = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <Space className="flex-shrink-0">
               <div className="md:col-span-2 lg:col-span-1">
-                {/* Nội dung nếu có */}
               </div>
               <SearchInput
                 placeholder="Tìm kiếm theo tên..."

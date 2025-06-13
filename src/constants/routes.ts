@@ -7,30 +7,30 @@ const ROUTERS = {
         users: {
             root: `${prefixAdmin}/users`,
             create: `${prefixAdmin}/users/create`,
-            edit: (id: string) => `{prefixAdmin}/users/edit/${id}`,
-            show: (id: string) => `{prefixAdmin}/users/detail/${id}`,
+            edit: (id: string) => `${prefixAdmin}/users/edit/${id}`,
+            show: (id: string) => `${prefixAdmin}/users/detail/${id}`,
             trash: `${prefixAdmin}/users/trash-bin`
         },
         roles: {
             root: `${prefixAdmin}/roles`,
             permissions: `${prefixAdmin}/roles/permissions`,
             create: `${prefixAdmin}/roles/create`,
-            edit: (id: string) => `{prefixAdmin}/roles/edit/${id}`,
-            show: (id: string) => `{prefixAdmin}/roles/detail/${id}`,
+            edit: (id: string) => `${prefixAdmin}/roles/edit/${id}`,
+            show: (id: string) => `${prefixAdmin}/roles/detail/${id}`,
             trash: `${prefixAdmin}/roles/trash-bin`
         },
         permissions: {
             root: `${prefixAdmin}/permissions`,
             create: `${prefixAdmin}/permissions/create`,
-            edit: (id: string) => `{prefixAdmin}/permissions/edit/${id}`,
-            show: (id: string) => `{prefixAdmin}/permissions/detail/${id}`,
+            edit: (id: string) => `${prefixAdmin}/permissions/edit/${id}`,
+            show: (id: string) => `${prefixAdmin}/permissions/detail/${id}`,
             trash: `${prefixAdmin}/permissions/trash-bin`
         },
         products: {
             root: `${prefixAdmin}/products`,
             create: `${prefixAdmin}/products/create`,
-            edit: (id: string) => `{prefixAdmin}/products/edit/${id}`,
-            show: (id: string) => `{prefixAdmin}/products/detail/${id}`,
+            edit: (id: string) => `${prefixAdmin}/products/edit/${id}`,
+            show: (id: string) => `${prefixAdmin}/products/detail/${id}`,
             trash: `${prefixAdmin}/products/trash-bin`
         },
         categories: {

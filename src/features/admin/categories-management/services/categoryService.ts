@@ -1,7 +1,10 @@
 import axiosInstance from "@/services/axios";
 import { CategoryCreateRequest, CategoryFilter } from "@/types";
+
+const prefixCategories = "/categories";
+
 export const getAllCategories = async (page: number, limit: number, filter: CategoryFilter = {}) => {
-  const res = await axiosInstance.get("/categories", {
+  const res = await axiosInstance.get(`${prefixCategories}`, {
     params: {
       page: page,
       limit: limit,
@@ -18,35 +21,35 @@ export const getAllCategories = async (page: number, limit: number, filter: Cate
 };
 
 export const getCategoryById = async (id: string) => {
-  const response = await axiosInstance.get(`/categories/${id}`);
+  const response = await axiosInstance.get(`${prefixCategories}/${id}`);
   return response.data;
 };
 
 export const createCategory = async (data: CategoryCreateRequest) => {
-  const response = await axiosInstance.post("/categories/create", data)
+  const response = await axiosInstance.post(`${prefixCategories}/create`, data)
   return response.data
 }
 
 export const deleteCategoryById = async (id: string) => {
-  const response = await axiosInstance.delete(`/categories/delete/${id}`);
+  const response = await axiosInstance.delete(`${prefixCategories}/delete/${id}`);
   return response.data;
 };
 
 export const softDeleteCategoryById = async (id: string) => {
-  const response = await axiosInstance.delete(`/categories/delete/${id}`);
+  const response = await axiosInstance.delete(`${prefixCategories}/delete/${id}`);
   return response.data;
 };
 
 export const hardDeleteCategoryById = async (id: string) => {
-  const response = await axiosInstance.delete(`/categories/hard-delete/${id}`);
+  const response = await axiosInstance.delete(`${prefixCategories}/hard-delete/${id}`);
   return response.data;
 };
 
 export const restoreCategoryById = async (id: string) => {
-  const response = await axiosInstance.put(`/categories/restore/${id}`);
+  const response = await axiosInstance.put(`${prefixCategories}/restore/${id}`);
   return response.data;
 }
 export const updateCategoryById = async (id: string, data: CategoryCreateRequest) => {
-  const response = await axiosInstance.put(`/categories/update/${id}`, data);
+  const response = await axiosInstance.put(`${prefixCategories}/update/${id}`, data);
   return response.data;
 }

@@ -169,7 +169,7 @@ export const DetailProductPage = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Số lượng tồn kho</p>
-                      <p className="text-lg font-semibold text-gray-900">{product.stock} units</p>
+                      <p className="text-lg font-semibold text-gray-900">{product.totalStock} units</p>
                     </div>
                   </div>
 
@@ -212,14 +212,14 @@ export const DetailProductPage = () => {
                 </div>
               </div>
             </div>
-            {product.colorVariants && product.colorVariants.length > 0 && (
+            {product.availableColors && product.availableColors.length > 0 && (
               <div className="bg-white rounded-lg shadow-sm border p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-6 pb-3 border-b">
                   Các biến thể màu sắc
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {product.colorVariants.map((variant, idx: number) => (
+                  {product.availableColors.map((color, idx: number) => (
                     <div
                       key={idx}
                       className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
@@ -227,16 +227,16 @@ export const DetailProductPage = () => {
                       <div className="flex items-center gap-3 mb-3">
                         <div
                           className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
-                          style={{ backgroundColor: variant.colorId?.hexCode || '#gray' }}
+                          style={{ backgroundColor: color.hexCode || '#gray' }}
                         />
                         <span className="font-medium text-gray-900">
-                          {variant.colorId?.name || 'Unknown Color'}
+                          {color.name || 'Unknown Color'}
                         </span>
                       </div>
                       <div className="text-sm text-gray-600">
                         <span className="font-medium">Stock: </span>
-                        <span className={`font-semibold ${variant.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {variant.stock} units
+                        <span className={`font-semibold ${product.totalStock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {product.totalStock} units
                         </span>
                       </div>
                     </div>

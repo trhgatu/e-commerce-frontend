@@ -85,10 +85,7 @@ export const PermissionManagementPage = () => {
     setSearchTerm(query);
     setLoading(true);
     try {
-      const res = await getAllPermissions(1, 10, {
-        search: query,
-        isDeleted: false
-      });
+      const res = await getAllPermissions(1, 10, { search: query, });
       setPermissions(res.data);
       setFilteredPermissions(res.data);
       setPageCount(res.totalPages);
@@ -161,7 +158,6 @@ export const PermissionManagementPage = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <Space className="flex-shrink-0">
               <div className="md:col-span-2 lg:col-span-1">
-                {/* Nội dung nếu có */}
               </div>
               <SearchInput
                 placeholder="Tìm kiếm theo tên hoặc nhãn..."
