@@ -20,7 +20,7 @@ import { TrashBinBrandsPage } from '@/features/admin/brands-management/pages/Tra
 import DashboardPage from '@/features/admin/dashboard/pages/Dashboard';
 import { ProductManagementPage, DetailProductPage, EditProductPage, TrashBinProductsPage, CreateProductPage } from '@/features/admin/products-management/pages';
 import { RoleManagementPage, CreateRolePage, RolePermissionMatrixPage } from '@/features/admin/roles-management/pages';
-import { PermissionManagementPage } from '@/features/admin/permissions-management/pages';
+import { CreatePermissionPage, DetailPermissionPage, EditPermissionPage, PermissionManagementPage } from '@/features/admin/permissions-management/pages';
 
 function App() {
   return (
@@ -66,6 +66,9 @@ function App() {
 
           <Route path="permissions">
             <Route index element={<PermissionManagementPage />} />
+            <Route path="create" element={<CreatePermissionPage />} />
+            <Route path="detail/:id" element={<DetailPermissionPage />} />
+            <Route path="edit/:id" element={<EditPermissionPage />} />
           </Route>
 
           <Route path="users">
