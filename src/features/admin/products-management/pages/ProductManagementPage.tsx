@@ -162,7 +162,7 @@ export const ProductManagementPage = () => {
                 variant="solid"
                 color="primary"
                 className="w-full md:w-auto"
-                style={{ width: '150px' }} // Cố định chiều rộng của Button
+                style={{ width: '150px' }}
               >
                 Xóa bộ lọc
               </Button>

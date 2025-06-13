@@ -1,7 +1,7 @@
 export enum PermissionStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  DEPRECATED = 'deprecated',
+    ACTIVE = 'active',
+    INACTIVE = 'inactive',
+    DEPRECATED = 'deprecated',
 }
 
 export interface IPermission {
@@ -11,15 +11,18 @@ export interface IPermission {
     status: PermissionStatus;
     label: string;
     group: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface PermissionCreateRequest {
     name: string;
-    description: string;
+    description?: string;
     label: string;
     group: string;
 }
 export interface PermissionFilter {
     search?: string;
     isDeleted?: boolean;
+    group?: string;
 }

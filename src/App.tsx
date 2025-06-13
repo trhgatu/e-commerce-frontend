@@ -34,14 +34,13 @@ function App() {
           <Route path="product/:id" element={<ProductDetailPage />} />
           <Route path="cart" element={<CartPage />} />
         </Route>
-
         <Route path="/auth" element={<MainLayout />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
         </Route>
 
+        {/* Admin Route */}
         <Route path="/admin/auth/login" element={<AdminLoginPage />} />
-
         <Route path="/admin" element={
           <AdminRoute>
             <AdminLayout />
