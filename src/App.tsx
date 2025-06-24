@@ -21,7 +21,7 @@ import DashboardPage from '@/features/admin/dashboard/pages/Dashboard';
 import { ProductManagementPage, DetailProductPage, EditProductPage, TrashBinProductsPage, CreateProductPage } from '@/features/admin/products-management/pages';
 import { RoleManagementPage, CreateRolePage, RolePermissionMatrixPage } from '@/features/admin/roles-management/pages';
 import { CreatePermissionPage, DetailPermissionPage, EditPermissionPage, PermissionManagementPage } from '@/features/admin/permissions-management/pages';
-import { VoucherManagementPage, CreateVoucherPage, DetailVoucherPage } from '@/features/admin/vouchers-management/pages';
+import { VoucherManagementPage, CreateVoucherPage, DetailVoucherPage, EditVoucherPage } from '@/features/admin/vouchers-management/pages';
 
 function App() {
   return (
@@ -95,6 +95,7 @@ function App() {
             <Route index element={<VoucherManagementPage />} />
             <Route path="create" element={<CreateVoucherPage />} />
             <Route path="detail/:id" element={<DetailVoucherPage />} />
+            <Route path="edit/:id" element={<EditVoucherPage />} />
 {/*             <Route path="trash-bin" element={<TrashBinBrandsPage />} /> */}
           </Route>
 
