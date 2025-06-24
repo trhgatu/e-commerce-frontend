@@ -72,7 +72,6 @@ export const TrashBinProductsPage = () => {
       <ProductTable
         data={products}
         onDelete={(product) => setProductToDelete(product)}
-        loading={loading}
         pagination={{
           pageIndex: page,
           pageCount: pageCount,

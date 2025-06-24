@@ -12,7 +12,8 @@ import {
   IconUsers,
   IconUserCheck,
   IconUserShield,
-  IconReceipt
+  IconReceipt,
+  IconGiftCard
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -80,7 +81,11 @@ const data = {
       url: ROUTERS.ADMIN.permissions.root,
       icon: IconUserShield
     },
-
+    {
+      title: "Quản lý mã giảm giá",
+      url: ROUTERS.ADMIN.vouchers.root,
+      icon: IconGiftCard
+    },
     {
       title: "Quản lý đơn hàng",
       url: ROUTERS.ADMIN.orders.root,

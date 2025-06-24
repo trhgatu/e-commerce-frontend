@@ -65,7 +65,6 @@ export const ProductManagementPage = () => {
     setSearchTerm('');
   };
 
-
   const handleSearch = async (query: string) => {
     setSearchTerm(query);
     setLoading(true);
@@ -103,6 +102,7 @@ export const ProductManagementPage = () => {
       try {
         await softDeleteProductById(productToDelete._id);
         setProducts((prev) => prev.filter((p) => p._id !== productToDelete._id));
+        setFilteredProducts((prev) => prev.filter((p) => p._id !== productToDelete._id));
         toast.success("Xóa sản phẩm thành công");
       } catch {
         toast.error("Xóa sản phẩm thất bại");
@@ -141,7 +141,6 @@ export const ProductManagementPage = () => {
 
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <Space className="flex-shrink-0">
               <div className="md:col-span-2 lg:col-span-1">

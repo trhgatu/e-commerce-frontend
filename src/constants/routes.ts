@@ -52,9 +52,16 @@ const ROUTERS = {
             create: `${prefixAdmin}/colors/create`,
             trash: `${prefixAdmin}/colors/trash-bin`
         },
-        orders : {
+        orders: {
             root: `${prefixAdmin}/orders`,
 
+        },
+        vouchers: {
+            root: `${prefixAdmin}/vouchers`,
+            create: `${prefixAdmin}/vouchers/create`,
+            trash: `${prefixAdmin}/vouchers/trash-bin`,
+            show: (id: string) => `${prefixAdmin}/vouchers/detail/${id}`,
+            edit: (id: string) => `${prefixAdmin}/vouchers/edit/${id}`
         }
     },
 }

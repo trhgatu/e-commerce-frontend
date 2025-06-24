@@ -56,8 +56,8 @@ export const DetailProductPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-6">
+    <div className="min-h-screen py-8">
+      <div className="px-6">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div>
