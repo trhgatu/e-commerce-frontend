@@ -1,5 +1,6 @@
+// src/features/admin/vouchers-management/components/VoucherTable.tsx
 import * as React from "react";
-import { IPermission } from "@/types";
+import { IVoucher } from "@/types";
 import {
   ColumnDef,
   getCoreRowModel,
@@ -7,6 +8,7 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { PaginationControls } from "@/components/PaginationControls";
+import { SkeletonTableRows } from "@/components/SkeletonTableRows";
 import {
   Table,
   TableBody,
@@ -15,48 +17,75 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Tooltip, Space, Button } from "antd";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-
-interface PermissionTableProps {
-  data: IPermission[];
-  onEdit?: (permission: IPermission) => void;
-  onDelete?: (permission: IPermission) => void;
+interface VoucherTableProps {
+  data: IVoucher[];
+  loading?: boolean;
+  onEdit?: (voucher: IVoucher) => void;
+  onDelete?: (voucher: IVoucher) => void;
+  onShow?: (voucher: IVoucher) => void;
   pagination?: {
     pageIndex: number;
     pageCount: number;
     onPageChange: (index: number) => void;
   };
-  onShow?: (permission: IPermission) => void;
-  actionRenderer?: (permission: IPermission) => React.ReactNode;
+  actionRenderer?: (voucher: IVoucher) => React.ReactNode;
 }
 
-export const PermissionTable: React.FC<PermissionTableProps> = ({
+export const VoucherTable: React.FC<VoucherTableProps> = ({
   data,
+  loading,
   onEdit,
   onDelete,
   onShow,
   pagination,
   actionRenderer,
 }) => {
-  const columns: ColumnDef<IPermission>[] = [
+  const columns: ColumnDef<IVoucher>[] = [
     {
-      accessorKey: "name",
-      header: "Tên quyền",
+      accessorKey: "code",
+      header: "Mã voucher",
     },
     {
-      accessorKey: "label",
-      header: "Nhãn",
-    },
-    {
-      accessorKey: "group",
-      header: "Nhóm quyền",
-    },
-    {
-      accessorKey: "createdAt",
-      header: "Thời gian tạo",
+      accessorKey: "type",
+      header: "Loại",
       cell: ({ row }) =>
-        new Date(row.original.createdAt).toLocaleDateString(),
+        row.original.type === "percentage" ? "Phần trăm" : "Cố định",
+    },
+    {
+      accessorKey: "value",
+      header: "Giá trị",
+      cell: ({ row }) =>
+        row.original.type === "percentage"
+          ? `${row.original.value}%`
+          : `${row.original.value.toLocaleString()}₫`,
+    },
+    {
+      accessorKey: "minOrderValue",
+      header: "Tối thiểu đơn hàng",
+      cell: ({ row }) => `${row.original.minOrderValue.toLocaleString()}₫`,
+    },
+    {
+      accessorKey: "usageLimit",
+      header: "Giới hạn lượt dùng",
+    },
+    {
+      accessorKey: "usageCount",
+      header: "Đã dùng",
+    },
+    {
+      accessorKey: "startDate",
+      header: "Ngày bắt đầu",
+      cell: ({ row }) =>
+        new Date(row.original.startDate).toLocaleDateString("vi-VN"),
+    },
+    {
+      accessorKey: "endDate",
+      header: "Ngày kết thúc",
+      cell: ({ row }) =>
+        new Date(row.original.endDate).toLocaleDateString("vi-VN"),
     },
     {
       id: "actions",
@@ -93,7 +122,7 @@ export const PermissionTable: React.FC<PermissionTableProps> = ({
             </Tooltip>
           </Space>
         ),
-    }
+    },
   ];
 
   const table = useReactTable({
@@ -121,12 +150,17 @@ export const PermissionTable: React.FC<PermissionTableProps> = ({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {loading ? (
+              <SkeletonTableRows columnCount={columns.length} />
+            ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -134,13 +168,11 @@ export const PermissionTable: React.FC<PermissionTableProps> = ({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="text-center">
-                  Không có quyền nào.
+                  Không có voucher nào.
                 </TableCell>
               </TableRow>
             )}
-
           </TableBody>
-
         </Table>
       </div>
       {pagination && (
