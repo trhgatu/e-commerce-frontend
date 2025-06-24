@@ -1,5 +1,5 @@
 import axiosInstance from "@/services/axios";
-import { IVoucher, VoucherCreateRequest, VoucherFilter } from "@/types";
+import { VoucherCreateRequest, VoucherFilter } from "@/types";
 
 export const getAllVouchers = async (page: number, limit: number, filter: VoucherFilter = {}) => {
   const res = await axiosInstance.get("/vouchers", {
@@ -23,9 +23,9 @@ export const createVoucher = async (data: VoucherCreateRequest) => {
   return response.data
 }
 
-export const getVoucherById = async (id: string): Promise<IVoucher> => {
+export const getVoucherById = async (id: string) => {
   const response = await axiosInstance.get(`/vouchers/${id}`)
-  return response.data.data
+  return response.data
 }
 
 export const softDeleteVoucherById = async (id: string) => {
