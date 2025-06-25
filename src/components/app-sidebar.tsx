@@ -91,6 +91,11 @@ const data = {
       url: ROUTERS.ADMIN.orders.root,
       icon: IconReceipt
     },
+    {
+      title: "Quản lý tồn kho",
+      url: ROUTERS.ADMIN.inventories.root,
+      icon: IconReceipt
+    },
 
 
 
