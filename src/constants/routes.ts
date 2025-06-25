@@ -62,6 +62,13 @@ const ROUTERS = {
             trash: `${prefixAdmin}/vouchers/trash-bin`,
             show: (id: string) => `${prefixAdmin}/vouchers/detail/${id}`,
             edit: (id: string) => `${prefixAdmin}/vouchers/edit/${id}`
+        },
+        inventories: {
+            root: `${prefixAdmin}/inventories`,
+            create: `${prefixAdmin}/inventories/create`,
+            trash: `${prefixAdmin}/inventories/trash-bin`,
+            show: (id: string) => `${prefixAdmin}/inventories/detail/${id}`,
+            edit: (id: string) => `${prefixAdmin}/inventories/edit/${id}`
         }
     },
 }

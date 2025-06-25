@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card, Typography } from "antd";
+import { Card, Typography, Select, DatePicker } from "antd";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { baseVoucherSchema } from "@/features/admin/vouchers-management/validator/voucher";
 import { createVoucher } from "@/features/admin/vouchers-management/services/voucherService";
 import ROUTERS from "@/constants/routes";
+import { Controller } from "react-hook-form";
+import dayjs from "dayjs";
 
 const { Title, Text } = Typography;
 
@@ -21,15 +23,28 @@ export const CreateVoucherPage = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<CreateVoucherFormData>({
     resolver: zodResolver(baseVoucherSchema),
+    defaultValues: {
+      type: "percentage",
+      startDate: "",
+      endDate: "",
+      isActive: true,
+    },
   });
 
   const onSubmit = async (data: CreateVoucherFormData) => {
     const toastId = toast.loading("Đang tạo voucher...");
+
+    const payload = {
+      ...data,
+      startDate: dayjs(data.startDate).toISOString(),
+      endDate: dayjs(data.endDate).toISOString(),
+    };
     try {
-      await createVoucher(data);
+      await createVoucher(payload);
       toast.success("Tạo voucher thành công!", { id: toastId });
       navigate(ROUTERS.ADMIN.vouchers.root);
     } catch (error) {
@@ -65,14 +80,25 @@ export const CreateVoucherPage = () => {
               {errors.code && <p className="text-sm text-red-500">{errors.code.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="type">Loại giảm giá *</Label>
-              <select id="type" {...register("type")} className="h-10 border rounded px-2">
-                <option value="percentage">Phần trăm</option>
-                <option value="fixed">Cố định</option>
-              </select>
-              {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
-            </div>
+            <Controller
+              name="type"
+              control={control}
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <Label htmlFor="type">Loại giảm giá *</Label>
+                  <Select
+                    {...field}
+                    id="type"
+                    options={[
+                      { label: "Phần trăm", value: "percentage" },
+                      { label: "Cố định", value: "fixed" },
+                    ]}
+                    className="w-full"
+                  />
+                  {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
+                </div>
+              )}
+            />
 
             <div className="space-y-2">
               <Label htmlFor="value">Giá trị giảm *</Label>
@@ -104,17 +130,42 @@ export const CreateVoucherPage = () => {
               {errors.usagePerUser && <p className="text-sm text-red-500">{errors.usagePerUser.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="startDate">Ngày bắt đầu *</Label>
-              <Input type="date" id="startDate" {...register("startDate")} className="h-10" />
-              {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
-            </div>
+            <Controller
+              name="startDate"
+              control={control}
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <Label htmlFor="startDate">Ngày bắt đầu *</Label>
+                  <DatePicker
+                    id="startDate"
+                    format="YYYY-MM-DD"
+                    className="w-full h-10"
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(date) => field.onChange(date ? date.format("YYYY-MM-DD") : "")}
+                  />
+                  {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
+                </div>
+              )}
+            />
+            <Controller
+              name="endDate"
+              control={control}
+              render={({ field }) => (
+                <div className="space-y-2">
+                  <Label htmlFor="endDate">Ngày kết thúc *</Label>
+                  <DatePicker
+                    id="endDate"
+                    format="YYYY-MM-DD"
+                    className="w-full h-10"
+                    value={field.value ? dayjs(field.value) : null}
+                    onChange={(date) => field.onChange(date ? date.format("YYYY-MM-DD") : "")}
+                  />
+                  {errors.endDate && <p className="text-sm text-red-500">{errors.endDate.message}</p>}
+                </div>
+              )}
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="endDate">Ngày kết thúc *</Label>
-              <Input type="date" id="endDate" {...register("endDate")} className="h-10" />
-              {errors.endDate && <p className="text-sm text-red-500">{errors.endDate.message}</p>}
-            </div>
+
           </div>
         </Card>
 

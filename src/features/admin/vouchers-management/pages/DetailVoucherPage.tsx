@@ -300,7 +300,25 @@ export const DetailVoucherPage = () => {
 
                 {/* Sidebar */}
                 <div className="space-y-6">
+
                     <Space direction="vertical" size="middle">
+                        <Card title="Xem trước voucher" className="shadow-sm">
+                            <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-4 text-white">
+                                <div className="text-center">
+                                    <div className="text-xs opacity-90 mb-1">VOUCHER</div>
+                                    <div className="text-lg font-bold font-mono">{voucher.code}</div>
+                                    <div className="text-2xl font-bold my-2">
+                                        {voucher.type === 'percentage'
+                                            ? `${voucher.value}% OFF`
+                                            : `${formatCurrency(voucher.value)} OFF`
+                                        }
+                                    </div>
+                                    <div className="text-xs opacity-90">
+                                        Đơn tối thiểu {formatCurrency(voucher.minOrderValue)}
+                                    </div>
+                                </div>
+                            </div>
+                        </Card>
                         <Card title="Trạng thái" className="shadow-sm">
                             <Space direction="vertical" className="w-full">
                                 <div className="flex justify-between items-center">
@@ -349,7 +367,7 @@ export const DetailVoucherPage = () => {
                                     <Text>Hiệu quả:</Text>
                                     <Text strong className={`${getUsagePercentage() > 50 ? 'text-green-600' : 'text-orange-600'}`}>
                                         {getUsagePercentage() > 75 ? 'Cao' :
-                                         getUsagePercentage() > 50 ? 'Trung bình' : 'Thấp'}
+                                            getUsagePercentage() > 50 ? 'Trung bình' : 'Thấp'}
                                     </Text>
                                 </div>
                                 <div className="flex justify-between items-center">
@@ -367,23 +385,7 @@ export const DetailVoucherPage = () => {
                         </Card>
 
                         {/* Voucher Preview */}
-                        <Card title="Xem trước voucher" className="shadow-sm">
-                            <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-4 text-white">
-                                <div className="text-center">
-                                    <div className="text-xs opacity-90 mb-1">VOUCHER</div>
-                                    <div className="text-lg font-bold font-mono">{voucher.code}</div>
-                                    <div className="text-2xl font-bold my-2">
-                                        {voucher.type === 'percentage'
-                                            ? `${voucher.value}% OFF`
-                                            : `${formatCurrency(voucher.value)} OFF`
-                                        }
-                                    </div>
-                                    <div className="text-xs opacity-90">
-                                        Đơn tối thiểu {formatCurrency(voucher.minOrderValue)}
-                                    </div>
-                                </div>
-                            </div>
-                        </Card>
+
                     </Space>
                 </div>
             </div>
