@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { Provider } from 'react-redux'
 import { store } from '@/store/index.ts'
-import AuthGate from '@/components/common/admin/AuthGate.tsx'
+import { AuthGate } from '@/features/admin/auth/components/AuthGate.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

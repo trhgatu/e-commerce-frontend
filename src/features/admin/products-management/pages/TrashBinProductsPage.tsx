@@ -59,6 +59,10 @@ export const TrashBinProductsPage = () => {
     }
   };
 
+  if( loading) {
+    return <div className="p-6">Loading...</div>;
+  }
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-4">
